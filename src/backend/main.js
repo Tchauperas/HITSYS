@@ -2,8 +2,8 @@ import { app, BrowserWindow } from "electron";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 750,
     webPreferences: {
       nodeIntegration: true, // habilite se precisar do Node dentro do renderer
     },
