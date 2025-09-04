@@ -1,17 +1,17 @@
 const user = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 class UsuarioController {
   async sign_in(req, res) {
-    let { nome, login, senha_hash, id_perfil_usuario, id_permissoes, ativo } =
-      req.body;
+    let { nome, login, senha_hash, id_perfil_usuario, ativo } = req.body;
     try {
       let result = await user.sign_in(
         nome,
         login,
         senha_hash,
         id_perfil_usuario,
-        id_permissoes,
         ativo
       );
       result.validated
@@ -31,10 +31,19 @@ class UsuarioController {
   async login(req, res) {
     try {
       let { login, senha_hash } = req.body;
-      let data = await user.findByLogin(login);
+      let usuario = await user.findByLogin(login);
+      let data = usuario.values[0];
 
-      if (await bcrypt.compare(senha_hash, data.values[0].senha_hash)) {
-        res.status(201).json({ success: true, message: "Usuário autenticado" });
+      if (await bcrypt.compare(senha_hash, data.senha_hash)) {
+        let token = jwt.sign(
+          { id: data.id_usuario, id_perfil: data.id_perfil_usuario },
+          process.env.SECTK,
+          { expiresIn: 5000 }
+        );
+        res.status(201).json({
+          success: true,
+          token: token,
+        });
       } else {
         res.status(403).json({ success: false, message: "Senha inválida" });
       }

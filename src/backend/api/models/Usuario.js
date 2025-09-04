@@ -7,7 +7,6 @@ class Usuario {
     login,
     senha_hash,
     id_perfil_usuario,
-    id_permissoes,
     ativo
   ) {
     try {
@@ -17,7 +16,6 @@ class Usuario {
           login: login,
           senha_hash: await bc(senha_hash),
           id_perfil_usuario: id_perfil_usuario,
-          id_permissoes: id_permissoes,
           ativo: ativo,
         })
         .table("usuarios");
@@ -33,6 +31,14 @@ class Usuario {
         return {validated: true, values: data}
     } catch(e) {
         return {validated: false, error: e.message}
+    }
+  }
+
+  async changePassword(password) {
+    try {
+      
+    } catch (e) {
+
     }
   }
 
