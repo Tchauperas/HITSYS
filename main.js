@@ -9,5 +9,5 @@ app.on("ready", () => {
     },
   });
 
-  mainWindow.loadURL("http://localhost:5173/");
+  mainWindow.loadURL("http://localhost:3000/");
 });

@@ -32,20 +32,24 @@ class UsuarioController {
     try {
       let { login, senha_hash } = req.body;
       let usuario = await user.findByLogin(login);
-      let data = usuario.values[0];
 
-      if (await bcrypt.compare(senha_hash, data.senha_hash)) {
-        let token = jwt.sign(
-          { id: data.id_usuario, id_perfil: data.id_perfil_usuario },
-          process.env.SECTK,
-          { expiresIn: 5000 }
-        );
-        res.status(201).json({
-          success: true,
-          token: token,
-        });
+      if (usuario.validated) {
+        let data = usuario.values[0];
+        if (await bcrypt.compare(senha_hash, data.senha_hash)) {
+          let token = jwt.sign(
+            { id: data.id_usuario, id_perfil: data.id_perfil_usuario },
+            process.env.SECTK,
+            { expiresIn: 5000 }
+          );
+          res.status(201).json({
+            success: true,
+            token: token,
+          })
+        } else {
+          res.status(403).json({ success: false, message: `Senha inválida` });
+        }
       } else {
-        res.status(403).json({ success: false, message: "Senha inválida" });
+        res.status(404).json({ success: false, message: usuario.error });
       }
     } catch (e) {
       res

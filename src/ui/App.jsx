@@ -1,76 +1,20 @@
 import { useState } from "react";
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from './pages/Login.jsx'
+import Home from './pages/Home.jsx'
 
 function App() {
-  const [login, setLogin] = useState("");
-  const [senha, setSenha] = useState("");
-  const [mensagem, setMensagem] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("http://127.0.0.1:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          login: login,
-          senha_hash: senha,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMensagem("Login realizado com sucesso!");
-        console.log("Resposta:", data);
-      } else {
-        setMensagem(data.message || "Erro ao realizar login.");
-      }
-    } catch (error) {
-      console.error("Erro:", error);
-      setMensagem("Erro de conexão com o servidor.");
-    }
-  };
-
   return (
-    <div className="login-container">
-      <form className="login-box" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-
-        <div className="input-group">
-          <label htmlFor="login">Usuário</label>
-          <input
-            type="text"
-            id="login"
-            placeholder="Digite seu usuário"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="senha">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" className="btn-login">
-          Entrar
-        </button>
-
-        {mensagem && <p className="mensagem">{mensagem}</p>}
-      </form>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />}/>
+          <Route path="/home" element={<Home />}/>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

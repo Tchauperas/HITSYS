@@ -28,7 +28,11 @@ class Usuario {
   async findByLogin(login) {
     try {
         let data = await db.select("*").where({login: login}).table("usuarios")
-        return {validated: true, values: data}
+        if (!(data.length <= 0)) {
+          return {validated: true, values: data}
+        } else {
+          return {validated: false, error: "Usuario não encontrado"}
+        }
     } catch(e) {
         return {validated: false, error: e.message}
     }
