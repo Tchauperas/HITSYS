@@ -1,4 +1,3 @@
-import React from "react";
 import "./Produtos.css";
 import Navbar from "../components/Navbar";
 

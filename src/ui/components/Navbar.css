@@ -45,6 +45,9 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: inherit;
+  bottom: 0;
+  margin-bottom: 10px;
 }
 .buttomButtons button {
   color: black;
