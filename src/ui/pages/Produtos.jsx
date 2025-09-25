@@ -21,23 +21,22 @@ function Produtos() {
             >
               Cadastrar
             </button>
-            <button className="btn-back"> </button>
           </div>
         </header>
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Pesquisar produto..." />
+          <input type="text" placeholder="Pesquisar produto" />
         </div>
 
         <table className="produtos-table">
           <thead>
             <tr>
-              <th>CÓDIGO</th>
-              <th>DESCRIÇÃO</th>
-              <th>PREÇO</th>
-              <th>ESTOQUE</th>
-              <th>AÇÕES</th>
+              <th>Código</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>

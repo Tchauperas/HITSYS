@@ -21,20 +21,19 @@ function Empresas() {
             >
               Cadastrar
             </button>
-            <button className="btn-back"> </button>
           </div>
         </header>
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Pesquisar empresa..." />
+          <input type="text" placeholder="   Pesquisar empresa" />
         </div>
         <table className="empresas-table">
           <thead>
             <tr>
-              <th>NOME</th>
+              <th>Nome</th>
               <th>CNPJ</th>
-              <th>AÇÕES</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
