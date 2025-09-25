@@ -25,7 +25,7 @@ function Produtos() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Pesquisar produto" />
+          <input type="text" placeholder="   Pesquisar produto" />
         </div>
 
         <table className="produtos-table">

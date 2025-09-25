@@ -26,7 +26,7 @@ function Pessoas() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="   Pesquisar pessoa..." />
+          <input type="text" placeholder="   Pesquisar pessoa" />
         </div>
 
         <table className="pessoas-table">
