@@ -5,7 +5,9 @@ const Home = () => {
     <>
       <div>
         <Navbar></Navbar>
-        <h1>Home Page</h1>
+        <div className="home_container">
+          <img src="src\ui\assets\back_logo.png" alt="" className="logomarca" />
+        </div>
       </div>
     </>
   );
