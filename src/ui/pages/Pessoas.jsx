@@ -1,6 +1,7 @@
 import React from "react";
 import "./Pessoas.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/pessoas_icon.png"
 
 function Pessoas() {
   return (
@@ -10,7 +11,8 @@ function Pessoas() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="people-icon">👥</span>
+            <span className="people-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Pessoas</h1>
           </div>
 

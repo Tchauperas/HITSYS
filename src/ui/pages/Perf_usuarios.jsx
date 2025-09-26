@@ -1,6 +1,8 @@
 import React from "react";
 import "./Perf_usuarios.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/perfis_icon.png"
+
 
 function Perf_usuarios() {
   return (
@@ -10,7 +12,8 @@ function Perf_usuarios() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="box-icon">👤</span>
+            <span className="box-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Perfis de Usuários</h1>
           </div>
 

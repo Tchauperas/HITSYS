@@ -1,5 +1,7 @@
+import React from "react";
 import "./Produtos.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/produtos_icon.png";
 
 function Produtos() {
   return (
@@ -9,7 +11,7 @@ function Produtos() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="box-icon">📦</span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Produtos</h1>
           </div>
 

@@ -1,6 +1,8 @@
 import React from "react";
 import "./Usuarios.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/usuarios_icon.png"
+
 
 function Usuarios() {
   return (
@@ -10,7 +12,8 @@ function Usuarios() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="box-icon">👤</span>
+            <span className="box-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Usuários</h1>
           </div>
 

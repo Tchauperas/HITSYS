@@ -1,7 +1,7 @@
 import React from "react";
 import "./Contas.css";
 import Navbar from "../components/Navbar";
-
+import logo from "../assets/contas_icon.png"
 function Contas() {
   return (
     <div className="contas-container">
@@ -10,7 +10,8 @@ function Contas() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="box-icon">💳</span>
+            <span className="box-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Contas</h1>
           </div>
 

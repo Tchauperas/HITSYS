@@ -1,6 +1,7 @@
 import React from "react";
 import "./Empresas.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/vendas_icon.png"
 
 function Empresas() {
   return (
@@ -11,6 +12,7 @@ function Empresas() {
         <header className="top-row">
           <div className="title">
             <span className="building-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Compras</h1>
           </div>
 

@@ -112,3 +112,11 @@
   background: #b91c1c;
   color: white;
 }
+
+.logo {
+  height: 30px;
+  width: auto;
+  background-color: #007bff; /* cor de fundo */
+  padding: 4px;
+  border-radius: 6px; /* arredonda */
+}
