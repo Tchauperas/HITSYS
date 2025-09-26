@@ -1,6 +1,7 @@
 import React from "react";
 import "./Vendedores.css";
 import Navbar from "../components/Navbar";
+import logo from "../assets/vendedores_icon.png"
 
 function Vendedores() {
   return (
@@ -10,7 +11,8 @@ function Vendedores() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <span className="box-icon">🧑‍💼</span>
+            <span className="box-icon"></span>
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Vendedores</h1>
           </div>
 
