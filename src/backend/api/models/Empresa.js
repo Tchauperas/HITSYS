@@ -13,7 +13,7 @@ class Empresa {
   async visualizarEmpresas() {
     try {
       let empresas = await db.select("*").table("empresas");
-      if (empresas != 0) {
+      if (empresas.lenght > 0) {
         return { validated: true, values: empresas };
       } else {
         return { validated: false, error: "Nenhuma empresa cadastrada" };
@@ -25,19 +25,35 @@ class Empresa {
 
   async alterarEmpresa(id, data) {
     try {
-      await db.update(data).where({id_empresa: id}).table("empresas")
-      return {validated: true}
-    } catch(e) {
-      return {validated: false, error: e.message}
+      await db.update(data).where({ id_empresa: id }).table("empresas");
+      return { validated: true };
+    } catch (e) {
+      return { validated: false, error: e.message };
     }
   }
 
   async deletarEmpresa(id) {
     try {
-      await db.delete("*").where({id_empresa: id}).table("empresas")
-      return {validated: true}
-    } catch(e) {
-      return {validated: false, error: e.message}
+      await db.delete("*").where({ id_empresa: id }).table("empresas");
+      return { validated: true };
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
+
+  async visualisarEmpresa(id) {
+    try {
+      let empresa = await db
+        .select("*")
+        .where({ id_empresa: id })
+        .table("empresas");
+      if (empresa.length > 0) {
+        return { validated: true, values: empresa };
+      } else {
+        return { validated: false, error: "Empresa não encontrada" };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
     }
   }
 }

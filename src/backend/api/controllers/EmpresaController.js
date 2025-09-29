@@ -50,19 +50,15 @@ class EmpresaController {
         let result = await empresa.alterarEmpresa(id, req.body);
         result.validated
           ? res.status(200).json({ success: true })
-          : res
-              .status(404)
-              .json({
-                success: false,
-                message: `Erro ao alterar empresa: ${result.error}`,
-              });
+          : res.status(404).json({
+              success: false,
+              message: `Erro ao alterar empresa: ${result.error}`,
+            });
       } catch (e) {
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: `Internal server error: ${e.message}`,
-          });
+        res.status(500).json({
+          success: false,
+          message: `Internal server error: ${e.message}`,
+        });
       }
     } else {
       res.status(401).json({ success: false, message: "Id de busca inválido" });
@@ -76,22 +72,44 @@ class EmpresaController {
         let result = await empresa.deletarEmpresa(id);
         result.validated
           ? res.status(200).json({ success: true })
+          : res.status(404).json({
+              success: false,
+              message: `Erro ao deletar empresa: ${result.error}`,
+            });
+      } catch (e) {
+        res.status(500).json({
+          success: false,
+          message: `Internal server Error: ${e.message}`,
+        });
+      }
+    } else {
+      res.status(401).json({ success: false, message: "ID de busca inválido" });
+    }
+  }
+
+  async visualizarEmpresa(req, res) {
+    let id = req.params.id;
+    if (!isNaN(id)) {
+      try {
+        let result = await empresa.visualisarEmpresa(id);
+        result.validated
+          ? res.status(200).json({ success: true, values: result.values })
           : res
               .status(404)
               .json({
-                success: false,
-                message: `Erro ao deletar empresa: ${result.error}`,
+                sucess: false,
+                message: `Erro ao vizualizar empresa: ${result.error}`,
               });
       } catch (e) {
         res
           .status(500)
           .json({
             success: false,
-            message: `Internal server Error: ${e.message}`,
+            message: `Internal server error: ${e.message}`,
           });
       }
     } else {
-      res.status(401).json({ success: false, message: "ID de busca inválido" });
+      res.status(400).json({ success: false, message: "Id de busca inválido" });
     }
   }
 }

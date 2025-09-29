@@ -7,8 +7,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/cadastrar", empresa.cadastrarEmpresa)
-router.get("/listar", empresa.visualizarEmpresas)
-router.get("/alterar/:id", empresa.alterarEmpresa)
+router.get("/visualizar", empresa.visualizarEmpresas)
+router.get("/visualizar/:id", empresa.visualizarEmpresa)
+router.put("/alterar/:id", empresa.alterarEmpresa)
 router.delete("/deletar/:id", empresa.deletarEmpresa)
 
 module.exports = router;
