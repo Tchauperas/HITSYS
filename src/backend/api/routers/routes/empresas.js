@@ -8,5 +8,7 @@ router.get("/", (req, res) => {
 
 router.post("/cadastrar", empresa.cadastrarEmpresa)
 router.get("/listar", empresa.visualizarEmpresas)
+router.get("/alterar/:id", empresa.alterarEmpresa)
+router.delete("/deletar/:id", empresa.deletarEmpresa)
 
 module.exports = router;

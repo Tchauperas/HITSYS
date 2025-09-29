@@ -22,6 +22,24 @@ class Empresa {
       return { validated: false, error: e.message };
     }
   }
+
+  async alterarEmpresa(id, data) {
+    try {
+      await db.update(data).where({id_empresa: id}).table("empresas")
+      return {validated: true}
+    } catch(e) {
+      return {validated: false, error: e.message}
+    }
+  }
+
+  async deletarEmpresa(id) {
+    try {
+      await db.delete("*").where({id_empresa: id}).table("empresas")
+      return {validated: true}
+    } catch(e) {
+      return {validated: false, error: e.message}
+    }
+  }
 }
 
 module.exports = new Empresa();
