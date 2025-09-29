@@ -1,0 +1,92 @@
+.cadastro_empresas-container {
+  background: white;
+  min-height: 100vh;
+  min-width: 100vw;
+  padding: 20px;
+  padding-left: 195px;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.btn-salvar {
+  background: #0f6ac5;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  max-width: 80px;
+}
+
+.btn-voltar {
+  background: #404951;
+  color: white;
+  border: none;
+  cursor: pointer;
+  height: 44px;
+  width: 44px;
+  padding: 0;
+}
+
+.voltar_icon {
+  width: 30px;
+}
+/* Container do switch */
+.status_empresa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: sans-serif;
+}
+
+/* Esconde o checkbox real */
+.status_empresa input {
+  display: none;
+}
+
+/* Slider (o botão que desliza) */
+.slider {
+  position: relative;
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 12px;
+  transition: background-color 0.3s;
+}
+
+/* Círculo interno */
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* Quando marcado */
+.status_empresa input:checked + .slider {
+  background-color: #0f6ac5; /* cor azul ao ativar */
+}
+
+.status_empresa input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+.status_row {
+  margin-left: 40px;
+}
