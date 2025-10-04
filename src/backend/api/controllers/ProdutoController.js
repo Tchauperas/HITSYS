@@ -1,18 +1,19 @@
-const pessoa = require("../models/Pessoa");
+const produto = require("../../controllers/ProdutoController");
 
-class PessoaController {
-  async cadastrarPessoa(req, res) {
+class ProdutoController {
+  async cadastrarProduto(req, res) {
     let data = req.body;
     if (data != undefined) {
       try {
-        let result = await pessoa.cadastrarPessoa(data);
+        let result = await produto.cadastrarProduto(data);
         result.validated
-          ? res
-              .status(201)
-              .json({ success: true, message: "Pessoa cadastrada com sucesso" })
+          ? res.status(201).json({
+              success: true,
+              message: "Produto cadastrado com sucesso",
+            })
           : res.status(400).json({
               success: false,
-              message: `Erro ao cadastrar pessoa: ${result.error}`,
+              message: `Erro ao cadastrar produto: ${result.error}`,
             });
       } catch (e) {
         res.status(500).json({
@@ -25,9 +26,9 @@ class PessoaController {
     }
   }
 
-  async visualizarPessoas(req, res) {
+  async visualizarProdutos(req, res) {
     try {
-      let result = await pessoa.visualizarPessoas();
+      let result = await produto.visualizarProdutos();
       result.validated
         ? res.status(200).json({ success: true, values: result.values })
         : res
@@ -41,19 +42,19 @@ class PessoaController {
     }
   }
 
-  async alterarPessoa(req, res) {
+  async alterarProduto(req, res) {
     let id = req.params.id;
     let data = req.body;
-    if (data != undefined && id != undefined || !(isNaN(id))) {
+    if ((data != undefined && id != undefined) || !isNaN(id)) {
       try {
-        let result = await pessoa.alterarPessoa(id, data);
+        let result = await produto.alterarProduto(id, data);
         result.validated
           ? res
               .status(200)
-              .json({ success: true, message: "Pessoa alterada com sucesso" })
+              .json({ success: true, message: "Produto alterado com sucesso" })
           : res.status(400).json({
               success: false,
-              message: `Erro ao alterar pessoa: ${result.error}`,
+              message: `Erro ao alterar produto: ${result.error}`,
             });
       } catch (e) {
         res.status(500).json({
@@ -66,18 +67,18 @@ class PessoaController {
     }
   }
 
-  async deletarPessoa(req, res) {
+  async deletarProduto(req, res) {
     let id = req.params.id;
-    if (id != undefined || !(isNaN(id))) {
+    if (id != undefined || !isNaN(id)) {
       try {
-        let result = await pessoa.deletarPessoa(id);
+        let result = await produto.deletarProduto(id);
         result.validated
           ? res
               .status(200)
-              .json({ success: true, message: "Pessoa deletada com sucesso" })
+              .json({ success: true, message: "Produto deletado com sucesso" })
           : res.status(400).json({
               success: false,
-              message: `Erro ao deletar pessoa: ${result.error}`,
+              message: `Erro ao deletar produto: ${result.error}`,
             });
       } catch (e) {
         res.status(500).json({
@@ -90,11 +91,11 @@ class PessoaController {
     }
   }
 
-  async visualizarPessoa(req, res) {
+  async visualizarProduto(req, res) {
     let id = req.params.id;
-    if (id != undefined || !(isNaN(id))) {
+    if (id != undefined || !isNaN(id)) {
       try {
-        let result = await pessoa.visualizarPessoa(id);
+        let result = await produto.visualizarProduto(id);
         result.validated
           ? res.status(200).json({ success: true, values: result.values })
           : res
@@ -112,4 +113,4 @@ class PessoaController {
   }
 }
 
-module.exports = PessoaController();
+module.exports = new ProdutoController();
