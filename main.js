@@ -1,13 +1,52 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 
-app.on("ready", () => {
-  const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 750,
+let loginWindow;
+let mainWindow;
+let userToken = null;
+
+const createLoginWindow = () => {
+  loginWindow = new BrowserWindow({
+    width: 800,
+    height: 512,
+    resizable: false,
     webPreferences: {
-      nodeIntegration: true, 
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: true,
     },
   });
 
-  mainWindow.loadURL("http://localhost:3000/");
+  loginWindow.loadURL("http://localhost:3000/");
+};
+
+function createMainWindow() {
+  mainWindow = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: true,
+    },
+  });
+
+  mainWindow.loadURL("http://localhost:3000/home");
+
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.maximize();
+    mainWindow.show();
+  });
+}
+
+app.whenReady().then(() => {
+  createLoginWindow();
+});
+
+ipcMain.on("Login-success", () => {
+  if (loginWindow) loginWindow.close();
+  createMainWindow();
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
 });

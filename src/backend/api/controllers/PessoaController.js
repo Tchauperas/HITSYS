@@ -112,4 +112,4 @@ class PessoaController {
   }
 }
 
-module.exports = PessoaController();
+module.exports = new PessoaController();

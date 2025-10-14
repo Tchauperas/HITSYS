@@ -1,4 +1,4 @@
-const produto = require("../../controllers/ProdutoController");
+const produto = require("../models/Produto");
 
 class ProdutoController {
   async cadastrarProduto(req, res) {

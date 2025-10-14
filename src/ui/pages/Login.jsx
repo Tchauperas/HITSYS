@@ -24,15 +24,12 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        setMensagem("Login realizado com sucesso!");
-        console.log("Resposta:", data);
-        window.location.href="http://localhost:3000/home"
+        window.electronAPI?.loginSuccess(data)
       } else {
-        setMensagem(data.message || "Erro ao realizar login.");
+        alert("Erro ao realizar login: ", data.message)
       }
     } catch (error) {
-      console.error("Erro:", error);
-      setMensagem("Erro de conexão com o servidor.");
+      alert("Erro de conexão com servidor: ", error)
     }
   };
 

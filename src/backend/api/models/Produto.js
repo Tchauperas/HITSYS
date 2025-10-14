@@ -1,4 +1,4 @@
-const db = require("../../../database/db");
+const db = require("../configs/config");
 
 class Produto {
   async cadastrarProduto(data) {

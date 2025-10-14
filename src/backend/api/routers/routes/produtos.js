@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const produto = require("../../controllers/ProdutoController");
+const produto = require("../../controllers/ProdutoController")
 
 router.get("/", (req, res) => {
   res.redirect("http://localhost:5173/produtos");
