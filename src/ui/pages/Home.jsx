@@ -1,6 +1,16 @@
-import Navbar from "../components/Navbar"
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    window.electronAPI?.onReceiveToken((jwt) => {
+      console.log("Token receive: ", jwt);
+      setToken(jwt);
+    });
+  }, []);
+
   return (
     <>
       <div>

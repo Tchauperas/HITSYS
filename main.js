@@ -35,6 +35,10 @@ function createMainWindow() {
   mainWindow.once("ready-to-show", () => {
     mainWindow.maximize();
     mainWindow.show();
+
+    if (userToken) {
+      mainWindow.webContents.send("user-token", userToken);
+    }
   });
 }
 
@@ -42,7 +46,8 @@ app.whenReady().then(() => {
   createLoginWindow();
 });
 
-ipcMain.on("Login-success", () => {
+ipcMain.on("Login-success", (event, token) => {
+  userToken = token;
   if (loginWindow) loginWindow.close();
   createMainWindow();
 });

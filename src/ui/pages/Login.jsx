@@ -24,12 +24,12 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        window.electronAPI?.loginSuccess(data)
+        window.electronAPI?.loginSuccess(data.token);
       } else {
-        alert("Erro ao realizar login: ", data.message)
+        alert("Erro ao realizar login: ", data.message);
       }
     } catch (error) {
-      alert("Erro de conexão com servidor: ", error)
+      alert("Erro de conexão com servidor: ", error);
     }
   };
 
