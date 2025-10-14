@@ -24,7 +24,7 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        window.electronAPI?.loginSuccess(data.token);
+        window.electronAPI?.loginSuccess(data);
       } else {
         alert("Erro ao realizar login: ", data.message);
       }
