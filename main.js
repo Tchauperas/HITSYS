@@ -1,9 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const { spawn } = require("child_process");
 
 let loginWindow;
 let mainWindow;
 let userToken = null;
+let backendProcess;
 
 const createLoginWindow = () => {
   loginWindow = new BrowserWindow({
@@ -43,6 +45,13 @@ function createMainWindow() {
 }
 
 app.whenReady().then(() => {
+  const backendScript = path.join(__dirname, "src/backend/server.js");
+
+  backendProcess = spawn("node", [backendScript], {
+    stdio: "inherit",
+    shell: true,
+  });
+
   createLoginWindow();
 });
 
@@ -53,5 +62,6 @@ ipcMain.on("Login-success", (event, token) => {
 });
 
 app.on("window-all-closed", () => {
+  if (backendProcess) backendProcess.kill();
   if (process.platform !== "darwin") app.quit();
 });
