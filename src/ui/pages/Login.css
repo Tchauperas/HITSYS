@@ -1,0 +1,116 @@
+@font-face {
+  font-family: "androidFont";
+  src: url("..//assets/fonts/Android.ttf") format("truetype");
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(238, 238, 238);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login-box {
+  padding: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+  color: #333;
+  margin-right: 10px;
+  width: 50px;
+}
+
+.input-group input {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 250px;
+  left: 0;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 0.75rem;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-login:hover {
+  background: #357ab8;
+}
+
+.mensagem {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.logo-name-box {
+  display: flex;
+  background-color: #4a90e2;
+  margin: 0;
+  width: 100%;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-name {
+  background-color: white;
+  display: flex;
+  justify-self: center;
+  font-family: "androidFont";
+  font-size: 60px;
+  padding: 5px;
+  margin: 0;
+}
+
+.logo-name img {
+  margin: 0;
+  margin-right: 20px;
+  padding: 0;
+  height: 60px;
+  background-color: white;
+}
+
+.inputs {
+  border: #4a90e2 solid;
+  margin: 40px;
+  border-radius: 20px;
+  display: block;
+  padding: 30px;
+  align-content: space-between;
+  height: 90px;
+}
