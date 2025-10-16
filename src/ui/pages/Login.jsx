@@ -1,5 +1,6 @@
 import { useState } from "react"
 import "./Login.css"
+import logo from "../assets/logo_hitsys.png"
 
 function Login() {
   const [login, setLogin] = useState("")
@@ -38,12 +39,7 @@ function Login() {
       <form onSubmit={handleSubmit} className="login-box">
         <div className="logo-name-box">
           <h1 className="logo-name">
-            {" "}
-            <img
-              src="src\ui\assets\logo_hitsys.png"
-              alt="Logo"
-              className="logo"
-            />
+            <img src={logo} alt="Logo" className="logo" />
             HITSYS
           </h1>
         </div>
@@ -71,11 +67,10 @@ function Login() {
               required
             />
           </div>
+          <button type="submit" className="btn-login">
+            Entrar
+          </button>
         </div>
-        <button type="submit" className="btn-login">
-          Entrar
-        </button>
-
         {mensagem && <p className="mensagem">{mensagem}</p>}
       </form>
     </div>
