@@ -26,4 +26,4 @@ HITSYSTEM
 *.sw?
 
 # Variaveis de Anbiente
-#.env
+.env
