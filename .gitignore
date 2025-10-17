@@ -25,5 +25,5 @@ HITSYSTEM
 *.sln
 *.sw?
 
-# Variaveis de Anbiente
+# Variaveis de Ambiente
 .env
