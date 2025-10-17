@@ -2,13 +2,7 @@ const db = require("../configs/config");
 const bc = require("../services/hash_pass");
 
 class Usuario {
-  async sign_in(
-    nome,
-    login,
-    senha_hash,
-    id_perfil_usuario,
-    ativo
-  ) {
+  async sign_in(nome, login, senha_hash, id_perfil_usuario, ativo) {
     try {
       await db
         .insert({
@@ -27,25 +21,29 @@ class Usuario {
 
   async findByLogin(login) {
     try {
-        let data = await db.select("*").where({login: login}).table("usuarios")
-        if (!(data.length <= 0)) {
-          return {validated: true, values: data}
-        } else {
-          return {validated: false, error: "Usuario não encontrado"}
-        }
-    } catch(e) {
-        return {validated: false, error: e.message}
-    }
-  }
-
-  async changePassword(password) {
-    try {
-      
+      let data = await db.select("*").where({ login: login }).table("usuarios");
+      if (!(data.length <= 0)) {
+        return { validated: true, values: data };
+      } else {
+        return { validated: false, error: "Usuario não encontrado" };
+      }
     } catch (e) {
-
+      return { validated: false, error: e.message };
     }
   }
 
+  async viewUsers() {
+    try {
+      let data = await db.select("*").table("usuarios");
+      if (data.length >= 0) {
+        return { validated: true, values: data };
+      } else {
+        return { validated: false, error: "Nenhum dado disponivel" };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
 }
 
 module.exports = new Usuario();

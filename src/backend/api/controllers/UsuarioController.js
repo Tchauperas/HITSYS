@@ -1,6 +1,7 @@
 const user = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const permission = require("../services/auth_permission");
 require("dotenv").config();
 
 class UsuarioController {
@@ -44,8 +45,8 @@ class UsuarioController {
           res.status(201).json({
             success: true,
             token: token,
-            data: data
-          })
+            data: data,
+          });
         } else {
           res.status(403).json({ success: false, message: `Senha inválida` });
         }
@@ -56,6 +57,48 @@ class UsuarioController {
       res
         .status(500)
         .json({ success: false, message: `Erro na aplicação: ${e.message}` });
+    }
+  }
+
+  async viewUsers(req, res) {
+    const auth = req.headers["authorization"];
+    if (auth != undefined) {
+      const bearer = auth.split(" ");
+      let token = bearer[1];
+      try {
+        let decoded = jwt.decode(token, process.env.SECTK);
+        let user_id = decoded.id;
+        if (permission(user_id, 14)) {
+          try {
+            let result = await user.viewUsers();
+            result.validated
+              ? res.status(201).json({ success: true, values: result.values })
+              : res.status(400).json({
+                  success: false,
+                  message: `Erro ao listar usuários: ${result.error}`,
+                });
+          } catch (e) {
+            res.status(500).json({
+              success: false,
+              message: `Internal server error: ${e.message}`,
+            });
+          }
+        } else {
+          res.status(401).json({
+            success: false,
+            messsage: "Usuário não tem permissão para essa ação",
+          });
+        }
+      } catch (e) {
+        res.status(500).json({
+          success: false,
+          message: `Internal server error: ${e.message}`,
+        });
+      }
+    } else {
+      res
+        .status(401)
+        .json({ success: false, message: "Usário não autenticado" });
     }
   }
 }

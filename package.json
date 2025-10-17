@@ -16,6 +16,7 @@
   "build": {
     "appId": "com.HITSYS.id",
     "productName": "HITSYS",
+    "asar": true,
     "directories": {
       "output": "HITSYSTEM"
     },
@@ -23,7 +24,8 @@
       "main.js",
       "renderer/**",
       "src/backend/**",
-      "package.json"
+      "package.json",
+      "preload.js"
     ],
     "linux": {
       "target": [
@@ -43,7 +45,8 @@
     "mysql2": "^3.14.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.1",
+    "tree-kill": "^1.2.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
