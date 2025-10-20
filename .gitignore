@@ -27,3 +27,4 @@ HITSYSTEM
 
 # Variaveis de Ambiente
 .env
+.env.dev

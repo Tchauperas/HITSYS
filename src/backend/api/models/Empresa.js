@@ -13,7 +13,7 @@ class Empresa {
   async visualizarEmpresas() {
     try {
       let empresas = await db.select("*").table("empresas");
-      if (empresas.lenght > 0) {
+      if (empresas.length > 0) {
         return { validated: true, values: empresas };
       } else {
         return { validated: false, error: "Nenhuma empresa cadastrada" };
