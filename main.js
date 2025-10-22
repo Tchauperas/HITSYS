@@ -47,7 +47,6 @@ function createMainWindow() {
   });
 }
 
-// Função para esperar o servidor ficar disponível
 function waitForServer(port, timeout = 5000) {
   const net = require("net");
   return new Promise((resolve, reject) => {

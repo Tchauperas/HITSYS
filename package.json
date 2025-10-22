@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "npm run build && electron .",
+    "start": "electron .",
     "devStart": "nodemon src/backend/server.js",
     "compile": "npm run build && electron-builder"
   },
