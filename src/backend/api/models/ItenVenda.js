@@ -37,6 +37,22 @@ class ItenVenda {
       return { validated: false, error: e.message };
     }
   }
+
+  async visualizarItensVenda(id_venda) {
+    try {
+      let itens = await db
+        .select("*")
+        .where({ id_venda: id_venda })
+        .table("itens_venda");
+      if (itens.length > 0) {
+        return { validated: true, values: itens };
+      } else {
+        return { validated: false, error: "Sem itens para visualização" };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
 }
 
 module.exports = new ItenVenda();
