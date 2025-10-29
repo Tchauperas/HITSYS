@@ -45,7 +45,7 @@ class UsuarioController {
           res.status(201).json({
             success: true,
             token: token,
-            //data: data,
+            data: data
           });
         } else {
           res.status(403).json({ success: false, message: `Senha inválida` });

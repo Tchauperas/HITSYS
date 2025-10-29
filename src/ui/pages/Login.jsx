@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom" // Certifique-se de que o react-router-dom está instalado
 import "./Login.css"
 import logo from "../assets/logo_hitsys.png"
 
@@ -6,6 +7,7 @@ function Login() {
   const [login, setLogin] = useState("")
   const [senha, setSenha] = useState("")
   const [mensagem, setMensagem] = useState("")
+  const navigate = useNavigate() // Hook para redirecionamento
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -25,12 +27,16 @@ function Login() {
       const data = await response.json()
 
       if (response.ok) {
-        window.electronAPI?.loginSuccess(data)
+        console.log(data)
+        // Armazena os dados no localStorage
+        localStorage.setItem("userData", JSON.stringify(data))
+        // Redireciona para a tela de Home
+        navigate("/home")
       } else {
-        alert("Erro ao realizar login: ", data.message)
+        setMensagem(`Erro ao realizar login: ${data.message}`)
       }
     } catch (error) {
-      alert("Erro de conexão com servidor: ", error)
+      setMensagem(`Erro de conexão com servidor: ${error.message}`)
     }
   }
 

@@ -1,50 +1,22 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const { spawn } = require("child_process");
 
-let loginWindow;
 let mainWindow;
-let userToken = null;
 let backendProcess;
-
-const createLoginWindow = () => {
-  loginWindow = new BrowserWindow({
-    width: 500,
-    height: 386,
-    resizable: false,
-    frame: false,
-    transparent: true,
-    useContentSize: true,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: true,
-    },
-  });
-
-  loginWindow.loadURL("http://localhost:3000/");
-};
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    show: false,
+    fullscreen: true, // Inicia em tela cheia real
+    resizable: false, // Desativa redimensionamento
+    frame: false, // Remove a barra de título (opcional)
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
-      nodeIntegration: true,
+      nodeIntegration: false,
     },
   });
 
-  mainWindow.loadURL("http://localhost:3000/home");
-
-  mainWindow.once("ready-to-show", () => {
-    mainWindow.maximize();
-    mainWindow.show();
-
-    if (userToken) {
-      mainWindow.webContents.send("user-token", userToken);
-    }
-  });
+  mainWindow.loadURL("http://localhost:3000/");
 }
 
 function waitForServer(port, timeout = 5000) {
@@ -82,16 +54,10 @@ app.whenReady().then(async () => {
   try {
     // aguarda o backend iniciar antes de abrir a janela
     await waitForServer(3000, 10000);
-    createLoginWindow();
+    createMainWindow();
   } catch (err) {
     console.error("Erro: backend não iniciou a tempo", err);
   }
-});
-
-ipcMain.on("Login-success", (event, token) => {
-  userToken = token;
-  if (loginWindow) loginWindow.close();
-  createMainWindow();
 });
 
 app.on("window-all-closed", () => {

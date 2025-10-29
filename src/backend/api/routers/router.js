@@ -16,6 +16,8 @@ const rootGrupos = require("./routes/grupos");
 const rootMarcas = require("./routes/marcas");
 const rootSecoes = require("./routes/secoes");
 const rootUnidades = require("./routes/unidades");
+const rootCidades = require("./routes/cidades");
+const rootEstados = require("./routes/estados");
 
 router.use("/", rootLogin);
 router.use("/home", rootHome);
@@ -32,5 +34,7 @@ router.use("/grupos", rootGrupos);
 router.use("/marcas", rootMarcas);
 router.use("/secoes", rootSecoes);
 router.use("/unidades", rootUnidades);
+router.use("/cidades", rootCidades);
+router.use("/estados", rootEstados);
 
 module.exports = router;
