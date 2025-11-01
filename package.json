@@ -63,5 +63,17 @@
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
     "vite": "^7.1.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tchauperas/HITSYS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tchauperas/HITSYS/issues"
+  },
+  "homepage": "https://github.com/Tchauperas/HITSYS#readme",
+  "description": ""
 }

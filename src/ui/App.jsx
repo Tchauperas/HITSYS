@@ -15,6 +15,7 @@ import Vendedores from "./pages/Vendedores.jsx";
 import Compras from "./pages/Compras.jsx";
 import Vendas from "./pages/Vendas.jsx";
 import Contas from "./pages/Contas.jsx";
+import Pdv from "./pages/Pdv.jsx";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/compras" element={<Compras />} />
           <Route path="/vendas" element={<Vendas />} />
           <Route path="/contas" element={<Contas />} />
+          <Route path="/pdv" element={<Pdv />} />
         </Routes>
       </BrowserRouter>
     </div>
