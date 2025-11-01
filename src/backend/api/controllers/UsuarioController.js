@@ -45,7 +45,7 @@ class UsuarioController {
           res.status(201).json({
             success: true,
             token: token,
-            data: data
+            data: data,
           });
         } else {
           res.status(403).json({ success: false, message: `Senha inválida` });
@@ -73,6 +73,45 @@ class UsuarioController {
       res.status(500).json({
         success: false,
         message: `Internal server error: ${e.message}`,
+      });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      const { id } = req.params; // ID do usuário a ser atualizado
+      const fieldsToUpdate = req.body; // Campos a serem atualizados
+
+      const result = await user.updateUser(id, fieldsToUpdate);
+
+      if (result.validated) {
+        res.status(200).json({ success: true, message: result.message });
+      } else {
+        res.status(404).json({ success: false, message: result.error });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: `Erro na aplicação: ${e.message}`,
+      });
+    }
+  }
+
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params; // ID do usuário a ser excluído
+
+      const result = await user.deleteUser(id);
+
+      if (result.validated) {
+        res.status(200).json({ success: true, message: result.message });
+      } else {
+        res.status(404).json({ success: false, message: result.error });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: `Erro na aplicação: ${e.message}`,
       });
     }
   }

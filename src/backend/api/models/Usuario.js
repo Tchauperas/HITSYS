@@ -44,6 +44,42 @@ class Usuario {
       return { validated: false, error: e.message };
     }
   }
+
+  async updateUser(id, fieldsToUpdate) {
+    try {
+      const updatedRows = await db("usuarios")
+        .where({ id: id })
+        .update(fieldsToUpdate);
+
+      if (updatedRows > 0) {
+        return { validated: true, message: "Usuário atualizado com sucesso" };
+      } else {
+        return {
+          validated: false,
+          error: "Usuário não encontrado para atualização",
+        };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
+
+  async deleteUser(id) {
+    try {
+      const deletedRows = await db("usuarios").where({ id: id }).del();
+
+      if (deletedRows > 0) {
+        return { validated: true, message: "Usuário excluído com sucesso" };
+      } else {
+        return {
+          validated: false,
+          error: "Usuário não encontrado para exclusão",
+        };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
 }
 
 module.exports = new Usuario();

@@ -53,6 +53,50 @@ class ItenVenda {
       return { validated: false, error: e.message };
     }
   }
+
+  async atualizarItem(id_item, data) {
+    try {
+      const updated = await db("itens_venda")
+        .where({ id_item_venda: id_item })
+        .update(data);
+
+      if (updated > 0) {
+        return { validated: true };
+      } else {
+        return { validated: false, error: "Item não encontrado" };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
+
+  async deletarItem(id_item) {
+    try {
+      const deleted = await db("itens_venda")
+        .where({ id_item_venda: id_item })
+        .delete();
+
+      if (deleted > 0) {
+        return { validated: true };
+      } else {
+        return { validated: false, error: "Item não encontrado" };
+      }
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
+
+  async deletarItensPorVenda(id_venda) {
+    try {
+      await db("itens_venda")
+        .where({ id_venda_venda: id_venda })
+        .delete();
+
+      return { validated: true };
+    } catch (e) {
+      return { validated: false, error: e.message };
+    }
+  }
 }
 
 module.exports = new ItenVenda();

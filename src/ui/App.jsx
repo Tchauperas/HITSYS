@@ -18,7 +18,7 @@ import Contas from "./pages/Contas.jsx";
 
 function App() {
   return (
-    <div className="container mt-4"> {/* Adiciona um container do Bootstrap */}
+    <div className="container mt-4">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
