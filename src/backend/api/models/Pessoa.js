@@ -13,7 +13,7 @@ class Pessoa {
   async visualizarPessoas() {
     try {
       let pessoas = await db.select("*").table("pessoas");
-      if (pessoas.lenght > 0) {
+      if (pessoas.length > 0) {
         return { validated: true, values: pessoas };
       } else {
         return { validated: false, error: "Nenhuma pessoa cadastrada" };
@@ -42,10 +42,10 @@ class Pessoa {
   async deletarPessoa(id) {
     try {
       let pessoa = await db
-        .delete("*")
+        .table("pessoas") // Especifica a tabela
         .where({ id_pessoa: id })
-        .table("pessoas");
-      if (pessoa != 0) {
+        .del(); // Remove o registro
+      if (pessoa > 0) {
         return { validated: true };
       } else {
         return { validated: false, error: "Pessoa não encontrada" };

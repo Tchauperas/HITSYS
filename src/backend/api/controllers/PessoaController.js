@@ -68,7 +68,7 @@ class PessoaController {
 
   async deletarPessoa(req, res) {
     let id = req.params.id;
-    if (id != undefined || !(isNaN(id))) {
+    if (id !== undefined && !isNaN(id)) { // Corrige a validação do ID
       try {
         let result = await pessoa.deletarPessoa(id);
         result.validated
@@ -86,7 +86,7 @@ class PessoaController {
         });
       }
     } else {
-      res.status(400).json({ success: false, message: "Invalid body request" });
+      res.status(400).json({ success: false, message: "ID inválido" });
     }
   }
 
