@@ -25,7 +25,8 @@
       "renderer/**",
       "src/backend/**",
       "package.json",
-      "preload.js"
+      "preload.js",
+      ".env"
     ],
     "linux": {
       "target": [

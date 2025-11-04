@@ -1,9 +1,102 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Produtos.css";
 import Navbar from "../components/Navbar";
 import logo from "../assets/produtos_icon.png";
 
 function Produtos() {
+  const [produtos, setProdutos] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const fetchProdutos = async () => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:3000/produtos/visualizar",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success && Array.isArray(data.values)) {
+        setProdutos(data.values);
+      } else {
+        console.error("Formato inesperado:", data);
+      }
+    } catch (error) {
+      console.error("Erro no fetch:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProdutos();
+  }, []);
+
+  const handleDelete = async (idProduto) => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      return;
+    }
+
+    if (window.confirm("Tem certeza que deseja excluir este produto?")) {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:3000/produtos/deletar/${idProduto}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.headers.get("Content-Type")?.includes("application/json")) {
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Produto excluído com sucesso!");
+            fetchProdutos();
+          } else {
+            console.error("Erro ao excluir produto:", data.message);
+            alert("Erro ao excluir produto.");
+          }
+        } else {
+          const text = await response.text();
+          console.error("Resposta inesperada da API:", text);
+          alert("Erro inesperado ao excluir produto.");
+        }
+      } catch (error) {
+        console.error("Erro no fetch:", error);
+        alert("Erro ao excluir produto.");
+      }
+    }
+  };
+
+  const filteredProdutos = produtos.filter(
+    (produto) =>
+      produto.descricao?.toLowerCase().includes(search.toLowerCase()) ||
+      produto.codigo?.toString().includes(search) ||
+      produto.cod_barras?.includes(search)
+  );
+
   return (
     <div className="produtos-container">
       <Navbar />
@@ -27,22 +120,66 @@ function Produtos() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="   Pesquisar produto" />
+          <input 
+            type="text" 
+            placeholder="   Pesquisar produto"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
 
-        <table className="produtos-table">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Descrição</th>
-              <th>Preço</th>
-              <th>Estoque</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        {loading ? (
+          <p style={{ textAlign: "center", marginTop: "20px" }}>
+            Carregando produtos...
+          </p>
+        ) : filteredProdutos.length === 0 ? (
+          <p style={{ textAlign: "center", marginTop: "20px" }}>
+            Nenhum produto encontrado.
+          </p>
+        ) : (
+          <table className="produtos-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProdutos.map((produto) => (
+                <tr key={produto.id_produto}>
+                  <td>{produto.codigo}</td>
+                  <td>{produto.descricao}</td>
+                  <td>
+                    {produto.preco_venda 
+                      ? parseFloat(produto.preco_venda).toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })
+                      : "R$ 0,00"}
+                  </td>
+                  <td>{produto.saldo_estoque || "0,000"}</td>
+                  <td>
+                    <button
+                      className="btn-alterar"
+                      onClick={() => alert("Abrir tela de alteração")}
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="btn-excluir"
+                      onClick={() => handleDelete(produto.id_produto)}
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
