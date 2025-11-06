@@ -76,8 +76,9 @@ function Login() {
           <button type="submit" className="btn-login">
             Entrar
           </button>
+          {mensagem && <p className="mensagem">{mensagem}</p>}
         </div>
-        {mensagem && <p className="mensagem">{mensagem}</p>}
+
       </form>
     </div>
   )

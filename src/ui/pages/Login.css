@@ -14,7 +14,7 @@
 .login-box {
   padding: 0;
   background: white;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 500px;
 }
@@ -69,7 +69,7 @@
   background: #404951;
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 22px;
   font-weight: bolder;
@@ -84,10 +84,10 @@
 }
 
 .mensagem {
-  margin-top: 1rem;
+  margin-top: 5px;
   text-align: center;
   font-size: 14px;
-  color: #333;
+  color: #f80000;
 }
 
 .logo-name-box {
@@ -130,12 +130,14 @@
 }
 
 .inputs {
-  border: 3px #0f6ac5 solid;
-  margin: 40px;
+  border: 5px #0f6ac5 solid;
+  margin: 20px;
   border-radius: 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   padding: 30px;
-  height: 135px;
   justify-content: center;
+  gap: 1.5px; /* espaço entre campos e botão */
 }
+
