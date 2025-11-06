@@ -113,6 +113,43 @@ function Pdv() {
       </div>
 
       <div className="row mb-3">
+        <div className="col-9">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="BUSQUE POR PRODUTOS"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") buscarProdutos(); }}
+          />
+        </div>
+        <div className="col-3">
+          <button className="btn btn-outline-primary w-100" onClick={buscarProdutos}>
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      {resultadosBusca.length > 0 && (
+        <div className="row mb-2">
+          <div className="col">
+            <ul className="list-group">
+              {resultadosBusca.map((p) => (
+                <li
+                  key={p.id_produto ?? p.codigo}
+                  className="list-group-item list-group-item-action"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => selecionarProduto(p)}
+                >
+                  {p.codigo} - {p.descricao} - R$ {Number(p.preco_unitario || 0).toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      <div className="row mb-3">
         <div className="col">
           <input
             type="text"
@@ -155,43 +192,6 @@ function Pdv() {
           </button>
         </div>
       </div>
-
-      <div className="row mb-3">
-        <div className="col-9">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar produto (F3)"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") buscarProdutos(); }}
-          />
-        </div>
-        <div className="col-3">
-          <button className="btn btn-outline-primary w-100" onClick={buscarProdutos}>
-            Buscar
-          </button>
-        </div>
-      </div>
-
-      {resultadosBusca.length > 0 && (
-        <div className="row mb-2">
-          <div className="col">
-            <ul className="list-group">
-              {resultadosBusca.map((p) => (
-                <li
-                  key={p.id_produto ?? p.codigo}
-                  className="list-group-item list-group-item-action"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => selecionarProduto(p)}
-                >
-                  {p.codigo} - {p.descricao} - R$ {Number(p.preco_unitario || 0).toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
 
       <table className="table table-bordered">
         <thead className="table-light">
