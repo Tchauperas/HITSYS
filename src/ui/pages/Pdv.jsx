@@ -12,6 +12,10 @@ function Pdv() {
   const [cliente, setCliente] = useState(1);
   const [vendedor, setVendedor] = useState(1);
 
+  // estados e funções para busca de produtos
+  const [busca, setBusca] = useState("");
+  const [resultadosBusca, setResultadosBusca] = useState([]);
+
   const adicionarItem = () => {
     const precoTotal = quantidade * valorUnitario;
     const novoItem = {
@@ -75,6 +79,32 @@ function Pdv() {
     }
   };
 
+  const buscarProdutos = async () => {
+    const termo = (busca || "").trim();
+    if (!termo) return;
+    try {
+      // futura chamada real ao backend
+      const res = await fetch(`http://127.0.0.1:3000/produtos?search=${encodeURIComponent(termo)}`);
+      if (!res.ok) throw new Error("Sem resposta do serviço");
+      const data = await res.json();
+      setResultadosBusca(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.warn("Busca de produtos falhou, usando simulação:", err);
+      // resultado simulado para desenvolvimento local
+      setResultadosBusca([
+        { id_produto: 1, codigo: "EX001", descricao: "Produto Exemplo", preco_unitario: 12.5 },
+      ]);
+    }
+  };
+
+  const selecionarProduto = (prod) => {
+    setCodigo(prod.codigo || "");
+    setDescricao(prod.descricao || "");
+    setValorUnitario(prod.preco_unitario || 0);
+    setQuantidade(1);
+    setResultadosBusca([]);
+  };
+
   return (
     <div className="container mt-4">
       <div className="text-center mb-4">
@@ -125,6 +155,43 @@ function Pdv() {
           </button>
         </div>
       </div>
+
+      <div className="row mb-3">
+        <div className="col-9">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Buscar produto (F3)"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") buscarProdutos(); }}
+          />
+        </div>
+        <div className="col-3">
+          <button className="btn btn-outline-primary w-100" onClick={buscarProdutos}>
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      {resultadosBusca.length > 0 && (
+        <div className="row mb-2">
+          <div className="col">
+            <ul className="list-group">
+              {resultadosBusca.map((p) => (
+                <li
+                  key={p.id_produto ?? p.codigo}
+                  className="list-group-item list-group-item-action"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => selecionarProduto(p)}
+                >
+                  {p.codigo} - {p.descricao} - R$ {Number(p.preco_unitario || 0).toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       <table className="table table-bordered">
         <thead className="table-light">
