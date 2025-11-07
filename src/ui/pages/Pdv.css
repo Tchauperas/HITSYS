@@ -2,7 +2,7 @@
 .container {
   background-color: #f8f9fa;
   border-radius: 8px;
-  padding: 20px;
+  padding: 40px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -44,6 +44,49 @@
   background-color: #e9ecef;
   text-align: center;
 }
+
+/* botões de seleção (empresa / cliente / vendedor) próximos à busca */
+.pdv-selectors {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-add-client {
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.btn-add-client {
+  background-color: #0F6AC5;
+  color: #ffffff;
+  border: 1px solid #0F6AC5;
+}
+
+.btn-add-client:hover {
+  filter: brightness(0.95);
+}
+
+/* dropdown panel used by selectors */
+.pdv-dropdown-panel {
+  position: absolute;
+  z-index: 30;
+  top: 42px;
+  left: 0;
+  width: 320px;
+  max-height: 260px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 6px;
+  padding: 8px;
+  box-shadow: 0 6px 18px rgba(22,27,34,0.08);
+  overflow: auto;
+}
+
+.pdv-selectors .selector-item { position: relative; }
+
+.pdv-dropdown-panel .list-group { max-height: 200px; overflow: auto; }
 
 .table td {
   text-align: center;
@@ -104,7 +147,7 @@
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .d-flex {
     flex-wrap: wrap;
     gap: 10px;

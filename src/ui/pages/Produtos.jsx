@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Produtos.css";
 import Navbar from "../components/Navbar";
+import CadastroProduto from "../components/Cadastro_produto";
+import AlterarProduto from "../components/Alterar_produto";
 import logo from "../assets/produtos_icon.png";
 
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showCadastroModal, setShowCadastroModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProduto, setSelectedProduto] = useState(null);
 
   const fetchProdutos = async () => {
     const token = JSON.parse(localStorage.getItem("userData"))?.token;
@@ -68,26 +73,72 @@ function Produtos() {
           }
         );
 
-        if (response.headers.get("Content-Type")?.includes("application/json")) {
-          const data = await response.json();
-
-          if (data.success) {
-            alert("Produto excluído com sucesso!");
-            fetchProdutos();
-          } else {
+        if (response.ok) {
+          alert("Produto excluído com sucesso!");
+          fetchProdutos(); // Refresh the page
+        } else {
+          if (response.headers.get("Content-Type")?.includes("application/json")) {
+            const data = await response.json();
             console.error("Erro ao excluir produto:", data.message);
             alert("Erro ao excluir produto.");
+          } else {
+            const text = await response.text();
+            console.error("Resposta inesperada da API:", text);
+            alert("Erro ao excluir produto.");
           }
-        } else {
-          const text = await response.text();
-          console.error("Resposta inesperada da API:", text);
-          alert("Erro inesperado ao excluir produto.");
         }
       } catch (error) {
         console.error("Erro no fetch:", error);
         alert("Erro ao excluir produto.");
       }
     }
+  };
+
+  const handleEdit = (produto) => {
+    setSelectedProduto(produto);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (updatedProduto) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+      if (!token) {
+        alert("Token não encontrado. Faça login novamente.");
+        return;
+      }
+
+      const response = await fetch(
+        `http://127.0.0.1:3000/produtos/alterar/${updatedProduto.id_produto}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedProduto),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Produto atualizado com sucesso!");
+        fetchProdutos(); // Recarregar lista
+        setShowEditModal(false);
+        setSelectedProduto(null);
+      } else {
+        alert(`Erro ao atualizar produto: ${data.message}`);
+      }
+    } catch (error) {
+      alert("Erro ao conectar com o servidor");
+      console.error(error);
+    }
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedProduto(null);
   };
 
   const filteredProdutos = produtos.filter(
@@ -111,7 +162,7 @@ function Produtos() {
           <div className="right-actions">
             <button
               className="btn-cadastrar"
-              onClick={() => alert("Abrir tela de cadastro")}
+              onClick={() => setShowCadastroModal(true)}
             >
               Cadastrar
             </button>
@@ -164,7 +215,7 @@ function Produtos() {
                   <td>
                     <button
                       className="btn-alterar"
-                      onClick={() => alert("Abrir tela de alteração")}
+                      onClick={() => handleEdit(produto)}
                     >
                       ✏️
                     </button>
@@ -181,6 +232,22 @@ function Produtos() {
           </table>
         )}
       </div>
+
+      {showCadastroModal && (
+        <CadastroProduto
+          onClose={() => setShowCadastroModal(false)}
+          onSuccess={fetchProdutos}
+        />
+      )}
+
+      {showEditModal && selectedProduto && (
+        <AlterarProduto
+          isOpen={showEditModal}
+          onClose={handleCloseEditModal}
+          produto={selectedProduto}
+          onUpdate={handleUpdate}
+        />
+      )}
     </div>
   );
 }
