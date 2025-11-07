@@ -17,7 +17,7 @@ function createMainWindow() {
         },
     })
 
-    mainWindow.loadURL("http://localhost:3000/home")
+    mainWindow.loadURL("http://localhost:3000/")
 }
 
 function waitForServer(port, timeout = 5000) {
