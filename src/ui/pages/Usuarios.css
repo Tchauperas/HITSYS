@@ -78,6 +78,7 @@
 .usuarios-table td {
     padding: 12px;
     text-align: left;
+    vertical-align: middle;
 }
 
 .usuarios-table th {
@@ -89,8 +90,10 @@
     display: flex;
     justify-content: center;
     gap: 8px;
+    align-items: center; /* garante alinhamento vertical dos botões */
 }
 
+/* Botões com estilo idêntico à página de Perfis */
 .btn-editar {
     background-color: #444;
     color: white;
@@ -101,9 +104,7 @@
     transition: opacity 0.2s;
 }
 
-.btn-editar:hover {
-    opacity: 0.8;
-}
+.btn-editar:hover { opacity: 0.8; }
 
 .btn-excluir {
     background-color: #dc3545;
@@ -115,19 +116,17 @@
     transition: opacity 0.2s;
 }
 
-.btn-excluir:hover {
-    opacity: 0.8;
+.btn-excluir:hover { opacity: 0.8; }
+
+/* botão de permissões (caso queira adicionar futuramente) */
+.btn-perms {
+    background-color: #0f6ac5;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-.btn-action {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  margin: 0 5px;
-  transition: transform 0.2s;
-}
-
-.btn-action:hover {
-  transform: scale(1.2);
-}
+.btn-perms:hover { opacity: 0.9; transform: translateY(-1px); }

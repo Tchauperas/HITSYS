@@ -6,16 +6,16 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
     nome: "",
     login: "",
     senha_hash: "",
-    id_perfil_usuario: 1,
+    id_perfil_usuario: "",
     ativo: true,
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [perfis, setPerfis] = useState([]);
 
   useEffect(() => {
-    // Carregar os dados do usuário ao abrir o modal
-    const fetchUserData = async () => {
+    const fetchPerfis = async () => {
       const token = JSON.parse(localStorage.getItem("userData"))?.token;
 
       if (!token) {
@@ -24,32 +24,111 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:3000/usuarios/visualizar/${userId}`, {
+        const response = await fetch("http://127.0.0.1:3000/perf_usuarios/visualizar", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           },
         });
 
-        const data = await response.json();
-
-        if (data.success) {
-          setFormData({
-            nome: data.values[0].nome, // Corrigido para acessar o primeiro objeto do array
-            login: data.values[0].login,
-            senha: "", // Senha não é retornada por segurança
-            id_perfil_usuario: data.values[0].id_perfil_usuario,
-            ativo: data.values[0].ativo === 1,
-          });
-        } else {
-          setMessage(`Erro ao carregar dados do usuário: ${data.message}`);
+        const text = await response.text();
+        console.log('Resposta da API:', text);
+        
+        try {
+          const data = JSON.parse(text);
+          if (data.success) {
+            setPerfis(data.values);
+          } else {
+            setMessage("Erro ao carregar perfis de usuários");
+          }
+        } catch (jsonError) {
+          console.error('Erro ao parsear JSON:', jsonError);
+          setMessage("Erro ao processar resposta do servidor");
         }
       } catch (error) {
         setMessage(`Erro ao conectar com o servidor: ${error.message}`);
       }
     };
 
-    fetchUserData();
+    fetchPerfis();
+  }, []);
+
+  const fetchUserData = async () => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      setMessage("Token não encontrado. Faça login novamente.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/usuarios/visualizar/${userId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData({
+          nome: data.values[0].nome,
+          login: data.values[0].login,
+          senha: "",
+          id_perfil_usuario: data.values[0].id_perfil_usuario,
+          ativo: data.values[0].ativo === 1,
+        });
+      } else {
+        setMessage(`Erro ao carregar dados do usuário: ${data.message}`);
+      }
+    } catch (error) {
+      setMessage(`Erro ao conectar com o servidor: ${error.message}`);
+    }
+  };
+
+  // Effect para carregar os perfis
+  useEffect(() => {
+    const fetchPerfis = async () => {
+      const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+      if (!token) {
+        setMessage("Token não encontrado. Faça login novamente.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:3000/perf_usuarios/visualizar", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        });
+
+        const text = await response.text();
+        console.log('Resposta da API:', text);
+        
+        try {
+          const data = JSON.parse(text);
+          if (data.success) {
+            setPerfis(data.values);
+            // Depois que os perfis são carregados, carregamos os dados do usuário
+            await fetchUserData();
+          } else {
+            setMessage("Erro ao carregar perfis de usuários");
+          }
+        } catch (jsonError) {
+          console.error('Erro ao parsear JSON:', jsonError);
+          setMessage("Erro ao processar resposta do servidor");
+        }
+      } catch (error) {
+        setMessage(`Erro ao conectar com o servidor: ${error.message}`);
+      }
+    };
+
+    fetchPerfis();
   }, [userId]);
 
   const handleChange = (e) => {
@@ -151,9 +230,16 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value={1}>Administrador</option>
-            <option value={2}>Vendedor</option>
-            <option value={3}>Usuário</option>
+            <option value="">Selecione um perfil</option>
+            {perfis.map((perfil) => {
+              const pid = perfil.id_perfil_usuario ?? perfil.id ?? perfil.id_perfil;
+              const label = perfil.descricao ?? perfil.nome ?? perfil.label ?? `Perfil ${pid}`;
+              return (
+                <option key={pid} value={pid}>
+                  {label}
+                </option>
+              );
+            })}
           </select>
           <label>
             <input

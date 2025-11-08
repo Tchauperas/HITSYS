@@ -7,6 +7,7 @@ import AlterarUsuarios from "../components/Alterar_usuarios";
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
+  const [perfis, setPerfis] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,13 +16,55 @@ function Usuarios() {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
+    const fetchPerfis = async () => {
+      const token = JSON.parse(localStorage.getItem("userData"))?.token;
+      
+      if (!token) {
+        setError("Token não encontrado. Faça login novamente.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:3000/perf_usuarios/visualizar", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setPerfis(data.values);
+        } else {
+          setError("Erro ao carregar perfis de usuários");
+        }
+      } catch (error) {
+        setError("Erro ao carregar perfis de usuários");
+        console.error(error);
+      }
+    };
+
+    fetchPerfis();
     fetchUsuarios();
   }, []);
 
   const fetchUsuarios = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://127.0.0.1:3000/usuarios/visualizar");
+      const token = JSON.parse(localStorage.getItem("userData"))?.token;
+      
+      if (!token) {
+        setError("Token não encontrado. Faça login novamente.");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:3000/usuarios/visualizar", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await response.json();
 
       if (data.success) {
@@ -70,12 +113,13 @@ function Usuarios() {
   };
 
   const getPerfilNome = (idPerfil) => {
-    const perfis = {
-      1: "Administrador",
-      2: "Vendedor",
-      3: "Usuario",
-    };
-    return perfis[idPerfil] || "Não definido";
+    if (!perfis || perfis.length === 0) return "Não definido";
+    // Alguns endpoints retornam o id como 'id_perfil_usuario' no banco
+    const perfil = perfis.find((p) => {
+      const pid = p.id_perfil_usuario ?? p.id ?? p.id_perfil;
+      return String(pid) === String(idPerfil);
+    });
+    return perfil ? perfil.descricao || perfil.nome || perfil.label || "Não definido" : "Não definido";
   };
 
   const filteredUsuarios = usuarios.filter(
@@ -142,7 +186,7 @@ function Usuarios() {
             <tr>
               <th>Nome</th>
               <th>Perfil</th>
-              <th>Ações</th>
+              <th style={{ textAlign: "center", width: 140 }}>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -152,19 +196,21 @@ function Usuarios() {
                 <tr key={usuario.id_usuario}>
                   <td>{usuario.nome}</td>
                   <td>{getPerfilNome(usuario.id_perfil_usuario)}</td>
-                  <td>
+                  <td className="acoes">
                     <button
-                      className="btn-action"
+                      className="btn-editar"
                       onClick={() => {
                         setSelectedUserId(usuario.id_usuario);
                         setShowAlterarModal(true);
                       }}
+                      title="Editar"
                     >
                       ✏️
                     </button>
                     <button
-                      className="btn-action"
+                      className="btn-excluir"
                       onClick={() => deleteUsuario(usuario.id_usuario)}
+                      title="Excluir"
                     >
                       🗑️
                     </button>
