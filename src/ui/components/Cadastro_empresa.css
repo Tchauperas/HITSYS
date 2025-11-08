@@ -100,3 +100,8 @@
   color: #b91c1c;
   text-align: center;
 }
+
+.modal-form .message.success {
+  color: #047857;
+  font-weight: 500;
+}

@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import logo from "../assets/perfis_icon.png";
 import CadastrarPerfil from "../components/Cadastrar_perfil";
 import AlterarPerfil from "../components/Alterar_perfil";
+import PermissoesModal from "../components/PermissoesModal";
 
 function Perf_usuarios() {
   const [perfis, setPerfis] = useState([]);
@@ -85,13 +86,13 @@ function Perf_usuarios() {
   const filtered = perfis.filter((p) => (p.descricao || "").toLowerCase().includes(searchTerm.toLowerCase()));
 
   const [showCadastrarModal, setShowCadastrarModal] = useState(false);
+  const [showPermissoesModal, setShowPermissoesModal] = useState(false);
+  const [selectedPerfilPerms, setSelectedPerfilPerms] = useState(null);
   
   // abrir modal/rota de permissões (placeholder)
   const openPermissoes = (perfil) => {
-    // Futuramente abrir modal de permissões ou navegar para página de permissões
-    // Por enquanto apenas abre um alert com o id
-    const id = perfil.id_perfil_usuario || perfil.id || "?";
-    window.alert(`Abrir permissões para perfil id: ${id} - implementar modal/rota`);
+    setSelectedPerfilPerms(perfil);
+    setShowPermissoesModal(true);
   };
 
   return (
@@ -165,6 +166,16 @@ function Perf_usuarios() {
           onSuccess={() => {
             fetchPerfis();
             setShowAlterarModal(false);
+          }}
+        />
+      )}
+      {showPermissoesModal && selectedPerfilPerms && (
+        <PermissoesModal
+          perfil={selectedPerfilPerms}
+          onClose={() => setShowPermissoesModal(false)}
+          onSuccess={() => {
+            fetchPerfis();
+            setShowPermissoesModal(false);
           }}
         />
       )}
