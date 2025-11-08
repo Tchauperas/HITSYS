@@ -10,6 +10,8 @@ import vendedoresIcon from "../assets/vendedores_icon.png";
 import comprasIcon from "../assets/compras_icon.png";
 import vendasIcon from "../assets/vendas_icon.png";
 import contasIcon from "../assets/contas_icon.png";
+import pdvIcon from "../assets/pdv_icon.png";
+import auditoriaIcon from "../assets/auditoria_icon.png"
 
 import { useNavigate } from "react-router-dom";
 
@@ -71,6 +73,16 @@ const Navbar = () => {
         <button onClick={() => navigate("/contas")}>
           <img className="sideIcon" src={contasIcon} alt="contas" />
           Contas
+        </button>
+
+        <button onClick={() => navigate("/pdv")}>
+          <img className="sideIcon" src={pdvIcon} alt="pdv" />
+          Pdv
+        </button>
+
+         <button onClick={() => navigate("/auditoria")}>
+          <img className="sideIcon" src={auditoriaIcon} alt="auditoria" />
+          Auditoria
         </button>
       </div>
     </div>

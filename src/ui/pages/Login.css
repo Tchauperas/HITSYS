@@ -140,3 +140,16 @@
   justify-content: center;
   gap: 1.5px;
 }
+
+/* FUNDO EXCLUSIVO TELA DE LOGIN */
+.login-page-wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  background: linear-gradient(135deg, #191970);
+ 
+}

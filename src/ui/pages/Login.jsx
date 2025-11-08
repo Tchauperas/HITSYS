@@ -41,45 +41,46 @@ function Login() {
   }
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-box">
-        <div className="logo-name-box">
-          <h1 className="logo-name">
-            <img src={logo} alt="Logo" className="logo" />
-            HITSYS
-          </h1>
-        </div>
-        <div className="inputs">
-          <div className="input-group">
-            <label htmlFor="login">Login</label>
-            <input
-              type="text"
-              id="login"
-              placeholder="Digite seu usuário"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-              required
-            />
+    <div className="login-page-wrapper">
+      <div className="login-container">
+        <form onSubmit={handleSubmit} className="login-box">
+          <div className="logo-name-box">
+            <h1 className="logo-name">
+              <img src={logo} alt="Logo" className="logo" />
+              HITSYS
+            </h1>
           </div>
+          <div className="inputs">
+            <div className="input-group">
+              <label htmlFor="login">Login</label>
+              <input
+                type="text"
+                id="login"
+                placeholder="Digite seu usuário"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+                required
+              />
+            </div>
 
-          <div className="input-group">
-            <label htmlFor="senha">Senha</label>
-            <input
-              type="password"
-              id="senha"
-              placeholder="Digite sua senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+            <div className="input-group">
+              <label htmlFor="senha">Senha</label>
+              <input
+                type="password"
+                id="senha"
+                placeholder="Digite sua senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="btn-login">
+              Entrar
+            </button>
+            {mensagem && <p className="mensagem">{mensagem}</p>}
           </div>
-          <button type="submit" className="btn-login">
-            Entrar
-          </button>
-          {mensagem && <p className="mensagem">{mensagem}</p>}
-        </div>
-
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
