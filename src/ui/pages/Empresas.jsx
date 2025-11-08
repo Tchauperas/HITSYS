@@ -161,8 +161,8 @@ function Empresas() {
                     <table className="empresas-table">
                         <thead>
                             <tr>
-                                <th>Nome Fantasia</th>
                                 <th>Razão Social</th>
+                                <th>Nome Fantasia</th>
                                 <th>CNPJ</th>
                                 <th>Ações</th>
                             </tr>
@@ -170,8 +170,8 @@ function Empresas() {
                         <tbody>
                             {filteredEmpresas.map((empresa) => (
                                 <tr key={empresa.id_empresa}>
-                                    <td>{empresa.nome_fantasia}</td>
                                     <td>{empresa.razao_social}</td>
+                                    <td>{empresa.nome_fantasia}</td>
                                     <td>
                                         {empresa.cnpj.replace(
                                             /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
