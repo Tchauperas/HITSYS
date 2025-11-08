@@ -13,14 +13,14 @@ const connDev = {
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "unifeob@123",
+  password: "Kvrt@911$",
   database: "hitsys"
 }
 
 
 const db = knex({
   client: "mysql2",
-  connection: conn,
+  connection: connDev,
 });
 
 module.exports = db;

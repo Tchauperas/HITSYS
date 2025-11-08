@@ -45,6 +45,22 @@ class Usuario {
     }
   }
 
+  async viewUser(id) {
+    try {
+      let data = await db
+        .select("*")
+        .where({ id_usuario: id })
+        .table("usuarios");
+      if (data.length >= 0) {
+        return { validated: true, values: data };
+      } else {
+        return { validated: false, error: "Sem dados disponiveis" };
+      }
+    } catch (e) {
+      return { validated: false, error: e };
+    }
+  }
+
   async updateUser(id, fieldsToUpdate) {
     try {
       const updatedRows = await db("usuarios")
@@ -66,7 +82,7 @@ class Usuario {
 
   async deleteUser(id) {
     try {
-      const deletedRows = await db("usuarios").where({ id: id }).del();
+      const deletedRows = await db("usuarios").where({ id_usuario: id }).del();
 
       if (deletedRows > 0) {
         return { validated: true, message: "Usuário excluído com sucesso" };
