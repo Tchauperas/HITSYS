@@ -2,6 +2,7 @@ const user = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const permission = require("../services/auth_permission");
+const { esbuildVersion } = require("vite");
 require("dotenv").config();
 
 class UsuarioController {
@@ -74,6 +75,27 @@ class UsuarioController {
         success: false,
         message: `Internal server error: ${e.message}`,
       });
+    }
+  }
+
+  async viewUser(req, res) {
+    let id = req.params.id;
+    if (!isNaN(id)) {
+      try {
+        let result = await user.viewUser(id);
+        result.validated
+          ? res.status(201).json({ success: true, values: result.values })
+          : res.status(400).json({
+              success: false,
+              message: `Erro ao listar usuários: ${result.error}`,
+            });
+      } catch (e) {
+        res
+          .status(500)
+          .json({ success: false, message: "Internal server error: ", e });
+      }
+    } else {
+      res.status(401).json({ success: false, message: "Id de busca inválido" });
     }
   }
 

@@ -98,6 +98,11 @@
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-editar:hover {
+    opacity: 0.8;
 }
 
 .btn-excluir {
@@ -107,4 +112,22 @@
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-excluir:hover {
+    opacity: 0.8;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin: 0 5px;
+  transition: transform 0.2s;
+}
+
+.btn-action:hover {
+  transform: scale(1.2);
 }
