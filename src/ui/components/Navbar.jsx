@@ -77,7 +77,7 @@ const Navbar = () => {
 
         <button onClick={() => navigate("/pdv")}>
           <img className="sideIcon" src={pdvIcon} alt="pdv" />
-          Pdv
+          PDV
         </button>
 
          <button onClick={() => navigate("/auditoria")}>
