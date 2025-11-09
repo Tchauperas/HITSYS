@@ -24,7 +24,8 @@ function CadastroPessoa({ onClose, onSuccess }) {
   });
 
   const [ufs, setUfs] = useState([]);
-  const [cidades, setCidades] = useState([]);
+  const [todasCidades, setTodasCidades] = useState([]); // todas as cidades
+  const [cidades, setCidades] = useState([]); // cidades filtradas pelo UF
   const [tiposCadastros, setTiposCadastros] = useState([]);
   const [tiposPessoas, setTiposPessoas] = useState([]);
   const [selectedTipos, setSelectedTipos] = useState([]);
@@ -81,34 +82,35 @@ function CadastroPessoa({ onClose, onSuccess }) {
     fetchTiposPessoas();
   }, []);
 
-  // Fetch Cidades when a UF is selected
+  // Buscar todas as cidades ao montar (uma única vez)
+  useEffect(() => {
+    const fetchAllCidades = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/cidades/cidades');
+        const data = await response.json();
+        if (data.success) {
+          setTodasCidades(data.values || []);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar cidades:', error);
+      }
+    };
+    fetchAllCidades();
+  }, []);
+
+  // Quando UF muda, filtra cidades; sem UF, mostrar todas
   useEffect(() => {
     if (formData.id_uf) {
-      const fetchCidades = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/cidades/cidades?uf=${formData.id_uf}`
-          );
-          const data = await response.json();
-          if (data.success) {
-            setCidades(data.values);
-          } else {
-            setCidades([]);
-            setMessageType('error');
-            setMessage("Erro ao carregar cidades.");
-          }
-        } catch (error) {
-          setCidades([]);
-          setMessageType('error');
-          setMessage(`Erro ao conectar com o servidor: ${error.message}`);
-        }
-      };
-
-      fetchCidades();
+      const filtradas = todasCidades.filter(c => String(c.id_uf) === String(formData.id_uf));
+      setCidades(filtradas);
+      // se cidade selecionada não pertence a esse UF, limpar
+      if (formData.id_cidade && !filtradas.find(c => String(c.id_cidade) === String(formData.id_cidade))) {
+        setFormData(f => ({ ...f, id_cidade: '' }));
+      }
     } else {
-      setCidades([]);
+      setCidades(todasCidades);
     }
-  }, [formData.id_uf]);
+  }, [formData.id_uf, todasCidades, formData.id_cidade]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -143,6 +145,17 @@ function CadastroPessoa({ onClose, onSuccess }) {
   const handleCNPJChange = (e) => {
     const formatted = formatCNPJ(e.target.value);
     setFormData({ ...formData, cnpj: formatted });
+  };
+
+  // Selecionar cidade ajusta automaticamente o UF correspondente
+  const handleCidadeChange = (e) => {
+    const id_cidade = e.target.value;
+    const cidadeObj = todasCidades.find(c => String(c.id_cidade) === String(id_cidade));
+    if (cidadeObj) {
+      setFormData(f => ({ ...f, id_cidade, id_uf: cidadeObj.id_uf }));
+    } else {
+      setFormData(f => ({ ...f, id_cidade }));
+    }
   };
 
   const handleTipoPessoaChange = (e) => {
@@ -517,7 +530,7 @@ function CadastroPessoa({ onClose, onSuccess }) {
               </div>
               <div className="form-group">
                 <label>Cidade</label>
-                <select name="id_cidade" value={formData.id_cidade} onChange={handleChange}>
+                <select name="id_cidade" value={formData.id_cidade} onChange={handleCidadeChange}>
                   <option value="">Selecione a Cidade</option>
                   {cidades.map((cidade) => (
                     <option key={cidade.id_cidade} value={cidade.id_cidade}>{cidade.cidade}</option>

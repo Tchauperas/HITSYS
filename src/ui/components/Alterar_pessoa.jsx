@@ -23,6 +23,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
   });
 
   const [ufs, setUfs] = useState([]);
+  const [todasCidades, setTodasCidades] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [tiposCadastros, setTiposCadastros] = useState([]);
   const [tiposPessoas, setTiposPessoas] = useState([]);
@@ -110,31 +111,32 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     fetchTiposPessoas();
   }, []);
 
-  // Fetch Cidades quando UF é selecionado
+  // Buscar todas as cidades ao montar
+  useEffect(() => {
+    const fetchAllCidades = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/cidades/cidades');
+        const data = await response.json();
+        if (data.success) setTodasCidades(data.values || []);
+      } catch (error) {
+        console.error('Erro ao carregar cidades:', error);
+      }
+    };
+    fetchAllCidades();
+  }, []);
+
+  // Quando UF muda, filtrar cidades; sem UF, mostrar todas
   useEffect(() => {
     if (formData.id_uf) {
-      const fetchCidades = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/cidades/cidades?uf=${formData.id_uf}`
-          );
-          const data = await response.json();
-          if (data.success) {
-            setCidades(data.values);
-          } else {
-            setCidades([]);
-          }
-        } catch (error) {
-          console.error('Erro ao carregar cidades:', error);
-          setCidades([]);
-        }
-      };
-
-      fetchCidades();
+      const filtradas = todasCidades.filter(c => String(c.id_uf) === String(formData.id_uf));
+      setCidades(filtradas);
+      if (formData.id_cidade && !filtradas.find(c => String(c.id_cidade) === String(formData.id_cidade))) {
+        setFormData(f => ({ ...f, id_cidade: '' }));
+      }
     } else {
-      setCidades([]);
+      setCidades(todasCidades);
     }
-  }, [formData.id_uf]);
+  }, [formData.id_uf, todasCidades, formData.id_cidade]);
 
   // Carregar dados da pessoa
   useEffect(() => {
@@ -221,6 +223,17 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     setFormData(prev => ({ ...prev, cnpj: formatted }));
     if (errors.cnpj) {
       setErrors(prev => ({ ...prev, cnpj: '' }));
+    }
+  };
+
+  // Selecionar cidade ajusta automaticamente o UF correspondente
+  const handleCidadeChange = (e) => {
+    const id_cidade = e.target.value;
+    const cidadeObj = todasCidades.find(c => String(c.id_cidade) === String(id_cidade));
+    if (cidadeObj) {
+      setFormData(prev => ({ ...prev, id_cidade, id_uf: cidadeObj.id_uf }));
+    } else {
+      setFormData(prev => ({ ...prev, id_cidade }));
     }
   };
 
@@ -679,7 +692,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
                   id="id_cidade"
                   name="id_cidade"
                   value={formData.id_cidade}
-                  onChange={handleChange}
+                  onChange={handleCidadeChange}
                   className={errors.id_cidade ? 'error' : ''}
                 >
                   <option value="">Selecione a Cidade</option>
