@@ -114,20 +114,37 @@
     font-weight: bold;
 }
 
-.pessoas-table td button {
-    margin-right: 8px;
+.acoes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-editar {
+    background-color: #444;
+    color: white;
     border: none;
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
+    transition: opacity 0.2s;
 }
 
-.btn-edit {
-    background: #374151;
-    color: white;
+.btn-editar:hover {
+    opacity: 0.8;
 }
 
-.btn-delete {
-    background: #b91c1c;
+.btn-excluir {
+    background-color: #dc3545;
     color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-excluir:hover {
+    opacity: 0.8;
 }

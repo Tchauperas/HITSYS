@@ -201,7 +201,7 @@ function Pessoas() {
               <tr>
                 <th>Nome</th>
                 <th>CNPJ/CPF</th>
-                <th>Ações</th>
+                <th style={{ textAlign: "center", width: 140 }}>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -210,18 +210,20 @@ function Pessoas() {
                   <tr key={pessoa.id_pessoa}>
                     <td>{pessoa.nome_razao_social}</td>
                     <td>{formatCNPJCPF(pessoa.cnpj, pessoa.cpf)}</td>
-                    <td>
+                    <td className="acoes">
                       <button
                         className="btn-editar"
                         onClick={() => handleEdit(pessoa)}
+                        title="Editar"
                       >
-                        ✏️ Editar
+                        ✏️
                       </button>
                       <button
-                        className="btn-deletar"
+                        className="btn-excluir"
                         onClick={() => handleDelete(pessoa.id_pessoa)}
+                        title="Excluir"
                       >
-                        🗑️ Deletar
+                        🗑️
                       </button>
                     </td>
                   </tr>
