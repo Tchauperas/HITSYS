@@ -78,6 +78,12 @@ form {
   margin-bottom: 1rem;
 }
 
+/* Ajuste específico para a linha que contém Estado (UF) e Cidade
+   UF ficará com 30% da largura e Cidade com 70% */
+.form-row.form-row--state-city {
+  grid-template-columns: 30% 70%;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -114,6 +120,22 @@ form {
   color: #ef4444;
   font-size: 0.75rem;
   margin-top: 0.25rem;
+}
+
+/* Estilo para lista de tipos e itens para alinhar com outros campos do formulário */
+.tipos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.tipo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #374151;
 }
 
 .modal-footer {
@@ -167,6 +189,11 @@ form {
   }
 
   .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Em telas pequenas, garantir que a linha de estado/cidade vire coluna única */
+  .form-row.form-row--state-city {
     grid-template-columns: 1fr;
   }
 

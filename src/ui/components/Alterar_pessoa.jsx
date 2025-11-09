@@ -25,6 +25,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
   const [ufs, setUfs] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [tiposCadastros, setTiposCadastros] = useState([]);
+  const [tiposPessoas, setTiposPessoas] = useState([]);
   const [selectedTipos, setSelectedTipos] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -95,6 +96,20 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     fetchTipos();
   }, []);
 
+  // fetch tipos de pessoa (para select)
+  useEffect(() => {
+    const fetchTiposPessoas = async () => {
+      try {
+        const resp = await fetch('http://localhost:3000/tipos_pessoas/visualizar');
+        const data = await resp.json();
+        if (data.success) setTiposPessoas(data.values);
+      } catch (err) {
+        console.error('Erro ao carregar tipos de pessoa:', err);
+      }
+    };
+    fetchTiposPessoas();
+  }, []);
+
   // Fetch Cidades quando UF é selecionado
   useEffect(() => {
     if (formData.id_uf) {
@@ -124,8 +139,8 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
   // Carregar dados da pessoa
   useEffect(() => {
     if (pessoa) {
-      // Determina o tipo de pessoa (1 = Jurídica, 2 = Física)
-      const tipoPessoa = pessoa.cnpj ? 1 : 2;
+      // Preferir valor vindo do banco (id_tipo_pessoa) quando disponível
+      const tipoPessoa = pessoa.id_tipo_pessoa ?? (pessoa.cnpj ? 1 : 2);
 
       setFormData({
         nome_razao_social: pessoa.nome_razao_social || '',
@@ -181,7 +196,8 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
   };
 
   const handleTipoPessoaChange = (e) => {
-    const tipo = parseInt(e.target.value);
+    const val = e.target.value;
+    const tipo = val === '' ? '' : parseInt(val);
     setFormData(prev => ({
       ...prev,
       id_tipo_pessoa: tipo,
@@ -257,35 +273,13 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
       newErrors.nome_razao_social = formData.id_tipo_pessoa === 1 ? 'Razão Social é obrigatória' : 'Nome é obrigatório';
     }
 
-    if (formData.id_tipo_pessoa === 1) {
-      if (!formData.cnpj.trim()) {
-        newErrors.cnpj = 'CNPJ é obrigatório';
-      } else if (formData.cnpj.replace(/\D/g, '').length !== 14) {
-        newErrors.cnpj = 'CNPJ inválido';
-      }
-    } else {
-      if (!formData.cpf.trim()) {
-        newErrors.cpf = 'CPF é obrigatório';
-      } else if (formData.cpf.replace(/\D/g, '').length !== 11) {
-        newErrors.cpf = 'CPF inválido';
-      }
+    // Tipo de pessoa obrigatório
+    if (!formData.id_tipo_pessoa) {
+      newErrors.id_tipo_pessoa = 'Tipo de pessoa é obrigatório';
     }
 
-    if (!formData.telefone.trim()) {
-      newErrors.telefone = 'Telefone é obrigatório';
-    }
-
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
-    }
-
-    if (!formData.id_uf) {
-      newErrors.id_uf = 'Estado é obrigatório';
-    }
-
-    if (!formData.id_cidade) {
-      newErrors.id_cidade = 'Cidade é obrigatória';
-    }
+    // Observação: exigimos apenas Nome/Razão Social e Tipo de Pessoa aqui.
+    // A validação de seleção de Tipos de Cadastro (pelo menos 1) é feita em handleSubmit.
 
     console.log('Erros encontrados:', newErrors);
 
@@ -310,6 +304,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
       // valida seleção de tipos
       if (!selectedTipos || selectedTipos.length === 0) {
         setErrors(prev => ({ ...prev, tipos: 'Selecione ao menos um Tipo de Cadastro' }));
+        setLoading(false);
         return;
       }
       const dataToSend = {
@@ -344,6 +339,38 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
           dataToSend.data_nascimento = date.toISOString().split('T')[0];
         }
       }
+
+      // Normalizar campos numéricos e setar vazios como null para evitar erros no banco
+      if (dataToSend.data_nascimento === "" || dataToSend.data_nascimento == null) {
+        dataToSend.data_nascimento = null;
+      }
+
+      if (dataToSend.id_cidade === "" || dataToSend.id_cidade == null) {
+        dataToSend.id_cidade = null;
+      } else {
+        dataToSend.id_cidade = Number(dataToSend.id_cidade);
+      }
+
+      if (dataToSend.id_uf === "" || dataToSend.id_uf == null) {
+        dataToSend.id_uf = null;
+      } else {
+        dataToSend.id_uf = Number(dataToSend.id_uf);
+      }
+
+      if (dataToSend.id_tipo_pessoa === "" || dataToSend.id_tipo_pessoa == null) {
+        dataToSend.id_tipo_pessoa = null;
+      } else {
+        dataToSend.id_tipo_pessoa = Number(dataToSend.id_tipo_pessoa);
+      }
+
+      if (Array.isArray(dataToSend.tipos_cadastros)) {
+        dataToSend.tipos_cadastros = dataToSend.tipos_cadastros.map((v) => Number(v));
+      }
+
+      // Converter quaisquer strings vazias restantes para null
+      Object.keys(dataToSend).forEach((k) => {
+        if (dataToSend[k] === '') dataToSend[k] = null;
+      });
 
       console.log('Enviando dados:', dataToSend);
       
@@ -381,21 +408,60 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* Pessoa Ativa e Tipos de Cadastro posicionados aqui para alinhar com demais campos */}
           <div className="form-section">
-            <h3>Tipo de Pessoa</h3>
-            
             <div className="form-group">
-              <label htmlFor="id_tipo_pessoa">Tipo *</label>
-              <select
-                id="id_tipo_pessoa"
-                name="id_tipo_pessoa"
-                value={formData.id_tipo_pessoa}
-                onChange={handleTipoPessoaChange}
-                required
-              >
-                <option value={1}>Pessoa Jurídica</option>
-                <option value={2}>Pessoa Física</option>
-              </select>
+              <label>
+                <input
+                  type="checkbox"
+                  name="ativo"
+                  checked={formData.ativo}
+                  onChange={(e) => setFormData(prev => ({ ...prev, ativo: e.target.checked }))}
+                />
+                Pessoa Ativa
+              </label>
+            </div>
+          </div>
+
+          {tiposCadastros.length > 0 && (
+            <div className="form-section">
+              <h3>Tipos de Cadastro *</h3>
+              <div className="tipos-list">
+                {tiposCadastros.map(tipo => (
+                  <label key={tipo.id_tipo_cadastro} className="tipo-item">
+                    <input
+                      type="checkbox"
+                      checked={selectedTipos.includes(tipo.id_tipo_cadastro)}
+                      onChange={() => toggleTipo(tipo.id_tipo_cadastro)}
+                    />
+                    {tipo.descricao}
+                  </label>
+                ))}
+              </div>
+              {errors.tipos && <span className="error-message">{errors.tipos}</span>}
+            </div>
+          )}
+          <div className="form-section">
+            <h3>Tipo de Pessoa *</h3>
+
+            <div className="form-group">
+                <select
+                  id="id_tipo_pessoa"
+                  name="id_tipo_pessoa"
+                  value={formData.id_tipo_pessoa}
+                  onChange={handleTipoPessoaChange}
+                  required
+                >
+                  <option value="">Selecione o tipo da pessoa</option>
+                  {tiposPessoas && tiposPessoas.length > 0 ? (
+                    tiposPessoas.map(tipo => (
+                      <option key={tipo.id_tipo_pessoa} value={tipo.id_tipo_pessoa}>{tipo.descricao}</option>
+                    ))
+                  ) : (
+                    <option value="">Nenhum tipo disponível</option>
+                  )}
+                </select>
+                {errors.id_tipo_pessoa && <span className="error-message">{errors.id_tipo_pessoa}</span>}
             </div>
 
           </div>
@@ -436,7 +502,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               <>
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="cnpj">CNPJ *</label>
+                    <label htmlFor="cnpj">CNPJ</label>
                     <input
                       type="text"
                       id="cnpj"
@@ -445,7 +511,6 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
                       onChange={handleCNPJChange}
                       maxLength="18"
                       className={errors.cnpj ? 'error' : ''}
-                      required
                     />
                     {errors.cnpj && <span className="error-message">{errors.cnpj}</span>}
                   </div>
@@ -466,7 +531,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               <>
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="cpf">CPF *</label>
+                    <label htmlFor="cpf">CPF</label>
                     <input
                       type="text"
                       id="cpf"
@@ -475,7 +540,6 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
                       onChange={handleCPFChange}
                       maxLength="14"
                       className={errors.cpf ? 'error' : ''}
-                      required
                     />
                     {errors.cpf && <span className="error-message">{errors.cpf}</span>}
                   </div>
@@ -494,9 +558,9 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               </>
             )}
 
-            <div className="form-row">
+            <div className="form-row form-row--state-city">
               <div className="form-group">
-                <label htmlFor="telefone">Telefone *</label>
+                <label htmlFor="telefone">Telefone</label>
                 <input
                   type="text"
                   id="telefone"
@@ -530,7 +594,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
             
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="cep">CEP *</label>
+                <label htmlFor="cep">CEP</label>
                 <input
                   type="text"
                   id="cep"
@@ -539,33 +603,30 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
                   onChange={handleCEPChange}
                   onBlur={handleCEPBlur}
                   maxLength="9"
-                  required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="logradouro">Logradouro *</label>
+                <label htmlFor="logradouro">Logradouro</label>
                 <input
                   type="text"
                   id="logradouro"
                   name="logradouro"
                   value={formData.logradouro}
                   onChange={handleChange}
-                  required
                 />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="numero">Número *</label>
+                <label htmlFor="numero">N°</label>
                 <input
                   type="text"
                   id="numero"
                   name="numero"
                   value={formData.numero}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
@@ -581,33 +642,31 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="bairro">Bairro *</label>
+                <label htmlFor="bairro">Bairro</label>
                 <input
                   type="text"
                   id="bairro"
                   name="bairro"
                   value={formData.bairro}
                   onChange={handleChange}
-                  required
                 />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="id_uf">Estado *</label>
+                <label htmlFor="id_uf">UF - Estado</label>
                 <select
                   id="id_uf"
                   name="id_uf"
                   value={formData.id_uf}
                   onChange={handleChange}
                   className={errors.id_uf ? 'error' : ''}
-                  required
                 >
-                  <option value="">Selecione o Estado</option>
+                  <option value="">Selecione a UF - Estado</option>
                   {ufs.map((uf) => (
                     <option key={uf.id_estado} value={uf.id_estado}>
-                      {uf.estado}
+                      {uf.uf + ' - ' + uf.estado}
                     </option>
                   ))}
                 </select>
@@ -615,14 +674,13 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="id_cidade">Cidade *</label>
+                <label htmlFor="id_cidade">Cidade</label>
                 <select
                   id="id_cidade"
                   name="id_cidade"
                   value={formData.id_cidade}
                   onChange={handleChange}
                   className={errors.id_cidade ? 'error' : ''}
-                  required
                 >
                   <option value="">Selecione a Cidade</option>
                   {cidades.map((cidade) => (
@@ -636,41 +694,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
             </div>
           </div>
 
-          <div className="form-section">
-            <div className="form-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="ativo"
-                  checked={formData.ativo}
-                  onChange={(e) =>
-                    setFormData(prev => ({ ...prev, ativo: e.target.checked }))
-                  }
-                />
-                Pessoa Ativa
-              </label>
-            </div>
-          </div>
-
-          {/* Tipos de Cadastro */}
-          {tiposCadastros.length > 0 && (
-            <div className="form-section">
-              <h3>Tipos de Cadastro *</h3>
-              <div className="tipos-list">
-                {tiposCadastros.map(tipo => (
-                  <label key={tipo.id_tipo_cadastro} className="tipo-item">
-                    <input
-                      type="checkbox"
-                      checked={selectedTipos.includes(tipo.id_tipo_cadastro)}
-                      onChange={() => toggleTipo(tipo.id_tipo_cadastro)}
-                    />
-                    {tipo.descricao}
-                  </label>
-                ))}
-              </div>
-              {errors.tipos && <span className="error-message">{errors.tipos}</span>}
-            </div>
-          )}
+          
 
           <div className="modal-footer">
             <button type="button" className="btn-cancel" onClick={handleClose}>

@@ -10,12 +10,15 @@ function Pessoas() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [tiposCadastros, setTiposCadastros] = useState([]);
+  const [selectedTipoFiltro, setSelectedTipoFiltro] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPessoa, setSelectedPessoa] = useState(null);
 
   useEffect(() => {
     fetchPessoas();
+    fetchTiposCadastros();
   }, []);
 
   const fetchPessoas = async () => {
@@ -37,12 +40,30 @@ function Pessoas() {
     }
   };
 
+  const fetchTiposCadastros = async () => {
+    try {
+      const resp = await fetch('http://localhost:3000/tipos_cadastros/visualizar');
+      const data = await resp.json();
+      if (data.success) setTiposCadastros(data.values);
+    } catch (err) {
+      console.error('Erro ao carregar tipos de cadastro:', err);
+    }
+  };
+
   const filteredPessoas = pessoas.filter((pessoa) => {
     const searchLower = searchTerm.toLowerCase();
+
+    // filtro por tipo de cadastro (se selecionado)
+    if (selectedTipoFiltro) {
+      const tipoId = Number(selectedTipoFiltro);
+      const pessoaTipos = pessoa.tipos_cadastros || [];
+      if (!pessoaTipos.includes(tipoId)) return false;
+    }
+
     return (
       pessoa.nome_razao_social?.toLowerCase().includes(searchLower) ||
-      pessoa.cnpj?.includes(searchTerm) ||
-      pessoa.cpf?.includes(searchTerm)
+      (pessoa.cnpj && pessoa.cnpj.includes(searchTerm)) ||
+      (pessoa.cpf && pessoa.cpf.includes(searchTerm))
     );
   });
 
@@ -56,7 +77,7 @@ function Pessoas() {
     if (cpf) {
       return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
     }
-    return "N/A";
+    return "";
   };
 
   const handleEdit = (pessoa) => {
@@ -177,7 +198,7 @@ function Pessoas() {
           <div className="title">
             <span className="people-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
-            <h1>Listagem de Pessoas</h1>
+            <h1>LISTAGEM DE PESSOAS</h1>
           </div>
 
           <div className="right-actions">
@@ -188,13 +209,23 @@ function Pessoas() {
         </header>
 
         <div className="search-bar">
-          <span className="search-icon">🔍</span>
           <input
             type="text"
-            placeholder="   Pesquisar pessoa"
+            placeholder="     Pesquisar pessoa"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <select
+            className="tipo-filtro"
+            value={selectedTipoFiltro}
+            onChange={(e) => setSelectedTipoFiltro(e.target.value)}
+          >
+            <option value="">Todos</option>
+            {tiposCadastros.map((t) => (
+              <option key={t.id_tipo_cadastro} value={t.id_tipo_cadastro}>{t.descricao}</option>
+            ))}
+          </select>
+          <span className="search-icon">🔍</span>
         </div>
 
         {loading && <p>Carregando...</p>}

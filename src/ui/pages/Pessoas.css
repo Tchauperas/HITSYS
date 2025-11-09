@@ -83,6 +83,15 @@
     margin-bottom: 20px;
 }
 
+.search-bar .tipo-filtro {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-right: 10px;
+    background: white;
+    font-size: 14px;
+}
+
 .search-icon {
     margin-right: 8px;
     color: #6b7280;

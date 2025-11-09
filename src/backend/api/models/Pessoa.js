@@ -28,11 +28,28 @@ class Pessoa {
   async visualizarPessoas() {
     try {
       let pessoas = await db.select("*").table("pessoas");
-      if (pessoas.length > 0) {
-        return { validated: true, values: pessoas };
-      } else {
+
+      if (pessoas.length === 0) {
         return { validated: false, error: "Nenhuma pessoa cadastrada" };
       }
+
+      // Buscar todos os relacionamentos de tipos de cadastro e agrupar por id_pessoa
+      const tiposRows = await db
+        .select('id_pessoa', 'id_tipo_cadastro')
+        .from('pessoas_tipos_cadastros');
+
+      const tiposMap = {};
+      tiposRows.forEach((r) => {
+        if (!tiposMap[r.id_pessoa]) tiposMap[r.id_pessoa] = [];
+        tiposMap[r.id_pessoa].push(r.id_tipo_cadastro);
+      });
+
+      // Anexar array de ids de tipos_cadastros em cada pessoa
+      const pessoasWithTipos = pessoas.map((p) => {
+        return { ...p, tipos_cadastros: tiposMap[p.id_pessoa] || [] };
+      });
+
+      return { validated: true, values: pessoasWithTipos };
     } catch (e) {
       return { validated: false, error: e.message };
     }
@@ -71,11 +88,15 @@ class Pessoa {
 
   async deletarPessoa(id) {
     try {
-      let pessoa = await db
-        .table("pessoas") // Especifica a tabela
-        .where({ id_pessoa: id })
-        .del(); // Remove o registro
-      if (pessoa > 0) {
+      // Primeiro remover relacionamentos em pessoas_tipos_cadastros para evitar violação de FK
+      // Usar transação para garantir atomicidade
+      const result = await db.transaction(async (trx) => {
+        await trx.where({ id_pessoa: id }).del().table("pessoas_tipos_cadastros");
+        const deleted = await trx.where({ id_pessoa: id }).del().table("pessoas");
+        return deleted;
+      });
+
+      if (result > 0) {
         return { validated: true };
       } else {
         return { validated: false, error: "Pessoa não encontrada" };
