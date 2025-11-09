@@ -19,6 +19,7 @@ const rootSecoes = require("./routes/secoes");
 const rootUnidades = require("./routes/unidades");
 const rootCidades = require("./routes/cidades");
 const rootEstados = require("./routes/estados");
+const rootTiposCadastros = require("./routes/tipos_cadastros");
 
 router.use("/", rootLogin);
 router.use("/home", rootHome);
@@ -38,5 +39,6 @@ router.use("/secoes", rootSecoes);
 router.use("/unidades", rootUnidades);
 router.use("/cidades", rootCidades);
 router.use("/estados", rootEstados);
+router.use("/tipos_cadastros", rootTiposCadastros);
 
 module.exports = router;

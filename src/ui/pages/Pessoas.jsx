@@ -93,6 +93,11 @@ function Pessoas() {
         bodyData.inscricao_estadual = updatedPessoa.inscricao_estadual;
       }
 
+      // Tipos de cadastro (array de ids), se informado
+      if (updatedPessoa.tipos_cadastros) {
+        bodyData.tipos_cadastros = updatedPessoa.tipos_cadastros;
+      }
+
       const response = await fetch(
         `http://localhost:3000/pessoas/alterar/${updatedPessoa.id_pessoa}`,
         {

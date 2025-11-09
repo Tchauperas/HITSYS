@@ -24,6 +24,8 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
 
   const [ufs, setUfs] = useState([]);
   const [cidades, setCidades] = useState([]);
+  const [tiposCadastros, setTiposCadastros] = useState([]);
+  const [selectedTipos, setSelectedTipos] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -79,6 +81,20 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     fetchUfs();
   }, []);
 
+  // fetch tipos de cadastro
+  useEffect(() => {
+    const fetchTipos = async () => {
+      try {
+        const resp = await fetch('http://localhost:3000/tipos_cadastros/visualizar');
+        const data = await resp.json();
+        if (data.success) setTiposCadastros(data.values);
+      } catch (err) {
+        console.error('Erro ao carregar tipos de cadastro:', err);
+      }
+    };
+    fetchTipos();
+  }, []);
+
   // Fetch Cidades quando UF é selecionado
   useEffect(() => {
     if (formData.id_uf) {
@@ -130,6 +146,22 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
         id_uf: pessoa.id_uf || '',
         ativo: pessoa.ativo === 1 || pessoa.ativo === true
       });
+
+      // se não tivermos os tipos no objeto pessoa, buscar detalhes
+      const fetchPessoaDetalhes = async () => {
+        try {
+          const resp = await fetch(`http://localhost:3000/pessoas/visualizar/${pessoa.id_pessoa}`);
+          const data = await resp.json();
+          if (data.success && data.values) {
+            const tipos = data.values.tipos_cadastros || [];
+            setSelectedTipos(tipos.map(t => t.id_tipo_cadastro));
+          }
+        } catch (err) {
+          console.error('Erro ao buscar detalhes da pessoa:', err);
+        }
+      };
+
+      fetchPessoaDetalhes();
     }
   }, [pessoa]);
 
@@ -275,6 +307,11 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     setLoading(true);
 
     try {
+      // valida seleção de tipos
+      if (!selectedTipos || selectedTipos.length === 0) {
+        setErrors(prev => ({ ...prev, tipos: 'Selecione ao menos um Tipo de Cadastro' }));
+        return;
+      }
       const dataToSend = {
         id_pessoa: pessoa.id_pessoa,
         nome_razao_social: formData.nome_razao_social,
@@ -291,6 +328,9 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
         id_uf: formData.id_uf,
         ativo: formData.ativo ? 1 : 0
       };
+
+      // incluir tipos selecionados
+      dataToSend.tipos_cadastros = selectedTipos;
 
       // Adiciona campos específicos baseado no tipo de pessoa
       if (formData.id_tipo_pessoa === 1) {
@@ -323,6 +363,13 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
     onClose();
   };
 
+  const toggleTipo = (id) => {
+    setSelectedTipos(prev => {
+      if (prev.includes(id)) return prev.filter(i => i !== id);
+      return [...prev, id];
+    });
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -350,6 +397,7 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
                 <option value={2}>Pessoa Física</option>
               </select>
             </div>
+
           </div>
 
           <div className="form-section">
@@ -603,6 +651,26 @@ const Alterar_pessoa = ({ isOpen, onClose, pessoa, onUpdate }) => {
               </label>
             </div>
           </div>
+
+          {/* Tipos de Cadastro */}
+          {tiposCadastros.length > 0 && (
+            <div className="form-section">
+              <h3>Tipos de Cadastro *</h3>
+              <div className="tipos-list">
+                {tiposCadastros.map(tipo => (
+                  <label key={tipo.id_tipo_cadastro} className="tipo-item">
+                    <input
+                      type="checkbox"
+                      checked={selectedTipos.includes(tipo.id_tipo_cadastro)}
+                      onChange={() => toggleTipo(tipo.id_tipo_cadastro)}
+                    />
+                    {tipo.descricao}
+                  </label>
+                ))}
+              </div>
+              {errors.tipos && <span className="error-message">{errors.tipos}</span>}
+            </div>
+          )}
 
           <div className="modal-footer">
             <button type="button" className="btn-cancel" onClick={handleClose}>

@@ -24,6 +24,8 @@ function CadastroPessoa({ onClose, onSuccess }) {
 
   const [ufs, setUfs] = useState([]);
   const [cidades, setCidades] = useState([]);
+  const [tiposCadastros, setTiposCadastros] = useState([]);
+  const [selectedTipos, setSelectedTipos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -44,6 +46,20 @@ function CadastroPessoa({ onClose, onSuccess }) {
     };
 
     fetchUfs();
+  }, []);
+
+  // Fetch tipos de cadastro
+  useEffect(() => {
+    const fetchTipos = async () => {
+      try {
+        const resp = await fetch('http://localhost:3000/tipos_cadastros/visualizar');
+        const data = await resp.json();
+        if (data.success) setTiposCadastros(data.values);
+      } catch (err) {
+        console.error('Erro ao carregar tipos de cadastro:', err);
+      }
+    };
+    fetchTipos();
   }, []);
 
   // Fetch Cidades when a UF is selected
@@ -106,6 +122,7 @@ function CadastroPessoa({ onClose, onSuccess }) {
     // Preparar dados para envio
     const dataToSend = {
       ...formData,
+      tipos_cadastros: selectedTipos,
       ativo: formData.ativo ? 1 : 0,
     };
 
@@ -121,6 +138,12 @@ function CadastroPessoa({ onClose, onSuccess }) {
     }
 
     try {
+      // valida seleção de tipos
+      if (!selectedTipos || selectedTipos.length === 0) {
+        setMessage('Selecione ao menos um Tipo de Cadastro.');
+        setLoading(false);
+        return;
+      }
       const response = await fetch("http://localhost:3000/pessoas/cadastrar", {
         method: "POST",
         headers: {
@@ -169,6 +192,13 @@ function CadastroPessoa({ onClose, onSuccess }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleTipo = (id) => {
+    setSelectedTipos((prev) => {
+      if (prev.includes(id)) return prev.filter((i) => i !== id);
+      return [...prev, id];
+    });
   };
 
   return (
@@ -339,6 +369,25 @@ function CadastroPessoa({ onClose, onSuccess }) {
             onChange={handleChange}
             required
           />
+
+          {/* Tipos de Cadastro (checkboxes) */}
+          {tiposCadastros.length > 0 && (
+            <div className="tipos-section">
+              <label>Tipos de Cadastro *</label>
+              <div className="tipos-list">
+                {tiposCadastros.map((tipo) => (
+                  <label key={tipo.id_tipo_cadastro} className="tipo-item">
+                    <input
+                      type="checkbox"
+                      checked={selectedTipos.includes(tipo.id_tipo_cadastro)}
+                      onChange={() => toggleTipo(tipo.id_tipo_cadastro)}
+                    />
+                    {tipo.descricao}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <label>
             <input
