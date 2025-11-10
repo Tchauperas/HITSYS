@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
-import { useNavigate } from "react-router-dom";
 
 function Pdv() {
   const [codigo, setCodigo] = useState("");
@@ -13,7 +13,8 @@ function Pdv() {
   const [cliente, setCliente] = useState(1);
   const [vendedor, setVendedor] = useState(1);
 
-  // select/dropdown states for Empresa / Cliente / Vendedor
+  const navigate = useNavigate();
+
   const [showEmpresaDropdown, setShowEmpresaDropdown] = useState(false);
   const [empresasList, setEmpresasList] = useState([]);
   const [empresaSearch, setEmpresaSearch] = useState("");
@@ -29,7 +30,6 @@ function Pdv() {
   const [vendedorSearch, setVendedorSearch] = useState("");
   const [vendedorNome, setVendedorNome] = useState("");
 
-  // estados e funções para busca de produtos
   const [busca, setBusca] = useState("");
   const [resultadosBusca, setResultadosBusca] = useState([]);
 
@@ -429,7 +429,9 @@ function Pdv() {
         <button className="btn btn-warning">Consultar Vendas</button>
         <button className="btn btn-dark">Alt. Vendedor</button>
         <button className="btn btn-danger">Desistir</button>
-        <button className="btn btn-outline-dark">Sair</button>
+        <button className="btn btn-outline-dark" onClick={() => navigate("/home")}>
+          Sair
+        </button>
       </div>
     </div>
   );
