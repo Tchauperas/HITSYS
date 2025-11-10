@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
+import { useNavigate } from "react-router-dom";
 
 function Pdv() {
   const [codigo, setCodigo] = useState("");

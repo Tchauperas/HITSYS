@@ -80,6 +80,7 @@ function CadastrarUsuarios({ onClose, onSuccess }) {
     console.log("Payload a ser enviado:", payload); // Adicionando o console.log
 
     try {
+      console.log(payload)
       const response = await fetch("http://127.0.0.1:3000/usuarios/cadastrar", {
         method: "POST",
         headers: {
@@ -96,7 +97,7 @@ function CadastrarUsuarios({ onClose, onSuccess }) {
         setFormData({
           nome: "",
           login: "",
-          senha: "",
+          senha_hash: "",
           id_perfil_usuario: "",
           ativo: true,
         });
@@ -146,7 +147,7 @@ function CadastrarUsuarios({ onClose, onSuccess }) {
           />
           <input
             type="password"
-            name="senha"
+            name="senha_hash"
             placeholder="Senha"
             value={formData.senha}
             onChange={handleChange}
