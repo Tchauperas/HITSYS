@@ -2,15 +2,15 @@ const permission = require("../services/auth_permission");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-class UsuarioAuth {
-  async visualiza_usuario(req, res, next) {
+class VendedorAuth {
+  async visualiza_vendedor(req, res, next) {
     const auth = req.headers["authorization"];
     if (auth != undefined) {
       let bearer = auth.split(" ");
       let token = bearer[1];
       try {
         let decoded = jwt.decode(token, process.env.SECTK);
-        (await permission(decoded.id, 14))
+        (await permission(decoded.id, 23))
           ? next()
           : res.status(401).json({
               success: false,
@@ -29,14 +29,14 @@ class UsuarioAuth {
     }
   }
 
-  async insere_usuario(req, res, next) {
+  async insere_vendedor(req, res, next) {
     const auth = req.headers["authorization"];
     if (auth != undefined) {
       let bearer = auth.split(" ");
       let token = bearer[1];
       try {
         let decoded = jwt.decode(token, process.env.SECTK);
-        (await permission(decoded.id, 15))
+        (await permission(decoded.id, 24))
           ? next()
           : res.status(401).json({
               success: false,
@@ -55,14 +55,14 @@ class UsuarioAuth {
     }
   }
 
-  async altera_usuario(req, res, next) {
+  async altera_vendedor(req, res, next) {
     const auth = req.headers["authorization"];
     if (auth != undefined) {
       let bearer = auth.split(" ");
       let token = bearer[1];
       try {
         let decoded = jwt.decode(token, process.env.SECTK);
-        (await permission(decoded.id, 16))
+        (await permission(decoded.id, 25))
           ? next()
           : res.status(401).json({
               success: false,
@@ -81,14 +81,14 @@ class UsuarioAuth {
     }
   }
 
-  async deleta_usuario(req, res, next) {
+  async deleta_vendedor(req, res, next) {
     const auth = req.headers["authorization"];
     if (auth != undefined) {
       let bearer = auth.split(" ");
       let token = bearer[1];
       try {
         let decoded = jwt.decode(token, process.env.SECTK);
-        (await permission(decoded.id, 17))
+        (await permission(decoded.id, 26))
           ? next()
           : res.status(401).json({
               success: false,
@@ -108,4 +108,4 @@ class UsuarioAuth {
   }
 }
 
-module.exports = new UsuarioAuth();
+module.exports = new VendedorAuth();

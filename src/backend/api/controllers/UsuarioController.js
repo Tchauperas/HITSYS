@@ -1,7 +1,7 @@
 const user = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const permission = require("../services/auth_permission");
+const audit = require("../services/auditar")
 const { esbuildVersion } = require("vite");
 require("dotenv").config();
 

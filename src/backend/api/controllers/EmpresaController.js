@@ -1,4 +1,5 @@
 const empresa = require("../models/Empresa");
+const auditar = require("../services/auditar");
 
 class EmpresaController {
   async cadastrarEmpresa(req, res) {
@@ -6,15 +7,22 @@ class EmpresaController {
     if (data != undefined) {
       try {
         let result = await empresa.cadastrarEmpresa(data);
-        result.validated
-          ? res.status(201).json({
-              success: true,
-              message: "Empresa cadastrado com sucesso",
-            })
-          : res.status(400).json({
-              success: false,
-              message: `Erro ao cadastrar empresa: ${result.error}`,
-            });
+        if (result.validated) {
+          await auditar(
+            req.headers.authorization,
+            1,
+            `Cadastrou empresa: ${data.nome || 'sem nome'}`
+          );
+          res.status(201).json({
+            success: true,
+            message: "Empresa cadastrado com sucesso",
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: `Erro ao cadastrar empresa: ${result.error}`,
+          });
+        }
       } catch (e) {
         res.status(500).json({
           success: false,
@@ -29,12 +37,19 @@ class EmpresaController {
   async visualizarEmpresas(req, res) {
     try {
       let result = await empresa.visualizarEmpresas();
-      result.validated
-        ? res.status(200).json({ success: true, values: result.values })
-        : res.status(400).json({
-            success: false,
-            message: `Erro ao listar empresas: ${result.error}`,
-          });
+      if (result.validated) {
+        await auditar(
+          req.headers.authorization,
+          2,
+          `Visualizou lista de empresas`
+        );
+        res.status(200).json({ success: true, values: result.values });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: `Erro ao listar empresas: ${result.error}`,
+        });
+      }
     } catch (e) {
       res.status(500).json({
         success: false,
@@ -48,12 +63,19 @@ class EmpresaController {
     if (!isNaN(id)) {
       try {
         let result = await empresa.alterarEmpresa(id, req.body);
-        result.validated
-          ? res.status(200).json({ success: true })
-          : res.status(404).json({
-              success: false,
-              message: `Erro ao alterar empresa: ${result.error}`,
-            });
+        if (result.validated) {
+          await auditar(
+            req.headers.authorization,
+            3,
+            `Alterou empresa ID: ${id}`
+          );
+          res.status(200).json({ success: true });
+        } else {
+          res.status(404).json({
+            success: false,
+            message: `Erro ao alterar empresa: ${result.error}`,
+          });
+        }
       } catch (e) {
         res.status(500).json({
           success: false,
@@ -70,12 +92,19 @@ class EmpresaController {
     if (!isNaN(id)) {
       try {
         let result = await empresa.deletarEmpresa(id);
-        result.validated
-          ? res.status(200).json({ success: true })
-          : res.status(404).json({
-              success: false,
-              message: `Erro ao deletar empresa: ${result.error}`,
-            });
+        if (result.validated) {
+          await auditar(
+            req.headers.authorization,
+            4,
+            `Deletou empresa ID: ${id}`
+          );
+          res.status(200).json({ success: true });
+        } else {
+          res.status(404).json({
+            success: false,
+            message: `Erro ao deletar empresa: ${result.error}`,
+          });
+        }
       } catch (e) {
         res.status(500).json({
           success: false,
@@ -92,21 +121,24 @@ class EmpresaController {
     if (!isNaN(id)) {
       try {
         let result = await empresa.visualisarEmpresa(id);
-        result.validated
-          ? res.status(200).json({ success: true, values: result.values })
-          : res
-              .status(404)
-              .json({
-                sucess: false,
-                message: `Erro ao vizualizar empresa: ${result.error}`,
-              });
-      } catch (e) {
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: `Internal server error: ${e.message}`,
+        if (result.validated) {
+          await auditar(
+            req.headers.authorization,
+            5,
+            `Visualizou empresa ID: ${id}`
+          );
+          res.status(200).json({ success: true, values: result.values });
+        } else {
+          res.status(404).json({
+            sucess: false,
+            message: `Erro ao vizualizar empresa: ${result.error}`,
           });
+        }
+      } catch (e) {
+        res.status(500).json({
+          success: false,
+          message: `Internal server error: ${e.message}`,
+        });
       }
     } else {
       res.status(400).json({ success: false, message: "Id de busca inválido" });
