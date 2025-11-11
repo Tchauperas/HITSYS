@@ -22,9 +22,24 @@ function Pessoas() {
   }, []);
 
   const fetchPessoas = async () => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      setError("Token de autenticação não encontrado.");
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/pessoas/visualizar");
+      const response = await fetch("http://localhost:3000/pessoas/visualizar", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
 
       if (data.success) {
@@ -41,8 +56,21 @@ function Pessoas() {
   };
 
   const fetchTiposCadastros = async () => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      return;
+    }
+
     try {
-      const resp = await fetch('http://localhost:3000/tipos_cadastros/visualizar');
+      const resp = await fetch('http://localhost:3000/tipos_cadastros/visualizar', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await resp.json();
       if (data.success) setTiposCadastros(data.values);
     } catch (err) {
@@ -86,6 +114,13 @@ function Pessoas() {
   };
 
   const handleUpdate = async (updatedPessoa) => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      alert("Token de autenticação não encontrado.");
+      return;
+    }
+
     try {
       const bodyData = {
         nome_razao_social: updatedPessoa.nome_razao_social,
@@ -125,6 +160,7 @@ function Pessoas() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(bodyData),
         }
@@ -146,6 +182,13 @@ function Pessoas() {
   };
 
   const handleDelete = async (id) => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      alert("Token de autenticação não encontrado.");
+      return;
+    }
+
     console.log("Tentando deletar pessoa com ID:", id); // Log para debug
     if (window.confirm("Deseja realmente deletar esta pessoa?")) {
       try {
@@ -153,6 +196,10 @@ function Pessoas() {
           `http://localhost:3000/pessoas/deletar/${id}`,
           {
             method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 

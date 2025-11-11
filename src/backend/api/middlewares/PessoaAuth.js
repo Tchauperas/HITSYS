@@ -5,11 +5,13 @@ require("dotenv").config();
 class PessoaAuth {
   async visualiza_pessoa(req, res, next) {
     const auth = req.headers["authorization"];
+    console.log(auth)
     if (auth != undefined) {
       let bearer = auth.split(" ");
       let token = bearer[1];
       try {
         let decoded = jwt.decode(token, process.env.SECTK);
+        console.log(await permission(decoded.id, 5))
         await permission(decoded.id, 5)
           ? next()
           : res.status(401).json({

@@ -17,9 +17,24 @@ function Perf_usuarios() {
   }, []);
 
   const fetchPerfis = async () => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      setError("Token de autenticação não encontrado.");
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await fetch("http://127.0.0.1:3000/perf_usuarios/visualizar");
+      const res = await fetch("http://127.0.0.1:3000/perf_usuarios/visualizar", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
 
       // espera-se que a API retorne { success: true, values: [...] } ou um array
@@ -49,11 +64,25 @@ function Perf_usuarios() {
   };
 
   const deletePerfil = async (id) => {
+    const token = JSON.parse(localStorage.getItem("userData"))?.token;
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      alert("Token de autenticação não encontrado.");
+      return;
+    }
+
     const ok = window.confirm("Deseja excluir este perfil?");
     if (!ok) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:3000/perf_usuarios/excluir/${id}`, { method: "DELETE" });
+      const res = await fetch(`http://127.0.0.1:3000/perf_usuarios/excluir/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       if (data && data.success) {
         alert("Perfil excluído");
