@@ -16,6 +16,7 @@ import Compras from "./pages/Compras.jsx"
 import Vendas from "./pages/Vendas.jsx"
 import Contas from "./pages/Contas.jsx"
 import Pdv from "./pages/Pdv.jsx"
+import Auditoria from "./pages/Auditoria.jsx"
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                     <Route path="/vendas" element={<Vendas />} />
                     <Route path="/contas" element={<Contas />} />
                     <Route path="/pdv" element={<Pdv />} />
+                    <Route path="/auditoria" element={<Auditoria/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
