@@ -19,7 +19,12 @@ function CadastrarVendedor({ onClose, onSuccess }) {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:3000/usuarios/visualizar");
+        const token = JSON.parse(localStorage.getItem("userData"))?.token;
+        const response = await fetch("http://127.0.0.1:3000/usuarios/visualizar", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         if (data.success) {
           setUsuarios(data.values);
@@ -38,7 +43,12 @@ function CadastrarVendedor({ onClose, onSuccess }) {
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:3000/pessoas/visualizar");
+        const token = JSON.parse(localStorage.getItem("userData"))?.token;
+        const response = await fetch("http://127.0.0.1:3000/pessoas/visualizar", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         if (data.success) {
           setPessoas(data.values);
