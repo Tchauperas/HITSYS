@@ -14,7 +14,7 @@ module.exports = async function (auth, id_acao, descricao_acao) {
     
     let decoded = jwt.verify(token, process.env.SECTK);
     
-    let dateTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    let dateTime = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/(\d{2})\/(\d{2})\/(\d{4}),/, '$3-$2-$1');
     
     await db.insert({
       data_hora: dateTime, 

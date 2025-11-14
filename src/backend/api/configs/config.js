@@ -13,7 +13,7 @@ const connDev = {
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "Kvrt@911$",
+  password: "unifeob@123",
   database: "hitsys"
 }
 
