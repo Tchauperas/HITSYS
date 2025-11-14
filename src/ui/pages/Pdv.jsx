@@ -30,13 +30,24 @@ function Pdv() {
   const [vendedorSearch, setVendedorSearch] = useState("");
   const [vendedorNome, setVendedorNome] = useState("");
 
+  const [showProdutoDropdown, setShowProdutoDropdown] = useState(false);
+  const [produtosList, setProdutosList] = useState([]);
+  const [produtoSearch, setProdutoSearch] = useState("");
+  const [produtoNome, setProdutoNome] = useState("");
+
   const [busca, setBusca] = useState("");
   const [resultadosBusca, setResultadosBusca] = useState([]);
 
+  const [produtoSelecionadoId, setProdutoSelecionadoId] = useState(null);
+
   const adicionarItem = () => {
+    if (!codigo || !descricao || quantidade <= 0 || valorUnitario <= 0) {
+      alert("Preencha todos os campos corretamente antes de adicionar.");
+      return;
+    }
     const precoTotal = quantidade * valorUnitario;
     const novoItem = {
-      id_produto: Math.floor(Math.random() * 1000), // Simulação
+      id_produto: produtoSelecionadoId || Math.floor(Math.random() * 1000), // Usar id real do produto
       codigo,
       descricao,
       quantidade,
@@ -47,10 +58,13 @@ function Pdv() {
       valor_desconto: 0,
     };
     setItens([...itens, novoItem]);
+    // Limpar todos os campos para próxima inserção
     setCodigo("");
     setDescricao("");
     setQuantidade(1);
     setValorUnitario(0);
+    setProdutoNome("");
+    setProdutoSelecionadoId(null);
   };
 
   const calcularTotalVenda = () => {
@@ -58,13 +72,53 @@ function Pdv() {
   };
 
   const enviarVenda = async () => {
+    // Validações
+    if (!empresa) {
+      alert("Selecione uma empresa antes de fechar a venda.");
+      return;
+    }
+    if (!cliente) {
+      alert("Selecione um cliente antes de fechar a venda.");
+      return;
+    }
+    if (!vendedor) {
+      alert("Selecione um vendedor antes de fechar a venda.");
+      return;
+    }
+    if (itens.length === 0) {
+      alert("Adicione pelo menos um produto antes de fechar a venda.");
+      return;
+    }
+
     const totalProdutos = calcularTotalVenda();
+    
+    // Formatar data no fuso GMT-3 (horário de Brasília)
+    const now = new Date();
+    const offset = -3 * 60; // GMT-3 em minutos
+    const localTime = new Date(now.getTime() + offset * 60 * 1000);
+    const dataAtual = localTime.toISOString().slice(0, 19).replace('T', ' ');
+    
+    const numVenda = `VEN-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+    
+    // Buscar o ID do usuário logado no caminho correto
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const idUsuario = userData?.data?.id_usuario;
+    
+    console.log("UserData completo:", userData);
+    console.log("ID do usuário:", idUsuario);
+    
+    if (!idUsuario) {
+      alert("Usuário não identificado. Faça login novamente.");
+      navigate("/");
+      return;
+    }
+
     const payload = {
       pedido: {
         id_empresa: empresa,
-        num_venda: `VEN-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-001`,
-        data_venda: new Date().toISOString(),
-        id_usuario_lancamento: 3,
+        num_venda: numVenda,
+        data_venda: dataAtual,
+        id_usuario_lancamento: idUsuario,
         id_cliente: cliente,
         id_vendedor: vendedor,
         total_produtos: totalProdutos,
@@ -77,49 +131,102 @@ function Pdv() {
         observacoes_venda: "Venda realizada com sucesso.",
         observacoes_internas: "PDV básico",
       },
-      itens,
+      itens: itens.map(item => ({
+        id_produto: item.id_produto,
+        codigo: item.codigo,
+        descricao: item.descricao,
+        quantidade: item.quantidade,
+        preco_unitario: item.preco_unitario,
+        preco_total: item.preco_total,
+        unidade_medida: item.unidade_medida || "UN",
+        margem_desconto: item.margem_desconto || 0,
+        valor_desconto: item.valor_desconto || 0
+      }))
     };
 
+    console.log("Payload que será enviado:", JSON.stringify(payload, null, 2));
+
     try {
-      const response = await fetch("http://127.0.0.1:3000/pedidos", {
+      const token = userData?.token;
+      if (!token) {
+        alert("Sessão expirada. Faça login novamente.");
+        navigate("/");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:3000/vendas/lancar", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(payload),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erro na resposta:", errorData);
+        alert(`Erro ao enviar venda: ${errorData.message || 'Erro desconhecido'}`);
+        return;
+      }
+
       const data = await response.json();
-      console.log("Venda enviada:", data);
-      alert("Venda finalizada com sucesso!");
-      setItens([]);
+      console.log("Resposta do envio da venda:", data);
+      
+      if (data.success) {
+        alert("Venda finalizada com sucesso!");
+        // Limpar todos os campos
+        setItens([]);
+        setEmpresa(1);
+        setCliente(1);
+        setVendedor(1);
+        setEmpresaNome("");
+        setClienteNome("");
+        setVendedorNome("");
+        setCodigo("");
+        setDescricao("");
+        setQuantidade(1);
+        setValorUnitario(0);
+        setProdutoNome("");
+      } else {
+        alert(`Erro ao finalizar venda: ${data.message || 'Erro desconhecido'}`);
+      }
     } catch (error) {
       console.error("Erro ao enviar venda:", error);
+      alert("Erro ao conectar com o servidor. Tente novamente.");
     }
   };
 
-  const buscarProdutos = async () => {
-    const termo = (busca || "").trim();
-    if (!termo) return;
+  const buscarProdutos = async (term = "") => {
     try {
-      // futura chamada real ao backend
-      const res = await fetch(`http://127.0.0.1:3000/produtos?search=${encodeURIComponent(termo)}`);
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const token = userData?.token;
+      if (!token) return;
+      const res = await fetch(`http://127.0.0.1:3000/produtos/visualizar?search=${encodeURIComponent(term)}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       if (!res.ok) throw new Error("Sem resposta do serviço");
       const data = await res.json();
-      setResultadosBusca(Array.isArray(data) ? data : []);
+      console.log("Produtos retornados:", data);
+      setProdutosList(Array.isArray(data.values) ? data.values : []);
     } catch (err) {
-      console.warn("Busca de produtos falhou, usando simulação:", err);
-      // resultado simulado para desenvolvimento local
-      setResultadosBusca([
-        { id_produto: 1, codigo: "EX001", descricao: "Produto Exemplo", preco_unitario: 12.5 },
-      ]);
+      console.error("Erro ao buscar produtos:", err);
+      setProdutosList([]);
     }
   };
 
   const selecionarProduto = (prod) => {
-    setCodigo(prod.codigo || "");
-    setDescricao(prod.descricao || "");
-    setValorUnitario(prod.preco_unitario || 0);
+    setProdutoSelecionadoId(prod.id_produto || prod.id);
+    setCodigo(prod.codigo || prod.codigo_produto || "");
+    setDescricao(prod.descricao || prod.descricao_produto || "");
+    setValorUnitario(prod.preco_unitario || prod.preco_venda || 0);
+    setProdutoNome(prod.descricao || prod.descricao_produto || "");
     setQuantidade(1);
-    setResultadosBusca([]);
+    setProdutoSearch("");
+    setShowProdutoDropdown(false);
   };
 
   // seletores de registros (placeholders -- substituir por modal/busca real)
@@ -152,85 +259,148 @@ function Pdv() {
   // --- funções para buscar listas (tentam API, caem em simulação) ---
   const fetchEmpresas = async (term = "") => {
     try {
-      const res = await fetch(`http://127.0.0.1:3000/empresas?search=${encodeURIComponent(term)}`);
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const token = userData?.token;
+      if (!token) return;
+      const res = await fetch(`http://127.0.0.1:3000/empresas/visualizar?search=${encodeURIComponent(term)}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       if (!res.ok) throw new Error("no response");
       const data = await res.json();
-      setEmpresasList(Array.isArray(data) ? data : []);
+      console.log("Empresas retornadas:", data);
+      setEmpresasList(Array.isArray(data.values) ? data.values : []);
     } catch (err) {
-      // fallback simulado
-      setEmpresasList([
-        { id: 1, nome: "Empresa A" },
-        { id: 2, nome: "Empresa B" },
-        { id: 3, nome: "Empresa C" },
-      ]);
+      console.error("Erro ao buscar empresas:", err);
+      setEmpresasList([]);
     }
   };
 
   const fetchClientes = async (term = "") => {
     try {
-      const res = await fetch(`http://127.0.0.1:3000/clientes?search=${encodeURIComponent(term)}`);
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const token = userData?.token;
+      if (!token) return;
+      const res = await fetch(`http://127.0.0.1:3000/pessoas/visualizar?search=${encodeURIComponent(term)}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       if (!res.ok) throw new Error("no response");
       const data = await res.json();
-      setClientesList(Array.isArray(data) ? data : []);
+      console.log("Clientes retornados:", data);
+      setClientesList(Array.isArray(data.values) ? data.values : []);
     } catch (err) {
-      setClientesList([
-        { id: 11, nome: "Fulano de Tal" },
-        { id: 12, nome: "Beltrano" },
-        { id: 13, nome: "Ciclano" },
-      ]);
+      console.error("Erro ao buscar clientes:", err);
+      setClientesList([]);
     }
   };
 
   const fetchVendedores = async (term = "") => {
     try {
-      const res = await fetch(`http://127.0.0.1:3000/vendedores?search=${encodeURIComponent(term)}`);
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const token = userData?.token;
+      if (!token) return;
+      const res = await fetch(`http://127.0.0.1:3000/vendedores/vendedores?search=${encodeURIComponent(term)}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       if (!res.ok) throw new Error("no response");
       const data = await res.json();
-      setVendedoresList(Array.isArray(data) ? data : []);
+      console.log("Vendedores retornados:", data);
+      setVendedoresList(Array.isArray(data.values) ? data.values : []);
     } catch (err) {
-      setVendedoresList([
-        { id: 21, nome: "Vendedor 1" },
-        { id: 22, nome: "Vendedor 2" },
-      ]);
+      console.error("Erro ao buscar vendedores:", err);
+      setVendedoresList([]);
     }
   };
 
   const openEmpresaDropdown = async () => {
-    await fetchEmpresas("");
     setShowEmpresaDropdown(true);
     setShowClienteDropdown(false);
     setShowVendedorDropdown(false);
+    await fetchEmpresas("");
   };
 
   const openClienteDropdown = async () => {
-    await fetchClientes("");
     setShowClienteDropdown(true);
     setShowEmpresaDropdown(false);
     setShowVendedorDropdown(false);
+    await fetchClientes("");
   };
 
   const openVendedorDropdown = async () => {
-    await fetchVendedores("");
     setShowVendedorDropdown(true);
     setShowEmpresaDropdown(false);
     setShowClienteDropdown(false);
+    await fetchVendedores("");
   };
 
+  const openProdutoDropdown = async () => {
+    setShowProdutoDropdown(true);
+    await buscarProdutos("");
+  };
+
+  // REMOVA os useEffect existentes e substitua por estes:
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showEmpresaDropdown && empresaSearch) {
+        fetchEmpresas(empresaSearch);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [empresaSearch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showClienteDropdown && clienteSearch) {
+        fetchClientes(clienteSearch);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [clienteSearch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showVendedorDropdown && vendedorSearch) {
+        fetchVendedores(vendedorSearch);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [vendedorSearch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showProdutoDropdown && produtoSearch) {
+        buscarProdutos(produtoSearch);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [produtoSearch]);
+
   const selectEmpresa = (item) => {
-    setEmpresa(item.id || item.id_empresa || item.idEmpresa || 0);
-    setEmpresaNome(item.nome || item.razao_social || item.nome_fantasia || String(item.id));
+    setEmpresa(item.id_empresa || item.id || 0);
+    setEmpresaNome(item.nome_fantasia || item.razao_social || item.nome || String(item.id_empresa || item.id));
+    setEmpresaSearch("");
     setShowEmpresaDropdown(false);
   };
 
   const selectCliente = (item) => {
-    setCliente(item.id || item.id_pessoa || 0);
-    setClienteNome(item.nome || item.razao_social || String(item.id));
+    setCliente(item.id_pessoa || item.id || 0);
+    setClienteNome(item.nome_razao_social || item.nome || String(item.id_pessoa || item.id));
+    setClienteSearch("");
     setShowClienteDropdown(false);
   };
 
   const selectVendedor = (item) => {
-    setVendedor(item.id || 0);
-    setVendedorNome(item.nome || String(item.id));
+    setVendedor(item.id_vendedor || item.id || 0);
+    setVendedorNome(item.nome_pessoa || item.nome || String(item.id_vendedor || item.id));
+    setVendedorSearch("");
     setShowVendedorDropdown(false);
   };
 
@@ -251,11 +421,16 @@ function Pdv() {
 
               {showEmpresaDropdown && (
                 <div className="pdv-dropdown-panel">
-                  <input className="form-control mb-2" placeholder="Buscar empresa..." value={empresaSearch} onChange={(e) => setEmpresaSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') fetchEmpresas(empresaSearch); }} />
+                  <input 
+                    className="form-control mb-2" 
+                    placeholder="Buscar empresa..." 
+                    value={empresaSearch} 
+                    onChange={(e) => setEmpresaSearch(e.target.value)}
+                  />
                   <div className="list-group">
                     {empresasList.map((it) => (
-                      <button key={it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
-                        {it.id} - {it.nome}
+                      <button key={it.id_empresa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
+                        {it.id_empresa || it.id} - {it.nome_fantasia || it.razao_social || it.nome}
                       </button>
                     ))}
                   </div>
@@ -270,11 +445,16 @@ function Pdv() {
                 </button>
                 {showClienteDropdown && (
                   <div className="pdv-dropdown-panel">
-                    <input className="form-control mb-2" placeholder="Buscar cliente..." value={clienteSearch} onChange={(e) => setClienteSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') fetchClientes(clienteSearch); }} />
+                    <input 
+                      className="form-control mb-2" 
+                      placeholder="Buscar cliente..." 
+                      value={clienteSearch} 
+                      onChange={(e) => setClienteSearch(e.target.value)}
+                    />
                     <div className="list-group">
                       {clientesList.map((it) => (
-                        <button key={it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectCliente(it)}>
-                          {it.id} - {it.nome}
+                        <button key={it.id_pessoa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectCliente(it)}>
+                          {it.id_pessoa || it.id} - {it.nome_razao_social || it.nome}
                         </button>
                       ))}
                     </div>
@@ -294,11 +474,16 @@ function Pdv() {
 
               {showVendedorDropdown && (
                 <div className="pdv-dropdown-panel">
-                  <input className="form-control mb-2" placeholder="Buscar vendedor..." value={vendedorSearch} onChange={(e) => setVendedorSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') fetchVendedores(vendedorSearch); }} />
+                  <input 
+                    className="form-control mb-2" 
+                    placeholder="Buscar vendedor..." 
+                    value={vendedorSearch} 
+                    onChange={(e) => setVendedorSearch(e.target.value)}
+                  />
                   <div className="list-group">
                     {vendedoresList.map((it) => (
-                      <button key={it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
-                        {it.id} - {it.nome}
+                      <button key={it.id_vendedor || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
+                        {it.id_vendedor || it.id} - {it.nome_pessoa || it.nome}
                       </button>
                     ))}
                   </div>
@@ -310,41 +495,40 @@ function Pdv() {
       </div>
 
       <div className="row mb-3">
-        <div className="col-9">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="BUSQUE POR PRODUTOS"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") buscarProdutos(); }}
-          />
-        </div>
-        <div className="col-3">
-          <button className="btn btn-outline-primary w-100" onClick={buscarProdutos}>
-            Buscar
-          </button>
-        </div>
-      </div>
+        <div className="col-12">
+          <div style={{ position: 'relative' }}>
+            <button className="btn btn-outline-success w-100" onClick={openProdutoDropdown}>
+              {produtoNome ? `Produto: ${produtoNome}` : "SELECIONE UM PRODUTO"}
+            </button>
 
-      {resultadosBusca.length > 0 && (
-        <div className="row mb-2">
-          <div className="col">
-            <ul className="list-group">
-              {resultadosBusca.map((p) => (
-                <li
-                  key={p.id_produto ?? p.codigo}
-                  className="list-group-item list-group-item-action"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => selecionarProduto(p)}
-                >
-                  {p.codigo} - {p.descricao} - R$ {Number(p.preco_unitario || 0).toFixed(2)}
-                </li>
-              ))}
-            </ul>
+            {showProdutoDropdown && (
+              <div className="pdv-dropdown-panel" style={{ width: '100%' }}>
+                <input 
+                  className="form-control mb-2" 
+                  placeholder="Buscar produto..." 
+                  value={produtoSearch} 
+                  onChange={(e) => setProdutoSearch(e.target.value)}
+                  autoFocus
+                />
+                <div className="list-group" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                  {produtosList.map((p) => (
+                    <button 
+                      key={p.id_produto || p.codigo} 
+                      type="button" 
+                      className="list-group-item list-group-item-action text-start" 
+                      onClick={() => selecionarProduto(p)}
+                    >
+                      <strong>{p.codigo || p.codigo_produto}</strong> - {p.descricao || p.descricao_produto}
+                      <br />
+                      <small className="text-muted">R$ {Number(p.preco_unitario || p.preco_venda || 0).toFixed(2)}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
 
       <div className="row mb-3">
         <div className="col">
@@ -354,6 +538,7 @@ function Pdv() {
             placeholder="Código"
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
+            readOnly
           />
         </div>
         <div className="col">
@@ -363,6 +548,7 @@ function Pdv() {
             placeholder="Descrição"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
+            readOnly
           />
         </div>
         <div className="col">
@@ -395,10 +581,8 @@ function Pdv() {
           <tr>
             <th>#</th>
             <th>Produto</th>
-            <th>Und.</th>
             <th>Qtd.</th>
             <th>Valor Unit.</th>
-            <th>Desconto</th>
             <th>Total</th>
             <th>Ações</th>
           </tr>
@@ -409,8 +593,16 @@ function Pdv() {
               <td>{index + 1}</td>
               <td>{item.descricao}</td>
               <td>{item.quantidade}</td>
-              <td>R$ {item.preco_unitario.toFixed(2)}</td>
-              <td>R$ {item.preco_total.toFixed(2)}</td>
+              <td>R$ {Number(item.preco_unitario || 0).toFixed(2)}</td>
+              <td>R$ {Number(item.preco_total || 0).toFixed(2)}</td>
+              <td>
+                <button 
+                  className="btn btn-sm btn-danger" 
+                  onClick={() => setItens(itens.filter((_, i) => i !== index))}
+                >
+                  Remover
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
