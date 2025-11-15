@@ -74,7 +74,6 @@
     border-collapse: collapse;
     background: white;
     border-radius: 8px;
-    overflow: hidden;
 }
 
 .auditoria-table th,
@@ -109,4 +108,9 @@
 .auditoria-table-container {
     max-height: 65vh; /* limite de altura */
     overflow-y: auto; /* scroll vertical */
+}
+.auditoria-table thead th{
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }

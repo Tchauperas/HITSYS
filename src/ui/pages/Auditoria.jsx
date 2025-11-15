@@ -32,7 +32,10 @@ function Auditoria() {
             const data = await response.json()
 
             if (data.success && Array.isArray(data.values)) {
-                setAuditorias(data.values)
+                const ordenado = data.values.sort(
+                    (a, b) => new Date(b.data_hora) - new Date(a.data_hora)
+                )
+                setAuditorias(ordenado)
             } else {
                 console.error("Formato inesperado:", data)
             }
