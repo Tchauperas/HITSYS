@@ -70,6 +70,18 @@ class Produto {
       return { validated: false, error: e.message };
     }
   }
+
+  async debitarEstoque(id, debt) {
+    try {
+      const quant = await db.select("saldo_estoque").table("produtos").where({id_produto: id})
+      let saldo =  quant[0].saldo_estoque - debt 
+      console.log(saldo, quant, debt)
+      await db.update({saldo_estoque: saldo}).table("produtos").where({id_produto: id})
+      return {validated: true}
+    } catch (e) {
+      return {validated: false, error: e}
+    }
+  }
 }
 
 module.exports = new Produto();

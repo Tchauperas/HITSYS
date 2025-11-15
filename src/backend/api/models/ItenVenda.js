@@ -1,4 +1,5 @@
 const db = require("../configs/config");
+const debt = require("./Produto")
 
 class ItenVenda {
   async inserirItem(id_venda, data) {
@@ -30,6 +31,8 @@ class ItenVenda {
             valor_desconto: valor_desconto,
           })
           .table("itens_venda");
+        let debito = await debt.debitarEstoque(id_produto, quantidade)
+        console.log(debito.validated, debito?.error, quantidade)
         i++;
       }
       return { validated: true };
