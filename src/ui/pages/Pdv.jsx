@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
+import CadastroPessoa from "../components/Cadastro_pessoa"; // Adicione esta importação
 
 function Pdv() {
   const [codigo, setCodigo] = useState("");
@@ -39,6 +40,9 @@ function Pdv() {
   const [resultadosBusca, setResultadosBusca] = useState([]);
 
   const [produtoSelecionadoId, setProdutoSelecionadoId] = useState(null);
+
+  // Adicione este estado para controlar o modal
+  const [showCadastroClienteModal, setShowCadastroClienteModal] = useState(false);
 
   const adicionarItem = () => {
     if (!codigo || !descricao || quantidade <= 0 || valorUnitario <= 0) {
@@ -246,14 +250,20 @@ function Pdv() {
   };
 
   const adicionarCliente = async () => {
-    const nome = window.prompt("Novo cliente - digite nome (simulação):");
-    if (nome) {
-      // simula criação e retorna novo id aleatório
-      const novoId = Math.floor(Math.random() * 9000) + 1000;
-      // futuramente chamar API para criar cliente
-      setCliente(novoId);
-      alert(`Cliente '${nome}' criado (id ${novoId}) - isto é apenas uma simulação.`);
+    // Substitua o conteúdo desta função
+    setShowCadastroClienteModal(true);
+  };
+
+  // Adicione esta função para lidar com o sucesso do cadastro
+  const handleClienteCadastrado = (novoCliente) => {
+    // Atualizar o cliente selecionado com os dados do novo cliente
+    if (novoCliente && novoCliente.id_pessoa) {
+      setCliente(novoCliente.id_pessoa);
+      setClienteNome(novoCliente.nome_razao_social || novoCliente.nome);
+      // Recarregar a lista de clientes
+      fetchClientes("");
     }
+    setShowCadastroClienteModal(false);
   };
 
   // --- funções para buscar listas (tentam API, caem em simulação) ---
@@ -625,6 +635,15 @@ function Pdv() {
           Sair
         </button>
       </div>
+
+      {/* Adicione o modal no final do return, antes do fechamento da div container */}
+      {showCadastroClienteModal && (
+        <CadastroPessoa
+          show={showCadastroClienteModal}
+          onHide={() => setShowCadastroClienteModal(false)}
+          onSuccess={handleClienteCadastrado}
+        />
+      )}
     </div>
   );
 }

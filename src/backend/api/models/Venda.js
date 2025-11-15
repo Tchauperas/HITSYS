@@ -12,7 +12,15 @@ class Venda {
 
   async visualizarVenda(id) {
     try {
-      let venda = await db.select("*").where({ id_venda: id }).table("vendas");
+      let venda = await db
+        .select(
+          "vendas.*",
+          "pessoas.nome_razao_social as nome_cliente"
+        )
+        .from("vendas")
+        .leftJoin("pessoas", "vendas.id_cliente", "pessoas.id_pessoa")
+        .where({ "vendas.id_venda": id });
+
       if (venda.length > 0) {
         return { validated: true, values: venda };
       } else {
@@ -28,7 +36,14 @@ class Venda {
 
   async visualizarVendas() {
     try {
-      let venda = await db.select("*").table("vendas");
+      let venda = await db
+        .select(
+          "vendas.*",
+          "pessoas.nome_razao_social as nome_cliente"
+        )
+        .from("vendas")
+        .leftJoin("pessoas", "vendas.id_cliente", "pessoas.id_pessoa");
+
       if (venda.length > 0) {
         return { validated: true, values: venda };
       } else {
