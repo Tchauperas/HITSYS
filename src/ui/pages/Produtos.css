@@ -27,13 +27,6 @@
     gap: 10px;
 }
 
-.title h1 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    color: black;
-}
-
 .right-actions {
     display: flex;
     gap: 10px;

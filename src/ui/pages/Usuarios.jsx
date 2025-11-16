@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import logo from "../assets/usuarios_icon.png";
 import CadastrarUsuarios from "../components/Cadastrar_usuarios";
 import AlterarUsuarios from "../components/Alterar_usuarios";
+import WindowControls from "../components/WindowControls";
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -130,6 +131,7 @@ function Usuarios() {
 
   return (
     <div className="usuarios-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">

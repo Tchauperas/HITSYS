@@ -2,9 +2,11 @@ import React from "react"
 import "./Compras.css"
 import Navbar from "../components/Navbar"
 import logo from "../assets/compras_icon.png"
+import WindowControls from "../components/WindowControls"
 function Compras() {
     return (
         <div className="empresas-container">
+            <WindowControls />
             <Navbar />
 
             <div className="content">

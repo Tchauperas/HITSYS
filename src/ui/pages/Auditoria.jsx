@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import "./Auditoria.css"
 import Navbar from "../components/Navbar"
 import logo from "../assets/auditoria_icon.png"
+import WindowControls from "../components/WindowControls"
 
 function Auditoria() {
     const [auditorias, setAuditorias] = useState([])
@@ -72,6 +73,7 @@ function Auditoria() {
 
     return (
         <div className="auditoria-container">
+            <WindowControls/>
             <Navbar />
 
             <div className="content">

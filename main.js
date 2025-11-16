@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const { spawn } = require("child_process")
 const fs = require("fs")
@@ -10,15 +10,38 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({
         fullscreen: true, // Inicia em tela cheia real
         resizable: false, // Desativa redimensionamento
-        frame: false, // Remove a barra de título (opcional)
+        frame: false, // Remove a barra de título
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
+            preload: path.join(__dirname, 'preload.js') // NECESSÁRIO PARA O FRONTEND ACESSAR APIs DO ELECTRON
         },
     })
 
     mainWindow.loadURL("http://localhost:3000/")
+    // mainWindow.webContents.openDevTools();          <----- DESCOMENTE PARA DEBUGAR (HABILITA DEVTOOLS NA JANELA ELECTRON, FUNÇÃO INSPECIONAR E ETC.) 
 }
+
+// ---------------- IPC HANDLERS ----------------- (NECESSÁRIOS APRA AS FUNÇÕES DE JANELA FUNCIONAR)
+
+ipcMain.on('window-minimize', (event) =>{
+    const win = BrowserWindow.fromWebContents(event.sender)
+    if (win) win.minimize()
+})
+
+ipcMain.on('window-close', (event) =>{
+    const win = BrowserWindow.fromWebContents(event.sender)
+    if (win) win.close()
+})
+
+// ---^--------^--- IPC HANDLERS ---^---------^--- 
+
+function sendTokenToRenderer(token) {
+    if (mainWindow && mainWindow.webContents) {
+        mainWindow.webContents.send("receive-token", token)
+    }
+}
+
 
 function waitForServer(port, timeout = 5000) {
     const net = require("net")

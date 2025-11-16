@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
 import CadastroPessoa from "../components/Cadastro_pessoa"; // Adicione esta importação
-
+import WindowControls from "../components/WindowControls"
 function Pdv() {
   const [codigo, setCodigo] = useState("");
   const [quantidade, setQuantidade] = useState(1);
@@ -416,6 +416,7 @@ function Pdv() {
 
   return (
     <div className="container mt-4">
+      <WindowControls />
       <div className="text-center mb-4">
         <img src={logo} alt="Logo" style={{ height: "50px" }} />
         <h2>PDV</h2>

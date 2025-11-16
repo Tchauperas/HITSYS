@@ -1,0 +1,40 @@
+/* WindowControlsLogin.css */
+#titlebar-login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  -webkit-app-region: drag; /* permite arrastar a janela */
+  background:transparent; /* ajuste conforme seu tema */
+}
+
+.controls-login {
+  -webkit-app-region: no-drag; /* botões não devem arrastar */
+  display: flex;
+}
+
+.controls-login button {
+  width: 46px;
+  height: 34px;
+  border: none;   
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+#min-btn-login {
+  font-weight: 900;
+}
+
+.controls-login button:hover {
+  background-color: #093c6e;
+  transform: none;
+}

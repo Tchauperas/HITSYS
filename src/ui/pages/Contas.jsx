@@ -2,9 +2,11 @@ import React from "react"
 import "./Contas.css"
 import Navbar from "../components/Navbar"
 import logo from "../assets/contas_icon.png"
+import WindowControls from "../components/WindowControls"
 function Contas() {
     return (
         <div className="contas-container">
+            <WindowControls />
             <Navbar />
 
             <div className="content">
@@ -15,7 +17,7 @@ function Contas() {
                         <h1>Listagem de Contas</h1>
                     </div>
 
-                    <div className="buttons">
+                    <div className="right-actions">
                         <button className="btn-cadastrar">Cadastrar</button>
                     </div>
                 </header>

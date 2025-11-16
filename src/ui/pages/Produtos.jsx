@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import CadastroProduto from "../components/Cadastro_produto";
 import AlterarProduto from "../components/Alterar_produto";
 import logo from "../assets/produtos_icon.png";
+import WindowControls from "../components/WindowControls";
 
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
@@ -150,11 +151,13 @@ function Produtos() {
 
   return (
     <div className="produtos-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">
         <header className="top-row">
           <div className="title">
+            <span className="box-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
             <h1>Listagem de Produtos</h1>
           </div>

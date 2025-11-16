@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom" // Certifique-se de que o react-router-dom está instalado
 import "./Login.css"
 import logo from "../assets/logo_hitsys.png"
+import WindowControlsLogin from "../components/WindowControlsLogin";
 
 function Login() {
   const [login, setLogin] = useState("")
@@ -42,6 +43,7 @@ function Login() {
 
   return (
     <div className="login-page-wrapper">
+      <WindowControlsLogin />
       <div className="login-container">
         <form onSubmit={handleSubmit} className="login-box">
           <div className="logo-name-box">

@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar"
 import CadastroEmpresa from "../components/Cadastro_empresa"
 import AlterarEmpresa from "../components/Alterar_empresa" // Importa o componente de alteração
 import logo from "../assets/empresas_icon.png"
-
+import WindowControls from "../components/WindowControls"
 function Empresas() {
     const [empresas, setEmpresas] = useState([])
     const [search, setSearch] = useState("")
@@ -120,6 +120,7 @@ function Empresas() {
 
     return (
         <div className="empresas-container">
+            <WindowControls />
             <Navbar />
 
             <div className="content">

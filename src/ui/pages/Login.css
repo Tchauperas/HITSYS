@@ -2,7 +2,6 @@
   font-family: "androidFont";
   src: url("..//assets/fonts/Android.ttf") format("truetype");
 }
-
 .login-container {
   display: flex;
   justify-content: center;

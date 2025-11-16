@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import CadastrarVendedor from "../components/Cadastrar_vendedor";
 import AlterarVendedor from "../components/Alterar_vendedores";
 import logo from "../assets/vendedores_icon.png"
+import WindowControls from "../components/WindowControls";
 
 function Vendedores() {
   const [vendedores, setVendedores] = useState([]);
@@ -105,6 +106,7 @@ function Vendedores() {
 
   return (
     <div className="vendedores-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">
@@ -115,7 +117,7 @@ function Vendedores() {
             <h1>Listagem de Vendedores</h1>
           </div>
 
-          <div className="buttons">
+          <div className="right-actions">
             <button className="btn-cadastrar" onClick={() => setShowModalCadastrar(true)}>
               Cadastrar
             </button>

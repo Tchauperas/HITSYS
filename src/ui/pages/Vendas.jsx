@@ -3,6 +3,7 @@ import "./Vendas.css";
 import Navbar from "../components/Navbar";
 import VisualizaVenda from "../components/Visualiza_venda";
 import logo from "../assets/vendas_icon.png";
+import WindowControls from "../components/WindowControls";
 
 function Vendas() {
   const [vendas, setVendas] = useState([]);
@@ -88,6 +89,7 @@ function Vendas() {
 
   return (
     <div className="vendas-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">

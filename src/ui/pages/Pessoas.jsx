@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import logo from "../assets/pessoas_icon.png";
 import CadastroPessoa from "../components/Cadastro_pessoa";
 import AlterarPessoa from "../components/Alterar_pessoa";
+import WindowControls from "../components/WindowControls";
 
 function Pessoas() {
   const [pessoas, setPessoas] = useState([]);
@@ -238,6 +239,7 @@ function Pessoas() {
 
   return (
     <div className="pessoas-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">

@@ -5,7 +5,7 @@ import logo from "../assets/perfis_icon.png";
 import CadastrarPerfil from "../components/Cadastrar_perfil";
 import AlterarPerfil from "../components/Alterar_perfil";
 import PermissoesModal from "../components/PermissoesModal";
-
+import WindowControls from "../components/WindowControls"
 function Perf_usuarios() {
   const [perfis, setPerfis] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,6 +126,7 @@ function Perf_usuarios() {
 
   return (
     <div className="perf-container">
+      <WindowControls />
       <Navbar />
 
       <div className="content">
@@ -136,7 +137,7 @@ function Perf_usuarios() {
             <h1>Listagem de Perfis de Usuários</h1>
           </div>
 
-          <div className="buttons">
+          <div className="right-actions">
             <button className="btn-cadastrar" onClick={cadastrarPerfil}>Cadastrar</button>
           </div>
         </header>
