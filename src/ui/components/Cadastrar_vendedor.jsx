@@ -39,7 +39,7 @@ function CadastrarVendedor({ onClose, onSuccess }) {
     fetchUsuarios();
   }, []);
 
-  // Fetch Pessoas on component mount
+  // Fetch Pessoas (somente Funcionários - tipo_cadastro id=3) on component mount
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
@@ -51,7 +51,11 @@ function CadastrarVendedor({ onClose, onSuccess }) {
         });
         const data = await response.json();
         if (data.success) {
-          setPessoas(data.values);
+          const somenteFuncionarios = (data.values || []).filter((p) => {
+            const tipos = p.tipos_cadastros || [];
+            return tipos.includes(3);
+          });
+          setPessoas(somenteFuncionarios);
         } else {
           setMessage("Erro ao carregar pessoas.");
         }
@@ -159,7 +163,7 @@ function CadastrarVendedor({ onClose, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value="">Selecione a Pessoa</option>
+            <option value="">Selecione o Funcionário</option>
             {pessoas.map((pessoa) => (
               <option key={pessoa.id_pessoa} value={pessoa.id_pessoa}>
                 {pessoa.nome_razao_social}

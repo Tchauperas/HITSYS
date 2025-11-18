@@ -10,6 +10,7 @@ function Vendedores() {
   const [vendedores, setVendedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [showModalCadastrar, setShowModalCadastrar] = useState(false);
   const [showModalAlterar, setShowModalAlterar] = useState(false);
   const [vendedorSelecionado, setVendedorSelecionado] = useState(null);
@@ -126,7 +127,12 @@ function Vendedores() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="     Buscar vendedor" />
+          <input
+            type="text"
+            placeholder="     Buscar vendedor"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
         {loading && <p>Carregando vendedores...</p>}
@@ -139,33 +145,53 @@ function Vendedores() {
               <th>Pessoa</th>
               <th>%Comissão</th>
               <th>%Desconto Máximo</th>
-              <th>Ações</th>
+              <th style={{ textAlign: "center", width: 140 }}>Ações</th>
             </tr>
           </thead>
           <tbody>
-            {vendedores.length === 0 && !loading && (
+            {vendedores.filter((v) => {
+              const term = searchTerm.toLowerCase();
+              if (!term) return true;
+              return (
+                v.nome_usuario?.toLowerCase().includes(term) ||
+                v.nome_pessoa?.toLowerCase().includes(term) ||
+                String(v.taxa_comissao ?? "").toLowerCase().includes(term) ||
+                String(v.desconto_max ?? "").toLowerCase().includes(term)
+              );
+            }).length === 0 && !loading && (
               <tr>
                 <td colSpan="5" style={{ textAlign: 'center' }}>
                   Nenhum vendedor encontrado
                 </td>
               </tr>
             )}
-            {vendedores.map((vendedor) => (
+            {vendedores
+              .filter((v) => {
+                const term = searchTerm.toLowerCase();
+                if (!term) return true;
+                return (
+                  v.nome_usuario?.toLowerCase().includes(term) ||
+                  v.nome_pessoa?.toLowerCase().includes(term) ||
+                  String(v.taxa_comissao ?? "").toLowerCase().includes(term) ||
+                  String(v.desconto_max ?? "").toLowerCase().includes(term)
+                );
+              })
+              .map((vendedor) => (
               <tr key={vendedor.id_vendedor}>
                 <td>{vendedor.nome_usuario}</td>
                 <td>{vendedor.nome_pessoa}</td>
                 <td>{parseFloat(vendedor.taxa_comissao).toFixed(2)}%</td>
                 <td>{parseFloat(vendedor.desconto_max).toFixed(2)}%</td>
-                <td className="action-buttons">
-                  <button 
-                    className="btn-edit"
+                <td className="acoes">
+                    <button 
+                      className="btn-editar"
                     onClick={() => handleEdit(vendedor)}
                     title="Editar vendedor"
                   >
                     ✏️
                   </button>
                   <button 
-                    className="btn-delete"
+                    className="btn-excluir"
                     onClick={() => handleDelete(vendedor.id_vendedor)}
                     title="Excluir vendedor"
                   >

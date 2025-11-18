@@ -47,14 +47,23 @@ function AlterarVendedor({ vendedor, onClose, onSuccess }) {
     fetchUsuarios();
   }, []);
 
-  // Fetch Pessoas on component mount
+  // Fetch Pessoas (somente Funcionários - tipo_cadastro id=3) on component mount
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:3000/pessoas/visualizar");
+        const token = JSON.parse(localStorage.getItem("userData"))?.token;
+        const response = await fetch("http://127.0.0.1:3000/pessoas/visualizar", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         if (data.success) {
-          setPessoas(data.values);
+          const somenteFuncionarios = (data.values || []).filter((p) => {
+            const tipos = p.tipos_cadastros || [];
+            return tipos.includes(3);
+          });
+          setPessoas(somenteFuncionarios);
         } else {
           setMessage("Erro ao carregar pessoas.");
         }
@@ -158,7 +167,7 @@ function AlterarVendedor({ vendedor, onClose, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value="">Selecione a Pessoa</option>
+            <option value="">Selecione o Funcionário</option>
             {pessoas.map((pessoa) => (
               <option key={pessoa.id_pessoa} value={pessoa.id_pessoa}>
                 {pessoa.nome_razao_social}
