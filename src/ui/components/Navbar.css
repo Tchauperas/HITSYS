@@ -113,3 +113,18 @@ button:active {
     gap: 10px;
     min-width: 100%;
 }
+
+/*submenu */
+.submenu {
+    background-color: #0f6ac5;
+    padding-left: 20px;/* empurra o submenu para direita */
+}
+
+.submenu button {
+    padding-left: 35px;
+    font-size: 18px;
+}
+
+.submenu button:hover {
+    background-color: #0b5aaa;
+}
