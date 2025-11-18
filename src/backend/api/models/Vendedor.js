@@ -22,11 +22,9 @@ class Vendedor {
         .leftJoin("usuarios", "vendedores.id_usuario", "usuarios.id_usuario") 
         .leftJoin("pessoas", "vendedores.id_pessoa", "pessoas.id_pessoa"); 
 
-      if (vendedores.length > 0) {
-        return { validated: true, values: vendedores };
-      } else {
-        return { validated: false, error: "Nenhum vendedor cadastrado" };
-      }
+      // Mesmo que não existam vendedores, retornamos sucesso com lista vazia
+      // para evitar erros 404 no frontend e permitir renderizar estado vazio.
+      return { validated: true, values: vendedores };
     } catch (e) {
       return { validated: false, error: e.message };
     }

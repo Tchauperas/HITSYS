@@ -134,7 +134,7 @@ function Perf_usuarios() {
           <div className="title">
             <span className="box-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
-            <h1>Listagem de Perfis de Usuários</h1>
+            <h1>LISTAGEM DE PERFIS DE USUÁRIOS</h1>
           </div>
 
           <div className="right-actions">
