@@ -80,7 +80,7 @@ function Auditoria() {
                 <header className="top-row">
                     <div className="title">
                         <img src={logo} alt="Logo" className="logo" />
-                        <h1>Listagem de Auditoria</h1>
+                        <h1>AUDITORIA</h1>
                     </div>
                 </header>
 

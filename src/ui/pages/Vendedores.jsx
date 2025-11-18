@@ -114,7 +114,7 @@ function Vendedores() {
           <div className="title">
             <span className="box-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
-            <h1>Listagem de Vendedores</h1>
+            <h1>LISTAGEM DE VENDEDORES</h1>
           </div>
 
           <div className="right-actions">
@@ -126,7 +126,7 @@ function Vendedores() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="   Buscar vendedor" />
+          <input type="text" placeholder="     Buscar vendedor" />
         </div>
 
         {loading && <p>Carregando vendedores...</p>}
@@ -138,7 +138,7 @@ function Vendedores() {
               <th>Usuario</th>
               <th>Pessoa</th>
               <th>%Comissão</th>
-              <th>Desconto Maximo</th>
+              <th>%Desconto Máximo</th>
               <th>Ações</th>
             </tr>
           </thead>

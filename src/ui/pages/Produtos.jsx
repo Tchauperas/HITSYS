@@ -159,7 +159,7 @@ function Produtos() {
           <div className="title">
             <span className="box-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
-            <h1>Listagem de Produtos</h1>
+            <h1>LISTAGEM DE PRODUTOS</h1>
           </div>
 
           <div className="right-actions">

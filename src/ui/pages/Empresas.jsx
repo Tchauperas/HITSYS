@@ -127,7 +127,7 @@ function Empresas() {
                 <header className="top-row">
                     <div className="title">
                         <img src={logo} alt="Logo" className="logo" />
-                        <h1>Listagem de Empresas</h1>
+                        <h1>LISTAGEM DE EMPRESAS</h1>
                     </div>
 
                     <div className="right-actions">

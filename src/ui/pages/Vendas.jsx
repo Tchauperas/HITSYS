@@ -97,7 +97,7 @@ function Vendas() {
           <div className="title">
             <span className="building-icon"></span>
             <img src={logo} alt="Logo" className="logo" />
-            <h1>Listagem de Vendas</h1>
+            <h1>LISTAGEM DE VENDAS</h1>
           </div>
         </header>
 
