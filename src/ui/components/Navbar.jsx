@@ -17,7 +17,6 @@ import pdvIcon from "../assets/pdv_icon.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-
 // Ícone Cadastros (mantido)
 const CadastrosIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
@@ -68,16 +67,46 @@ const MovIcon = ({ className }) => (
 // Ícone RECEBER (substituído por seta para baixo)
 const ReceberIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
-    <line x1="12" y1="4" x2="12" y2="14" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
-    <polyline points="7 10 12 15 17 10" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <line
+      x1="12"
+      y1="4"
+      x2="12"
+      y2="14"
+      stroke="white"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+    />
+    <polyline
+      points="7 10 12 15 17 10"
+      stroke="white"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
   </svg>
 );
 
 // Ícone PAGAR (substituído por seta para cima)
 const PagarIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
-    <line x1="12" y1="20" x2="12" y2="10" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
-    <polyline points="7 14 12 9 17 14" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <line
+      x1="12"
+      y1="20"
+      x2="12"
+      y2="10"
+      stroke="white"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+    />
+    <polyline
+      points="7 14 12 9 17 14"
+      stroke="white"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
   </svg>
 );
 
@@ -85,8 +114,24 @@ const PagarIcon = ({ className }) => (
 const AuditoriaIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
     <circle cx="11" cy="11" r="7" stroke="white" strokeWidth="2" fill="none" />
-    <line x1="16" y1="16" x2="21" y2="21" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    <line x1="11" y1="8" x2="11" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    <line
+      x1="16"
+      y1="16"
+      x2="21"
+      y2="21"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    <line
+      x1="11"
+      y1="8"
+      x2="11"
+      y2="12"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
     <circle cx="11" cy="14.5" r="1" fill="white" />
   </svg>
 );
@@ -97,7 +142,12 @@ const AuditoriaIcon = ({ className }) => (
 const OrcamentosIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
     <rect x="3.5" y="4.5" width="13" height="15" rx="1.2" fill="white" />
-    <path d="M9 8h5M9 12h6" stroke="#0f6ac5" strokeWidth="1.2" strokeLinecap="round" />
+    <path
+      d="M9 8h5M9 12h6"
+      stroke="#0f6ac5"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+    />
     <rect x="18.5" y="7.5" width="2" height="10" rx="1" fill="white" />
   </svg>
 );
@@ -105,7 +155,16 @@ const OrcamentosIcon = ({ className }) => (
 // Unidade de Medida icon
 const UnidadeIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
-    <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="white" strokeWidth="1.6" />
+    <rect
+      x="4"
+      y="6"
+      width="16"
+      height="12"
+      rx="2"
+      fill="none"
+      stroke="white"
+      strokeWidth="1.6"
+    />
     <circle cx="8.5" cy="12" r="1.2" fill="white" />
     <path d="M11 9h6" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
   </svg>
@@ -134,7 +193,12 @@ const GruposIcon = ({ className }) => (
 const MarcasIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24">
     <rect x="4" y="7" width="16" height="10" rx="2" fill="white" />
-    <path d="M8 11h8" stroke="#0f6ac5" strokeWidth="1.4" strokeLinecap="round" />
+    <path
+      d="M8 11h8"
+      stroke="#0f6ac5"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
@@ -180,7 +244,6 @@ const Navbar = () => {
       <img className="logo" src={logo} alt="Logo Hitsys" />
 
       <div className="topButtons">
-
         {/* HOME */}
         <button onClick={() => navegar("/home")}>
           <img className="sideIcon" src={homeIcon} alt="home" />
@@ -231,10 +294,10 @@ const Navbar = () => {
 
         {openMenu === "contas" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => navegar("/contas/receber")}>
+            <button onClick={() => navegar("/contas-receber")}>
               <ReceberIcon className="sideIcon" /> Receber
             </button>
-            <button onClick={() => navegar("/contas/pagar")}>
+            <button onClick={() => navegar("/contas-pagar")}>
               <PagarIcon className="sideIcon" /> Pagar
             </button>
           </div>
@@ -260,11 +323,16 @@ const Navbar = () => {
 
         {openMenu === "relatorios" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
+<<<<<<< HEAD
             <button onClick={() => navegar("/relatorios/vendasperiodo")}>
               ▸ Vendas por Período
             </button>
             <button onClick={() => navegar("/relatorios/comissaovendedores")}>
               ▸ Comissão de vendedores
+=======
+            <button onClick={() => navegar("/auditoria")}>
+              <AuditoriaIcon className="sideIcon" /> Auditoria
+>>>>>>> faeafc8 (commit)
             </button>
           </div>
         )}
@@ -283,7 +351,6 @@ const Navbar = () => {
 
         {openMenu === "cadastros" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
-
             <button onClick={() => navegar("/empresas")}>
               <img className="sideIcon" src={empresasIcon} /> Empresas
             </button>
@@ -319,9 +386,9 @@ const Navbar = () => {
             <button onClick={() => navegar("/cidades")}>
               <CidadesIcon className="sideIcon" /> Cidades
             </button>
-
           </div>
         )}
+<<<<<<< HEAD
         {/* AUDITORIA */}
         <button onClick={() => navegar("/relatorios/auditoria")}>
           <AuditoriaIcon className="sideIcon" /> Auditoria
@@ -330,6 +397,8 @@ const Navbar = () => {
         <button onClick={() => navegar("/")}>
            <img src={voltarIcon} className="sideIcon" /> Sair
         </button>
+=======
+>>>>>>> faeafc8 (commit)
       </div>
     </div>
   );
