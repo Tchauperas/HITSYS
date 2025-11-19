@@ -49,8 +49,8 @@ function App() {
           <Route path="/unidade-medida" element={<UnidadesMedida />} />
           <Route path="/cidades" element={<Cidades />} />
           <Route path="/orcamentos" element={<Orcamentos />} />
-          <Route path="contas-receber" element={<ContasReceber/>}/>
-          <Route path="contas-pagar" element={<ContasPagar/>}/>
+          <Route path="/contas-receber" element={<ContasReceber/>}/>
+          <Route path="/contas-pagar" element={<ContasPagar/>}/>
         </Routes>
       </BrowserRouter>
     </div>

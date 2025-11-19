@@ -30,6 +30,7 @@ function Pdv() {
   const [vendedoresList, setVendedoresList] = useState([]);
   const [vendedorSearch, setVendedorSearch] = useState("");
   const [vendedorNome, setVendedorNome] = useState("");
+  const [comissao, setComissao] = useState(0);
 
   const [showProdutoDropdown, setShowProdutoDropdown] = useState(false);
   const [produtosList, setProdutosList] = useState([]);
@@ -96,6 +97,10 @@ function Pdv() {
 
     const totalProdutos = calcularTotalVenda();
     
+    // Calcular comissão
+    const margemComissao = comissao || 0;
+    const totalComissao = (totalProdutos * margemComissao) / 100;
+    
     // Formatar data no fuso GMT-3 (horário de Brasília)
     const now = new Date();
     const offset = -3 * 60; // GMT-3 em minutos
@@ -110,6 +115,7 @@ function Pdv() {
     
     console.log("UserData completo:", userData);
     console.log("ID do usuário:", idUsuario);
+    console.log("Comissão aplicada:", margemComissao, "% - Total:", totalComissao);
     
     if (!idUsuario) {
       alert("Usuário não identificado. Faça login novamente.");
@@ -130,8 +136,8 @@ function Pdv() {
         id_status_venda: 1,
         margem_total_desconto: 0,
         total_desconto: 0,
-        margem_comissao: 0,
-        total_comissao: 0,
+        margem_comissao: margemComissao,
+        total_comissao: totalComissao,
         observacoes_venda: "Venda realizada com sucesso.",
         observacoes_internas: "PDV básico",
       },
@@ -187,6 +193,7 @@ function Pdv() {
         setEmpresaNome("");
         setClienteNome("");
         setVendedorNome("");
+        setComissao(0);
         setCodigo("");
         setDescricao("");
         setQuantidade(1);
@@ -393,6 +400,51 @@ function Pdv() {
     return () => clearTimeout(timer);
   }, [produtoSearch]);
 
+  // Buscar comissão do vendedor quando o vendedor mudar
+  useEffect(() => {
+    const buscarComissaoVendedor = async () => {
+      if (!vendedor || vendedor === 0) {
+        setComissao(0);
+        return;
+      }
+
+      try {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const token = userData?.token;
+        if (!token) return;
+
+        const response = await fetch(`http://127.0.0.1:3000/vendedores/vendedores/${vendedor}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const vendedorData = await response.json();
+          console.log('Dados do vendedor (useEffect):', vendedorData);
+          
+          const taxaComissao = vendedorData.values?.[0]?.taxa_comissao || 
+                               vendedorData.taxa_comissao || 
+                               vendedorData.values?.[0]?.comissao || 
+                               vendedorData.comissao;
+          
+          if (taxaComissao !== undefined && taxaComissao !== null) {
+            setComissao(parseFloat(taxaComissao));
+            console.log('Comissão definida (useEffect):', parseFloat(taxaComissao));
+          } else {
+            setComissao(0);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao buscar comissão do vendedor:', error);
+        setComissao(0);
+      }
+    };
+
+    buscarComissaoVendedor();
+  }, [vendedor]);
+
   const selectEmpresa = (item) => {
     setEmpresa(item.id_empresa || item.id || 0);
     setEmpresaNome(item.nome_fantasia || item.razao_social || item.nome || String(item.id_empresa || item.id));
@@ -407,11 +459,46 @@ function Pdv() {
     setShowClienteDropdown(false);
   };
 
-  const selectVendedor = (item) => {
-    setVendedor(item.id_vendedor || item.id || 0);
+  const selectVendedor = async (item) => {
+    const vendedorId = item.id_vendedor || item.id || 0;
+    setVendedor(vendedorId);
     setVendedorNome(item.nome_pessoa || item.nome || String(item.id_vendedor || item.id));
     setVendedorSearch("");
     setShowVendedorDropdown(false);
+    
+    // Buscar comissão do vendedor dinamicamente
+    if (vendedorId) {
+      try {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const token = userData?.token;
+        if (!token) return;
+        
+        const response = await fetch(`http://127.0.0.1:3000/vendedores/vendedores/${vendedorId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const vendedorData = await response.json();
+          console.log('Dados do vendedor:', vendedorData);
+          
+          // Verificar tanto 'taxa_comissao' quanto 'comissao' para compatibilidade
+          const taxaComissao = vendedorData.values?.[0]?.taxa_comissao || 
+                               vendedorData.taxa_comissao || 
+                               vendedorData.values?.[0]?.comissao || 
+                               vendedorData.comissao;
+          
+          if (taxaComissao !== undefined && taxaComissao !== null) {
+            setComissao(parseFloat(taxaComissao));
+            console.log('Comissão definida:', parseFloat(taxaComissao));
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao buscar comissão do vendedor:', error);
+      }
+    }
   };
 
   return (
