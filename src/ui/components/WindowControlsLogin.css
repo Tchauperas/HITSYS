@@ -8,6 +8,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  z-index: 9999;
   -webkit-app-region: drag; /* permite arrastar a janela */
   background:transparent; /* ajuste conforme seu tema */
 }

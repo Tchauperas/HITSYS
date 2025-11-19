@@ -92,6 +92,7 @@ button:active {
     height: 100vh;
     background-color: #0f6ac5;
     position: fixed;
+    overflow-y: auto;
 }
 
 .menuButtons {
@@ -127,4 +128,18 @@ button:active {
 
 .submenu button:hover {
     background-color: #0b5aaa;
+}
+
+.sidebar::-webkit-scrollbar{
+  width: 10px;
+  background: #0f6ac5;
+}
+.sidebar::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }

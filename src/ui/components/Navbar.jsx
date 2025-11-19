@@ -8,6 +8,7 @@ import produtosIcon from "../assets/produtos_icon.png";
 import usuariosIcon from "../assets/usuarios_icon.png";
 import perfisIcon from "../assets/perfis_icon.png";
 import vendedoresIcon from "../assets/vendedores_icon.png";
+import voltarIcon from "../assets/voltar_icon.png";
 
 import comprasIcon from "../assets/compras_icon.png";
 import vendasIcon from "../assets/vendas_icon.png";
@@ -259,8 +260,11 @@ const Navbar = () => {
 
         {openMenu === "relatorios" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => navegar("/relatorios/auditoria")}>
-              <AuditoriaIcon className="sideIcon" /> Auditoria
+            <button onClick={() => navegar("/relatorios/vendasperiodo")}>
+              ▸ Vendas por Período
+            </button>
+            <button onClick={() => navegar("/relatorios/comissaovendedores")}>
+              ▸ Comissão de vendedores
             </button>
           </div>
         )}
@@ -318,7 +322,14 @@ const Navbar = () => {
 
           </div>
         )}
-
+        {/* AUDITORIA */}
+        <button onClick={() => navegar("/relatorios/auditoria")}>
+          <AuditoriaIcon className="sideIcon" /> Auditoria
+        </button>
+        {/* SAIR */}
+        <button onClick={() => navegar("/")}>
+           <img src={voltarIcon} className="sideIcon" /> Sair
+        </button>
       </div>
     </div>
   );
