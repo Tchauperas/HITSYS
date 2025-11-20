@@ -173,7 +173,7 @@ class Relatorio {
 
       const comissoes = await db
         .select(
-          "vendedor.id_pessoa as id_vendedor",
+          "vendedores.id_vendedor",
           "vendedor.nome_razao_social as nome_vendedor",
           "vendedor.cpf",
           "vendedor.cnpj"
@@ -184,8 +184,13 @@ class Relatorio {
         .avg("vendas.margem_comissao as margem_comissao_media")
         .from("vendas")
         .leftJoin(
-          "pessoas as vendedor",
+          "vendedores",
           "vendas.id_vendedor",
+          "vendedores.id_vendedor"
+        )
+        .leftJoin(
+          "pessoas as vendedor",
+          "vendedores.id_pessoa",
           "vendedor.id_pessoa"
         )
         .whereBetween("vendas.data_venda", [dataInicioConvertida, dataFimConvertida])
@@ -194,7 +199,7 @@ class Relatorio {
         })
         .whereNotNull("vendas.id_vendedor")
         .groupBy(
-          "vendedor.id_pessoa",
+          "vendedores.id_vendedor",
           "vendedor.nome_razao_social",
           "vendedor.cpf",
           "vendedor.cnpj"
