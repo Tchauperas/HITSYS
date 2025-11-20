@@ -25,6 +25,7 @@ import Orcamentos from "./pages/Orcamentos.jsx"
 import ContasPagar from "./components/ContasPagar.jsx";
 import ContasReceber from "./components/ContasReceber.jsx";
 import VendasPorPeriodo from "./pages/VendasPorPeriodo.jsx";
+import ComissaoVendedor from "./pages/ComissaoVendedor.jsx";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/contas-receber" element={<ContasReceber/>}/>
           <Route path="/contas-pagar" element={<ContasPagar/>}/>
           <Route path="/relatorios/vendasperiodo" element={<VendasPorPeriodo/>}/>
+          <Route path="/relatorios/comissaovendedores" element={<ComissaoVendedor/>}/> 
         </Routes>
       </BrowserRouter>
     </div>

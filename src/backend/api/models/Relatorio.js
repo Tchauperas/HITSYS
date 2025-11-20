@@ -158,11 +158,9 @@ class Relatorio {
 
   async comissaoVendedores(dataInicio, dataFim) {
     try {
-      // Converter datas para o formato do banco de dados
       const dataInicioConvertida = this.converterData(dataInicio);
       const dataFimConvertida = this.converterData(dataFim);
 
-      // Debug: verificar vendas no período
       const vendasDebug = await db
         .select("id_venda", "data_venda", "id_vendedor", "cancelada", "total_comissao")
         .from("vendas")
@@ -191,8 +189,8 @@ class Relatorio {
           "vendedor.id_pessoa"
         )
         .whereBetween("vendas.data_venda", [dataInicioConvertida, dataFimConvertida])
-        .andWhere(function() {
-          this.where("vendas.cancelada", 0).orWhereNull("vendas.cancelada");
+        .where(function() {
+          this.where("vendas.cancelada", 2).orWhereNull("vendas.cancelada");
         })
         .whereNotNull("vendas.id_vendedor")
         .groupBy(
@@ -229,8 +227,8 @@ class Relatorio {
             )
             .where("vendas.id_vendedor", vendedor.id_vendedor)
             .whereBetween("vendas.data_venda", [dataInicioConvertida, dataFimConvertida])
-            .andWhere(function() {
-              this.where("vendas.cancelada", 0).orWhereNull("vendas.cancelada");
+            .where(function() {
+              this.where("vendas.cancelada", 2).orWhereNull("vendas.cancelada");
             })
             .orderBy("vendas.data_venda", "desc");
 
@@ -241,7 +239,6 @@ class Relatorio {
         })
       );
 
-      // Calcular resumo geral
       const resumo = {
         total_vendedores: comissoes.length,
         total_vendas: comissoes.reduce(

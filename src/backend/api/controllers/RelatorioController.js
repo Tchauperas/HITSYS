@@ -20,6 +20,7 @@ class RelatorioController {
           2,
           `Gerou relatório de vendas por período: ${dataInicio} a ${dataFim}`
         );
+        console.log(auditar)
         res.status(200).json({
           success: true,
           resumo: result.resumo,

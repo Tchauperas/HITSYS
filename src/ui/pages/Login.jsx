@@ -29,9 +29,7 @@ function Login() {
 
       if (response.ok) {
         console.log(data)
-        // Armazena os dados no localStorage
         localStorage.setItem("userData", JSON.stringify(data))
-        // Redireciona para a tela de Home
         navigate("/home")
       } else {
         setMensagem(`Erro ao realizar login: ${data.message}`)

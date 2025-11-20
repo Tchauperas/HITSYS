@@ -8,6 +8,7 @@ module.exports = async function (auth, id_acao, descricao_acao) {
       console.error("Token de autorização não fornecido");
       return { error: "Token não fornecido" };
     }
+    console.log(auth)
 
     let bearer = auth.split(" ");
     let token = bearer[1];
