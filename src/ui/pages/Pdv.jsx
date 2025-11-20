@@ -185,7 +185,6 @@ function Pdv() {
       
       if (data.success) {
         alert("Venda finalizada com sucesso!");
-        // Limpar todos os campos
         setItens([]);
         setEmpresa(1);
         setCliente(1);
