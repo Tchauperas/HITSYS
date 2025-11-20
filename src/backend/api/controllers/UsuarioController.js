@@ -1,7 +1,8 @@
 const user = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const audit = require("../services/auditar")
+const audit = require("../services/auditar");
+const hashPass = require("../services/hash_pass");
 const { esbuildVersion } = require("vite");
 require("dotenv").config();
 
@@ -103,6 +104,10 @@ class UsuarioController {
     try {
       const { id } = req.params; // ID do usuário a ser atualizado
       const fieldsToUpdate = req.body; // Campos a serem atualizados
+
+      if (fieldsToUpdate.senha_hash) {
+        fieldsToUpdate.senha_hash = await hashPass(fieldsToUpdate.senha_hash);
+      }
 
       const result = await user.updateUser(id, fieldsToUpdate);
 

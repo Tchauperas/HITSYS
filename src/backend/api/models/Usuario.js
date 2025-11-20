@@ -64,7 +64,7 @@ class Usuario {
   async updateUser(id, fieldsToUpdate) {
     try {
       const updatedRows = await db("usuarios")
-        .where({ id: id })
+        .where({ id_usuario: id })
         .update(fieldsToUpdate);
 
       if (updatedRows > 0) {

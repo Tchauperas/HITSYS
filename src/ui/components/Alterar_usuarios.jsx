@@ -76,7 +76,7 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
         setFormData({
           nome: data.values[0].nome,
           login: data.values[0].login,
-          senha: "",
+          senha_hash: "",
           id_perfil_usuario: data.values[0].id_perfil_usuario,
           ativo: data.values[0].ativo === 1,
         });
@@ -154,9 +154,14 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
       ativo: formData.ativo ? 1 : 0, // Convertendo boolean para número
     };
 
+    if (!payload.senha_hash || payload.senha_hash.trim() === "") {
+      delete payload.senha_hash;
+    }
+
     console.log("Payload a ser enviado:", payload);
 
     try {
+      console.log(payload)
       const response = await fetch(
         `http://127.0.0.1:3000/usuarios/atualizar/${userId}`,
         {
@@ -219,9 +224,9 @@ function AlterarUsuarios({ userId, onClose, onSuccess }) {
           />
           <input
             type="password"
-            name="senha"
+            name="senha_hash"
             placeholder="Senha (deixe em branco para não alterar)"
-            value={formData.senha}
+            value={formData.senha_hash}
             onChange={handleChange}
           />
           <select
