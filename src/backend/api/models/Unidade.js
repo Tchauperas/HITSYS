@@ -27,7 +27,7 @@ class Unidade {
     try {
       let unidade = await db
         .update(data)
-        .where({ id_unidade: id })
+        .where({ id_unidade_medida: id })
         .table("unidades_medidas");
       if (unidade != 0 || unidade != undefined) {
         return { validated: true };
@@ -43,7 +43,7 @@ class Unidade {
     try {
       let unidade = await db
         .delete()
-        .where({ id_unidade: id })
+        .where({ id_unidade_medida: id })
         .table("unidades_medidas");
       if (unidade != 0) {
         return { validated: true };
@@ -59,7 +59,7 @@ class Unidade {
     try {
       let unidade = await db
         .select("*")
-        .where({ id_unidade: id })
+        .where({ id_unidade_medida: id })
         .table("unidades_medidas");
       if (unidade.length > 0) {
         return { validated: true, values: unidade };
