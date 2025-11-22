@@ -22,6 +22,7 @@ import Grupo from "./pages/Grupo.jsx";
 import UnidadesMedida from "./pages/UnidadesMedida.jsx";
 import Cidades from "./pages/Cidades.jsx";
 import Orcamentos from "./pages/Orcamentos.jsx"
+import FormasPagamento from "./pages/FormasPagamento.jsx";
 import ContasPagar from "./components/ContasPagar.jsx";
 import ContasReceber from "./components/ContasReceber.jsx";
 import VendasPorPeriodo from "./pages/VendasPorPeriodo.jsx";
@@ -51,6 +52,7 @@ function App() {
           <Route path="/unidade-medida" element={<UnidadesMedida />} />
           <Route path="/cidades" element={<Cidades />} />
           <Route path="/orcamentos" element={<Orcamentos />} />
+          <Route path="/formas-pagamento" element={<FormasPagamento />} />
           <Route path="/contas-receber" element={<ContasReceber/>}/>
           <Route path="/contas-pagar" element={<ContasPagar/>}/>
           <Route path="/relatorios/vendasperiodo" element={<VendasPorPeriodo/>}/>
