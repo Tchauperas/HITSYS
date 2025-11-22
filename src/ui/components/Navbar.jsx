@@ -50,6 +50,15 @@ const AuditoriaIcon = ({ className }) => (
   </svg>
 );
 
+// Unidade de Medida icon
+const UnidadeIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24">
+    <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="white" strokeWidth="1.6" />
+    <circle cx="8.5" cy="12" r="1.2" fill="white" />
+    <path d="M11 9h6" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(() => {
@@ -99,12 +108,6 @@ const Navbar = () => {
           Orçamentos
         </button>
 
-        {/* RELATÓRIOS */}
-        <button onClick={() => navegar("/relatorios")}>
-          <img className="sideIcon" src={relatoriosIcon} alt="Relatórios" />
-          Relatórios
-        </button>
-
         {/* VENDAS */}
         <button onClick={() => navegar("/vendas")}>
           <img className="sideIcon" src={vendasIcon} alt="vendas" />
@@ -148,32 +151,68 @@ const Navbar = () => {
 
         {openMenu === "cadastros" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
+
             <button onClick={() => navegar("/empresas")}>
               <img className="sideIcon" src={empresasIcon} /> Empresas
             </button>
+            
             <button onClick={() => navegar("/usuarios")}>
               <img className="sideIcon" src={usuariosIcon} /> Usuários
             </button>
+            
             <button onClick={() => navegar("/perf_usuarios")}>
               <img className="sideIcon" src={perfisIcon} /> Perfis de Usuários
             </button>
+            
             <button onClick={() => navegar("/vendedores")}>
               <img className="sideIcon" src={vendedoresIcon} /> Vendedores
             </button>
+            
             <button onClick={() => navegar("/formas-pagamento")}>
               <img className="sideIcon" src={formaPagamentoIcon} /> Formas de Pagamento
             </button>
+            
+            <button onClick={() => navegar("/unidade-medida")}>
+              <UnidadeIcon className="sideIcon" /> Unidade de Medida
+            </button>
+            
+            <button onClick={() => navegar("/secoes")}>
+              <img className="sideIcon" src={secoesIcon} /> Seções
+            </button>
+            
             <button onClick={() => navegar("/grupos")}>
               <img className="sideIcon" src={gruposIcon} /> Grupos
             </button>
-            <button onClick={() => navegar("/cidades")}>
-              <img className="sideIcon" src={cidadesIcon} /> Cidades
-            </button>
+            
             <button onClick={() => navegar("/marcas")}>
               <img className="sideIcon" src={marcasIcon} /> Marcas
             </button>
-            <button onClick={() => navegar("/secoes")}>
-              <img className="sideIcon" src={secoesIcon} /> Seções
+            
+            <button onClick={() => navegar("/cidades")}>
+              <img className="sideIcon" src={cidadesIcon} /> Cidades
+            </button>
+          </div>
+        )}
+
+         {/* RELATÓRIOS */}
+        <button
+          className="submenu-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleMenu("relatorios");
+          }}
+        >
+          <img className="sideIcon" src={relatoriosIcon} alt="Relatórios"/>
+          Relatórios ▸
+        </button>
+
+        {openMenu === "relatorios" && (
+          <div className="submenu" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => navegar("/relatorios/vendasperiodo")}>
+              ▸ Vendas por Período
+            </button>
+            <button onClick={() => navegar("/relatorios/comissaovendedores")}>
+              ▸ Comissão de vendedores
             </button>
           </div>
         )}
