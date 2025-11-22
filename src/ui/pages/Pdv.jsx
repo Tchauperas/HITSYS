@@ -339,6 +339,10 @@ function Pdv() {
     if (id) setCliente(Number(id));
   };
 
+  const enviarOrcamento = async () => {
+    alert("Funcionalidade de orçamento ainda não implementada.");
+  };
+
   const selecionarVendedor = async () => {
     const id = window.prompt("Selecionar Vendedor (digite id) - simulação:", String(vendedor));
     if (id) setVendedor(Number(id));
