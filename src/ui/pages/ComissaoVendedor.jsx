@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./ComissaoVendedor.css";
 import Navbar from "../components/Navbar";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/comissao_vendedores_icon.png";
 
 const ComissaoVendedor = () => {
   const [dataInicio, setDataInicio] = useState("");
@@ -121,8 +122,12 @@ const ComissaoVendedor = () => {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>💰 RELATÓRIO DE COMISSÃO DE VENDEDORES</h1>
-          </div>
+             <span className="icon-bg">
+                <img src={logo} alt="Ícone Comissão" className="title-icon" />
+              </span>
+          <h1>COMISSÃO DOS VENDEDORES</h1>
+        </div>
+
         </header>
 
         <div className="filtros-container">
