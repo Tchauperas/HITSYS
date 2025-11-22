@@ -725,56 +725,58 @@ function Pdv() {
         <div>
           <div className="top-row">
             <div className="top-botoes">
+              <div className="selector-item botao_empresa">
+                <div style={{ position: 'relative' }} className="div_botao_empresa">
+                  <button className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
+                    {empresaNome ? `Empresa:${empresaNome}` : `Empresa${empresa}`}
+                  </button>
+
+                  {showEmpresaDropdown && (
+                    <div className="pdv-dropdown-panel">
+                      <input 
+                        className="form-control mb-2" 
+                        placeholder="Buscar empresa..." 
+                        value={empresaSearch} 
+                        onChange={(e) => setEmpresaSearch(e.target.value)}
+                      />
+                      <div className="list-group">
+                        {empresasList.map((it) => (
+                          <button key={it.id_empresa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
+                            {it.id_empresa || it.id} - {it.nome_fantasia || it.razao_social || it.nome}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               <div className="selector-item botao_vendedor">
-                <button className="btn btn-outline-dark" onClick={openVendedorDropdown}>
-                  {vendedorNome ? `Vendedor:${vendedorNome}` : `Vendedor${vendedor}`}
-                </button>
-
-                {showVendedorDropdown && (
-                  <div className="pdv-dropdown-panel">
-                    <input 
-                      className="form-control mb-2" 
-                      placeholder="Buscar vendedor..." 
-                      value={vendedorSearch} 
-                      onChange={(e) => setVendedorSearch(e.target.value)}
-                    />
-                    <div className="list-group">
-                      {vendedoresList.map((it) => (
-                        <button key={it.id_vendedor || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
-                          {it.id_vendedor || it.id} - {it.nome_pessoa || it.nome}
-                        </button>
-                      ))}
+                <div style={{ position: 'relative' }} className="div_botao_vendedor">
+                  <button className="btn btn-outline-dark" onClick={openVendedorDropdown}>
+                    {vendedorNome ? `Vendedor:${vendedorNome}` : `Vendedor${vendedor}`}
+                  </button>
+                  {showVendedorDropdown && (
+                    <div className="pdv-dropdown-panel">
+                      <input 
+                        className="form-control mb-2" 
+                        placeholder="Buscar vendedor..." 
+                        value={vendedorSearch} 
+                        onChange={(e) => setVendedorSearch(e.target.value)}
+                      />
+                      <div className="list-group">
+                        {vendedoresList.map((it) => (
+                          <button key={it.id_vendedor || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
+                            {it.id_vendedor || it.id} - {it.nome_pessoa || it.nome}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-              <div className="selector-item">
-                <button className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
-                  {empresaNome ? `Empresa:${empresaNome}` : `Empresa${empresa}`}
-                </button>
-
-                {showEmpresaDropdown && (
-                  <div className="pdv-dropdown-panel">
-                    <input 
-                      className="form-control mb-2" 
-                      placeholder="Buscar empresa..." 
-                      value={empresaSearch} 
-                      onChange={(e) => setEmpresaSearch(e.target.value)}
-                    />
-                    <div className="list-group">
-                      {empresasList.map((it) => (
-                        <button key={it.id_empresa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
-                          {it.id_empresa || it.id} - {it.nome_fantasia || it.razao_social || it.nome}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              <div className="selector-item d-flex align-items-center">
-                <div style={{ position: 'relative' }}>
-                  <button className="btn btn-outline-primary" onClick={openClienteDropdown}>
+              <div className="selector-item container_botao_cliente">
+                <div style={{ position: 'relative' }} className="div_botao_cliente">
+                  <button className="botao_cliente" onClick={openClienteDropdown}>
                     {clienteNome ? `Cliente:${clienteNome}` : `Cliente${cliente}`}
                   </button>
                   {showClienteDropdown && (
@@ -796,13 +798,13 @@ function Pdv() {
                   )}
                 </div>
 
-                <button className="btn btn-add-client adicionar_cliente" onClick={adicionarCliente} title="Adicionar cliente">
+                <button className="adicionar_cliente" onClick={adicionarCliente} title="Adicionar cliente">
                   +
                 </button>
               </div>
             </div>
             <div className="logo_container">
-              <img src={logo} alt="Logo" style={{ height: "50px" }} />
+              <h1 className="logo_label">HITSYS</h1>
             </div>
           </div>
         </div>
@@ -811,7 +813,7 @@ function Pdv() {
       <div className="row mb-3">
         <div className="col-12">
           <div style={{ position: 'relative' }}>
-            <button className="btn btn-outline-success w-100" onClick={openProdutoDropdown}>
+            <button className="btn-selecao-produto" onClick={openProdutoDropdown}>
               {produtoNome ? `Produto: ${produtoNome}` : "SELECIONE UM PRODUTO"}
             </button>
 
@@ -884,7 +886,7 @@ function Pdv() {
           />
         </div>
         <div className="col">
-          <button className="btn btn-primary w-100" onClick={adicionarItem}>
+          <button className="btn-inserir" onClick={adicionarItem}>
             Inserir
           </button>
         </div>
@@ -922,11 +924,11 @@ function Pdv() {
           </tbody>
         </table>
       </div>
-      <div className="text-end mb-3 texto-total">
+      <div className="texto-total">
         <h4>Total da Venda: R$ {calcularTotalVenda().toFixed(2)}</h4>
       </div>
 
-      <div className="d-flex justify-content-between botoes">
+      <div className="botoes">
         <button onClick={enviarVenda}>
           Fechar
         </button>

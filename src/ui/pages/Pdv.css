@@ -7,27 +7,53 @@
 }
 
 .container-my {
-  height: 90vh;
+  height: 92vh;
   width: 95vw;
   background-color: #f3f3f3;
   border-radius: 20px;
   padding: 20px;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .titulo {
   display: flex;
   font-weight: bolder;
-  color: #007bff;
-  font-size: 50px;
+  color: #0f6ac5;
+  font-size: 60px;
   justify-content: center;
+  margin:0;
+  line-height: 0.7;
 }
 .top-botoes {
   display: flex;
 }
-
-
+.top-row{
+  margin-bottom: 5px !important;
+}
+.btn-inserir{
+  background-color: #0f6ac5;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 10px;
+  min-width: 100%; 
+  height: 38px;
+}
+.btn-selecao-produto {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  height: 38px;
+  background-color: #28a745;
+  color: white;
+  font-weight: 1000;
+  font-size: 20px;
+}
+.btn-selecao-produto:hover{
+  background-color: #168a31;
+}
 .botoes button {
-  background-color: #007bff;
+  background-color: #0f6ac5;
   border: none;
   color: white;
   font-weight: bold;
@@ -35,12 +61,28 @@
   border-radius: 10px;
   min-width: 165px;  
 }
+.botoes {
+  display: flex;
+  justify-content: space-between;
+  bottom: 0 !important;
+}
 
 /* Logo e título */
 .text-center img {
   margin-bottom: 10px;
 }
-
+.logo_container {
+  align-items: center;
+}
+@font-face {
+  font-family: "androidFont";
+  src: url("..//assets/fonts/Android.ttf") format("truetype");
+}
+.logo_label {
+  font-family: 'androidFont';
+  margin: 0;
+  font-size: 50px;
+}
 .text-center h2 {
   font-weight: bold;
   color: #007bff;
@@ -68,7 +110,7 @@
   width: 100%;
 }
 .table-space{
-  height: 40vh;
+  height: 47vh;
   background-color: white;
   border-radius: 6px;
   border: 1px solid #adb5bd;
@@ -108,12 +150,32 @@
 .btn-add-client:hover {
   filter: brightness(0.95);
 }
+.botao_cliente{
+  padding: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.div_botao_cliente {
+  height: 100%;
+}
+.container_botao_cliente{
+  height: 36px;
+  display:flex;
+  align-items: center;
+}
 .top-botoes button {
   margin-right: 10px;
   height: 100%;
-  background-color: black;
+  background-color: #404951;
   color: white;
-  
+  border: none;
+  font-weight: 800;
+  min-width: 100px;
+  border-radius: 6px;
+}
+
+.top-botoes button:hover {
+  background-color: #0F6AC5;
 }
 
 /* dropdown panel used by selectors */
@@ -140,10 +202,12 @@
 }
 
 /* Total da venda */
-.text-end h4 {
+.texto-total h4 {
   font-size: 1.5rem;
   color: #28a745;
-  font-weight: bold;
+  font-weight: 1000;
+  justify-self: flex-end;
+  margin: 5px;
 }
 
 /* Botões de ação */

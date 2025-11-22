@@ -345,13 +345,16 @@ function CadastroPessoa({ onClose, onSuccess }) {
           {/* Pessoa Ativa e Tipos de Cadastro posicionados aqui para alinhar com demais campos */}
           <div className="form-section">
             <div className="form-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="ativo"
-                  checked={formData.ativo}
-                  onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
-                />
+              <label className="check_ativo">
+                <div>
+                  <input
+                    className="input_ativo"
+                    type="checkbox"
+                    name="ativo"
+                    checked={formData.ativo}
+                    onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
+                  />
+                </div>
                 Pessoa Ativa
               </label>
             </div>

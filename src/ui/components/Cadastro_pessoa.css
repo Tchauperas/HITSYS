@@ -10,7 +10,19 @@
   align-items: center;
   z-index: 1000;
 }
-
+.input_ativo {
+  float: right;
+  width: 13px !important;
+  align-self: center;
+}
+.check_ativo {
+  height: 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px !important;
+  font-size: 13px;
+}
 .modal-container {
   background-color: white;
   padding: 30px;
