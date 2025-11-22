@@ -63,7 +63,6 @@ function Pdv() {
       valor_desconto: 0,
     };
     setItens([...itens, novoItem]);
-    // Limpar todos os campos para próxima inserção
     setCodigo("");
     setDescricao("");
     setQuantidade(1);
@@ -77,7 +76,6 @@ function Pdv() {
   };
 
   const enviarVenda = async () => {
-    // Validações
     if (!empresa) {
       alert("Selecione uma empresa antes de fechar a venda.");
       return;
@@ -96,8 +94,7 @@ function Pdv() {
     }
 
     const totalProdutos = calcularTotalVenda();
-    
-    // Calcular comissão
+
     const margemComissao = comissao || 0;
     const totalComissao = (totalProdutos * margemComissao) / 100;
     
@@ -203,6 +200,133 @@ function Pdv() {
       }
     } catch (error) {
       console.error("Erro ao enviar venda:", error);
+      alert("Erro ao conectar com o servidor. Tente novamente.");
+    }
+  };
+
+  const enviarOrcamento = async () => {
+    if (!empresa) {
+      alert("Selecione uma empresa antes de criar o orçamento.");
+      return;
+    }
+    if (!cliente) {
+      alert("Selecione um cliente antes de criar o orçamento.");
+      return;
+    }
+    if (!vendedor) {
+      alert("Selecione um vendedor antes de criar o orçamento.");
+      return;
+    }
+    if (itens.length === 0) {
+      alert("Adicione pelo menos um produto antes de criar o orçamento.");
+      return;
+    }
+
+    const totalProdutos = calcularTotalVenda();
+
+    const margemComissao = comissao || 0;
+    const totalComissao = (totalProdutos * margemComissao) / 100;
+    
+    // Formatar data no fuso GMT-3 (horário de Brasília)
+    const now = new Date();
+    const offset = -3 * 60; // GMT-3 em minutos
+    const localTime = new Date(now.getTime() + offset * 60 * 1000);
+    const dataAtual = localTime.toISOString().slice(0, 19).replace('T', ' ');
+    
+    const numOrcamento = `ORC-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+    
+    // Buscar o ID do usuário logado no caminho correto
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const idUsuario = userData?.data?.id_usuario;
+    
+    console.log("UserData completo:", userData);
+    console.log("ID do usuário:", idUsuario);
+    console.log("Comissão aplicada:", margemComissao, "% - Total:", totalComissao);
+    
+    if (!idUsuario) {
+      alert("Usuário não identificado. Faça login novamente.");
+      navigate("/");
+      return;
+    }
+
+    const payload = {
+      pedido: {
+        id_empresa: empresa,
+        num_orcamento: numOrcamento,
+        data_orcamento: dataAtual,
+        id_usuario_lancamento: idUsuario,
+        id_cliente: cliente,
+        id_vendedor: vendedor,
+        total_produtos: totalProdutos,
+        total_orcamento: totalProdutos,
+        id_status_orcamento: 2,
+        margem_total_desconto: 0,
+        total_desconto: 0,
+        observacoes_orcamento: "Orçamento criado no PDV.",
+        observacoes_internas: "PDV básico",
+      },
+      itens: itens.map(item => ({
+        id_produto: item.id_produto,
+        codigo: item.codigo,
+        descricao: item.descricao,
+        quantidade: item.quantidade,
+        preco_unitario: item.preco_unitario,
+        preco_total: item.preco_total,
+        unidade_medida: item.unidade_medida || "UN",
+        margem_desconto: item.margem_desconto || 0,
+        valor_desconto: item.valor_desconto || 0
+      }))
+    };
+
+    console.log("Payload de orçamento que será enviado:", JSON.stringify(payload, null, 2));
+
+    try {
+      const token = userData?.token;
+      if (!token) {
+        alert("Sessão expirada. Faça login novamente.");
+        navigate("/");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:3000/orcamentos/lancar", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erro na resposta:", errorData);
+        alert(`Erro ao enviar orçamento: ${errorData.message || 'Erro desconhecido'}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Resposta do envio do orçamento:", data);
+      
+      if (data.success) {
+        alert("Orçamento criado com sucesso!");
+        setItens([]);
+        setEmpresa(1);
+        setCliente(1);
+        setVendedor(1);
+        setEmpresaNome("");
+        setClienteNome("");
+        setVendedorNome("");
+        setComissao(0);
+        setCodigo("");
+        setDescricao("");
+        setQuantidade(1);
+        setValorUnitario(0);
+        setProdutoNome("");
+      } else {
+        alert(`Erro ao criar orçamento: ${data.message || 'Erro desconhecido'}`);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar orçamento:", error);
       alert("Erro ao conectar com o servidor. Tente novamente.");
     }
   };
@@ -714,7 +838,7 @@ function Pdv() {
         <button onClick={enviarVenda}>
           Fechar
         </button>
-        <button>Orçamento</button>
+        <button onClick={enviarOrcamento}>Orçamento</button>
         <button>Receber</button>
         <button>Consultar Vendas</button>
         <button>Desistir</button>

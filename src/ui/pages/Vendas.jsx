@@ -105,7 +105,7 @@ function Vendas() {
           <span className="search-icon">🔍</span>
           <input
             type="text"
-            placeholder="   Pesquisar por número da venda"
+            placeholder="Pesquisar por número da venda"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -139,15 +139,18 @@ function Vendas() {
                     <td>{formatDate(venda.pedido.data_venda)}</td>
                     <td>{venda.pedido.nome_cliente}</td>
                     <td>{formatCurrency(venda.pedido.total_venda)}</td>
-                    <td>
+                    <td className="acoes">
                       <button 
                         className="btn-visualizar"
                         onClick={() => fetchVendaDetails(venda.pedido.id_venda)}
                         disabled={loadingDetails}
+                        title="Visualizar"
                       >
-                        👁️ Ver
+                        👁️
                       </button>
-                      <button className="btn-editar">✏️ Editar</button>
+                      <button className="btn-editar" title="Editar">
+                        ✏️
+                      </button>
                     </td>
                   </tr>
                 ))
