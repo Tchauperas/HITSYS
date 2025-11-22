@@ -89,9 +89,10 @@
 .empresas-table td button {
     margin-right: 8px;
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 10px 10px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 17px
 }
 
 .btn-edit {

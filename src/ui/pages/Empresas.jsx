@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react"
 import "./Empresas.css"
 import Navbar from "../components/Navbar"
 import CadastroEmpresa from "../components/Cadastro_empresa"
-import AlterarEmpresa from "../components/Alterar_empresa" // Importa o componente de alteração
+import AlterarEmpresa from "../components/Alterar_empresa"
 import logo from "../assets/empresas_icon.png"
 import WindowControls from "../components/WindowControls"
+
 function Empresas() {
     const [empresas, setEmpresas] = useState([])
     const [search, setSearch] = useState("")
@@ -81,7 +82,6 @@ function Empresas() {
                     }
                 )
 
-                // Tenta interpretar a resposta como JSON
                 if (
                     response.headers
                         .get("Content-Type")
@@ -91,13 +91,12 @@ function Empresas() {
 
                     if (data.success) {
                         alert("Empresa excluída com sucesso!")
-                        fetchEmpresas() // Atualiza a lista de empresas
+                        fetchEmpresas()
                     } else {
                         console.error("Erro ao excluir empresa:", data.message)
                         alert("Erro ao excluir empresa.")
                     }
                 } else {
-                    // Caso a resposta não seja JSON
                     const text = await response.text()
                     console.error("Resposta inesperada da API:", text)
                     alert("Erro inesperado ao excluir empresa.")
@@ -144,7 +143,7 @@ function Empresas() {
                     <span className="search-icon">🔍</span>
                     <input
                         type="text"
-                        placeholder="   Pesquisar empresa"
+                        placeholder="   Pesquisar empresa"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -181,7 +180,7 @@ function Empresas() {
                                     </td>
                                     <td>
                                         <button
-                                            className="btn-editar"
+                                            className="btn-edit" 
                                             onClick={() => {
                                                 setEmpresaSelecionada(empresa)
                                                 setShowAlterarModal(true)
@@ -190,7 +189,7 @@ function Empresas() {
                                             ✏️
                                         </button>
                                         <button
-                                            className="btn-excluir"
+                                            className="btn-delete" 
                                             onClick={() =>
                                                 handleDelete(empresa.id_empresa)
                                             }

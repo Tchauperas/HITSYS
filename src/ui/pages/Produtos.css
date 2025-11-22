@@ -87,28 +87,59 @@
     font-weight: bold;
 }
 
-.produtos-table td button {
-    margin-right: 6px;
+/* CENTRALIZAR A COLUNA AÇÕES */
+.acoes-header {
+    text-align: center;
+}
+
+.acoes-cell {
+    text-align: center;
+}
+
+.acoes-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+
+.btn-alterar, .btn-excluir {
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    width: 42px;
+    height: 42px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn-edit {
-    background: #374151;
+.btn-alterar {
+    background: #3a3a3a;
     color: white;
 }
 
-.btn-delete {
-    background: #b91c1c;
+.btn-excluir {
+    background: #dc2626;
     color: white;
+}
+
+/* Ícones não mudam tamanho */
+.btn-alterar span, .btn-excluir span {
+    font-size: 20px;
 }
 
 .logo {
     height: 30px;
     width: auto;
-    background-color: #007bff; /* cor de fundo */
+    background-color: #007bff;
     padding: 4px;
-    border-radius: 6px; /* arredonda */
+    border-radius: 6px;
+}
+
+.produtos-table th:nth-child(5),
+.produtos-table td:nth-child(5) {
+    text-align: center !important;
+    width: 120px;
 }

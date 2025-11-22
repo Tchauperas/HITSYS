@@ -76,17 +76,11 @@ function Produtos() {
 
         if (response.ok) {
           alert("Produto excluído com sucesso!");
-          fetchProdutos(); // Refresh the page
+          fetchProdutos();
         } else {
-          if (response.headers.get("Content-Type")?.includes("application/json")) {
-            const data = await response.json();
-            console.error("Erro ao excluir produto:", data.message);
-            alert("Erro ao excluir produto.");
-          } else {
-            const text = await response.text();
-            console.error("Resposta inesperada da API:", text);
-            alert("Erro ao excluir produto.");
-          }
+          const data = await response.json();
+          console.error("Erro ao excluir produto:", data.message);
+          alert("Erro ao excluir produto.");
         }
       } catch (error) {
         console.error("Erro no fetch:", error);
@@ -125,7 +119,7 @@ function Produtos() {
 
       if (data.success) {
         alert("Produto atualizado com sucesso!");
-        fetchProdutos(); // Recarregar lista
+        fetchProdutos();
         setShowEditModal(false);
         setSelectedProduto(null);
       } else {
@@ -174,8 +168,8 @@ function Produtos() {
 
         <div className="search-bar">
           <span className="search-icon">🔍</span>
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="   Pesquisar produto"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -198,7 +192,7 @@ function Produtos() {
                 <th>Descrição</th>
                 <th>Preço</th>
                 <th>Estoque</th>
-                <th>Ações</th>
+                <th className="acoes-header">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -207,7 +201,7 @@ function Produtos() {
                   <td>{produto.codigo}</td>
                   <td>{produto.descricao}</td>
                   <td>
-                    {produto.preco_venda 
+                    {produto.preco_venda
                       ? parseFloat(produto.preco_venda).toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",
@@ -215,19 +209,22 @@ function Produtos() {
                       : "R$ 0,00"}
                   </td>
                   <td>{produto.saldo_estoque || "0,000"}</td>
-                  <td>
-                    <button
-                      className="btn-alterar"
-                      onClick={() => handleEdit(produto)}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="btn-excluir"
-                      onClick={() => handleDelete(produto.id_produto)}
-                    >
-                      🗑️
-                    </button>
+
+                  <td className="acoes-cell">
+                    <div className="acoes-wrapper">
+                      <button
+                        className="btn-alterar"
+                        onClick={() => handleEdit(produto)}
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        className="btn-excluir"
+                        onClick={() => handleDelete(produto.id_produto)}
+                      >
+                        🗑️
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

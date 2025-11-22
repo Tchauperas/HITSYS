@@ -123,37 +123,45 @@
     font-weight: bold;
 }
 
+/* ----------- AÇÕES (Estilo igual ao Produtos) ----------- */
+
+.pessoas-table th:last-child,
+.pessoas-table td:last-child {
+    text-align: center;
+    width: 120px;
+}
+
 .acoes {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
 }
 
-.btn-editar {
-    background-color: #444;
-    color: white;
+.btn-editar, .btn-excluir {
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: opacity 0.2s;
 }
 
-.btn-editar:hover {
-    opacity: 0.8;
+.btn-editar {
+    background: #3a3a3a;
+    color: white;
 }
 
 .btn-excluir {
-    background-color: #dc3545;
+    background: #dc2626;
     color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: opacity 0.2s;
 }
 
+.btn-editar:hover,
 .btn-excluir:hover {
     opacity: 0.8;
 }
