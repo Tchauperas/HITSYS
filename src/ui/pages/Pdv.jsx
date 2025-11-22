@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
 import CadastroPessoa from "../components/Cadastro_pessoa"; // Adicione esta importação
-import WindowControls from "../components/WindowControls"
+import WindowControls from "../components/WindowControls";
+import PagamentoVendaModal from "../components/PagamentoVendaModal";
 function Pdv() {
   const [codigo, setCodigo] = useState("");
   const [quantidade, setQuantidade] = useState(1);
@@ -31,6 +32,8 @@ function Pdv() {
   const [vendedorSearch, setVendedorSearch] = useState("");
   const [vendedorNome, setVendedorNome] = useState("");
   const [comissao, setComissao] = useState(0);
+  const [showPagamentoModal, setShowPagamentoModal] = useState(false);
+  const [pendingVendaData, setPendingVendaData] = useState(null);
 
   const [showProdutoDropdown, setShowProdutoDropdown] = useState(false);
   const [produtosList, setProdutosList] = useState([]);
@@ -76,8 +79,8 @@ function Pdv() {
     return itens.reduce((acc, item) => acc + item.preco_total, 0);
   };
 
-  const enviarVenda = async () => {
-    // Validações
+  const handleAbrirPagamentoModal = () => {
+    // Validações básicas
     if (!empresa) {
       alert("Selecione uma empresa antes de fechar a venda.");
       return;
@@ -95,27 +98,20 @@ function Pdv() {
       return;
     }
 
+    // Preparar dados da venda (sem enviar ainda)
     const totalProdutos = calcularTotalVenda();
-    
-    // Calcular comissão
     const margemComissao = comissao || 0;
     const totalComissao = (totalProdutos * margemComissao) / 100;
     
-    // Formatar data no fuso GMT-3 (horário de Brasília)
     const now = new Date();
-    const offset = -3 * 60; // GMT-3 em minutos
+    const offset = -3 * 60;
     const localTime = new Date(now.getTime() + offset * 60 * 1000);
     const dataAtual = localTime.toISOString().slice(0, 19).replace('T', ' ');
     
     const numVenda = `VEN-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
     
-    // Buscar o ID do usuário logado no caminho correto
     const userData = JSON.parse(localStorage.getItem("userData"));
     const idUsuario = userData?.data?.id_usuario;
-    
-    console.log("UserData completo:", userData);
-    console.log("ID do usuário:", idUsuario);
-    console.log("Comissão aplicada:", margemComissao, "% - Total:", totalComissao);
     
     if (!idUsuario) {
       alert("Usuário não identificado. Faça login novamente.");
@@ -123,47 +119,66 @@ function Pdv() {
       return;
     }
 
-    const payload = {
-      pedido: {
-        id_empresa: empresa,
-        num_venda: numVenda,
-        data_venda: dataAtual,
-        id_usuario_lancamento: idUsuario,
-        id_cliente: cliente,
-        id_vendedor: vendedor,
-        total_produtos: totalProdutos,
-        total_venda: totalProdutos,
-        id_status_venda: 1,
-        margem_total_desconto: 0,
-        total_desconto: 0,
-        margem_comissao: margemComissao,
-        total_comissao: totalComissao,
-        observacoes_venda: "Venda realizada com sucesso.",
-        observacoes_internas: "PDV básico",
+    // Armazenar dados para enviar após confirmar pagamento
+    const vendaData = {
+      payload: {
+        pedido: {
+          id_empresa: empresa,
+          num_venda: numVenda,
+          data_venda: dataAtual,
+          id_usuario_lancamento: idUsuario,
+          id_cliente: cliente,
+          id_vendedor: vendedor,
+          total_produtos: totalProdutos,
+          total_venda: totalProdutos,
+          id_status_venda: 1,
+          margem_total_desconto: 0,
+          total_desconto: 0,
+          margem_comissao: margemComissao,
+          total_comissao: totalComissao,
+          observacoes_venda: "Venda realizada com sucesso.",
+          observacoes_internas: "PDV básico",
+        },
+        itens: itens.map(item => ({
+          id_produto: item.id_produto,
+          codigo: item.codigo,
+          descricao: item.descricao,
+          quantidade: item.quantidade,
+          preco_unitario: item.preco_unitario,
+          preco_total: item.preco_total,
+          unidade_medida: item.unidade_medida || "UN",
+          margem_desconto: item.margem_desconto || 0,
+          valor_desconto: item.valor_desconto || 0
+        }))
       },
-      itens: itens.map(item => ({
-        id_produto: item.id_produto,
-        codigo: item.codigo,
-        descricao: item.descricao,
-        quantidade: item.quantidade,
-        preco_unitario: item.preco_unitario,
-        preco_total: item.preco_total,
-        unidade_medida: item.unidade_medida || "UN",
-        margem_desconto: item.margem_desconto || 0,
-        valor_desconto: item.valor_desconto || 0
-      }))
+      userData
     };
 
-    console.log("Payload que será enviado:", JSON.stringify(payload, null, 2));
+    console.log("Abrindo modal de pagamento com dados:", vendaData);
+    setPendingVendaData(vendaData);
+    setShowPagamentoModal(true);
+  };
+
+  const handleConfirmPagamento = async (pagamentos) => {
+    if (!pendingVendaData) {
+      alert("Erro: dados da venda não encontrados.");
+      return;
+    }
+
+    const { payload, userData } = pendingVendaData;
+    const token = userData?.token;
+
+    if (!token) {
+      alert("Sessão expirada. Faça login novamente.");
+      navigate("/");
+      return;
+    }
 
     try {
-      const token = userData?.token;
-      if (!token) {
-        alert("Sessão expirada. Faça login novamente.");
-        navigate("/");
-        return;
-      }
-
+      console.log("Iniciando envio da venda...");
+      console.log("Payload:", payload);
+      
+      // Enviar venda
       const response = await fetch("http://127.0.0.1:3000/vendas/lancar", {
         method: "POST",
         headers: { 
@@ -173,38 +188,115 @@ function Pdv() {
         body: JSON.stringify(payload),
       });
 
+      console.log("Status da resposta:", response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
+        let errorData = {};
+        try {
+          errorData = await response.json();
+        } catch (e) {
+          errorData = { message: `Erro HTTP ${response.status}` };
+        }
         console.error("Erro na resposta:", errorData);
         alert(`Erro ao enviar venda: ${errorData.message || 'Erro desconhecido'}`);
+        setShowPagamentoModal(false);
         return;
       }
 
-      const data = await response.json();
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (e) {
+        console.error("Erro ao parsear JSON:", e);
+        alert("Erro ao processar resposta do servidor.");
+        setShowPagamentoModal(false);
+        return;
+      }
+
       console.log("Resposta do envio da venda:", data);
       
       if (data.success) {
-        alert("Venda finalizada com sucesso!");
-        setItens([]);
-        setEmpresa(1);
-        setCliente(1);
-        setVendedor(1);
-        setEmpresaNome("");
-        setClienteNome("");
-        setVendedorNome("");
-        setComissao(0);
-        setCodigo("");
-        setDescricao("");
-        setQuantidade(1);
-        setValorUnitario(0);
-        setProdutoNome("");
+        const id_venda = data.id_venda;
+        console.log("Venda criada com id:", id_venda);
+        console.log("Pagamentos recebidos:", pagamentos);
+        
+        // Salvar pagamentos
+        const responsePagamentos = await fetch("http://127.0.0.1:3000/pagamento-vendas/criar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            id_venda,
+            pagamentos
+          })
+        });
+
+        if (!responsePagamentos.ok) {
+          let errorData = {};
+          try {
+            errorData = await responsePagamentos.json();
+          } catch (e) {
+            errorData = { message: `Erro HTTP ${responsePagamentos.status}` };
+          }
+          console.error("Erro ao salvar pagamentos:", errorData);
+          alert(`Erro ao salvar pagamentos: ${errorData.message || 'Erro desconhecido'}`);
+          setShowPagamentoModal(false);
+          return;
+        }
+
+        let dataPagamentos = {};
+        try {
+          dataPagamentos = await responsePagamentos.json();
+        } catch (e) {
+          console.error("Erro ao parsear resposta de pagamentos:", e);
+          alert("Erro ao processar resposta de pagamentos.");
+          setShowPagamentoModal(false);
+          return;
+        }
+
+        if (dataPagamentos.success) {
+          console.log("Pagamentos salvos com sucesso:", dataPagamentos);
+          alert("Venda e pagamentos finalizados com sucesso!");
+          
+          // Limpar formulário
+          setItens([]);
+          setEmpresa(1);
+          setCliente(1);
+          setVendedor(1);
+          setEmpresaNome("");
+          setClienteNome("");
+          setVendedorNome("");
+          setComissao(0);
+          setCodigo("");
+          setDescricao("");
+          setQuantidade(1);
+          setValorUnitario(0);
+          setProdutoNome("");
+          setProdutoSelecionadoId(null);
+          
+          // Fechar modal de pagamento
+          setShowPagamentoModal(false);
+          setPendingVendaData(null);
+        } else {
+          alert(`Erro ao finalizar pagamentos: ${dataPagamentos.message || 'Erro desconhecido'}`);
+          setShowPagamentoModal(false);
+        }
       } else {
         alert(`Erro ao finalizar venda: ${data.message || 'Erro desconhecido'}`);
+        setShowPagamentoModal(false);
       }
     } catch (error) {
       console.error("Erro ao enviar venda:", error);
-      alert("Erro ao conectar com o servidor. Tente novamente.");
+      console.error("Stack:", error.stack);
+      alert(`Erro ao conectar com o servidor: ${error.message}`);
+      setShowPagamentoModal(false);
     }
+  };
+
+  const enviarVenda = async () => {
+    handleAbrirPagamentoModal();
   };
 
   const buscarProdutos = async (term = "") => {
@@ -722,6 +814,20 @@ function Pdv() {
           Sair
         </button>
       </div>
+
+      {/* Modal de Pagamento */}
+      {showPagamentoModal && (
+        <PagamentoVendaModal
+          isOpen={showPagamentoModal}
+          onClose={() => {
+            setShowPagamentoModal(false);
+            setPendingVendaData(null);
+          }}
+          totalVenda={calcularTotalVenda()}
+          onConfirm={handleConfirmPagamento}
+          idVenda={pendingVendaData?.payload?.pedido?.num_venda}
+        />
+      )}
 
       {/* Adicione o modal no final do return, antes do fechamento da div container */}
       {showCadastroClienteModal && (

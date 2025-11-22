@@ -25,6 +25,7 @@ const rootAuditoria = require("./routes/auditoria");
 const rootRelatorios = require("./routes/relatorios");
 const rootOrcamentos = require("./routes/orcamentos");
 const rootFormasPagamento = require("./routes/formas_pagamento");
+const rootPagamentoVendas = require("./routes/pagamento_vendas");
 
 router.use("/", rootLogin);
 router.use("/home", rootHome);
@@ -50,5 +51,6 @@ router.use("/auditoria", rootAuditoria);
 router.use("/relatorios", rootRelatorios);
 router.use("/orcamentos", rootOrcamentos);
 router.use("/formas-pagamento", rootFormasPagamento);
+router.use("/pagamento-vendas", rootPagamentoVendas);
 
 module.exports = router;

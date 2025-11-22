@@ -12,7 +12,10 @@ class VendaController {
         if (resultPedido.validated) {
           let result = await itensVenda.inserirItem(resultPedido.id, itens);
           result.validated
-            ? res.status(201).json({ success: true })
+            ? res.status(201).json({ 
+                success: true,
+                id_venda: resultPedido.id
+              })
             : res.status(400).json({
                 success: false,
                 message: `Erro ao inserir itens: ${result.error}`,
@@ -24,7 +27,7 @@ class VendaController {
           });
         }
       } catch (e) {
-        res.stauts(500).json({
+        res.status(500).json({
           success: false,
           message: `Internal server error: ${e.message}`,
         });
