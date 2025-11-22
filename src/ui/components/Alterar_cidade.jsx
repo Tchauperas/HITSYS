@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./Cadastrar_cidade.css";
+import "./Alterar_cidade.css";
 
-function CadastrarCidade({ onClose, onSuccess }) {
+function AlterarCidade({ isOpen, onClose, cidade, onUpdate }) {
   const [formData, setFormData] = useState({
     cidade: "",
     id_uf: "",
@@ -16,6 +16,16 @@ function CadastrarCidade({ onClose, onSuccess }) {
   useEffect(() => {
     fetchUfs();
   }, []);
+
+  useEffect(() => {
+    if (cidade) {
+      setFormData({
+        cidade: cidade.cidade || "",
+        id_uf: cidade.id_uf || "",
+        ibge: cidade.ibge || "",
+      });
+    }
+  }, [cidade]);
 
   const fetchUfs = async () => {
     try {
@@ -63,38 +73,44 @@ function CadastrarCidade({ onClose, onSuccess }) {
       return;
     }
 
+    // Garantir que id_uf seja um número válido
+    const idUf = parseInt(formData.id_uf, 10);
+    if (isNaN(idUf)) {
+      setMessageType("error");
+      setMessage("UF inválida selecionada.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const payload = {
-        cidade,
-        id_uf,
-        ibge,
-      };
-      console.log(payload);
-      const response = await fetch("http://127.0.0.1:3000/cidades/cidades", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cidade: formData.cidade,
-          id_uf: Number(formData.id_uf),
-          ibge: formData.ibge,
-        }),
-      });
+      const response = await fetch(
+        `http://127.0.0.1:3000/cidades/cidades/${cidade.id_cidade}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            cidade: formData.cidade,
+            id_uf: idUf,
+            ibge: formData.ibge,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (data.success) {
         setMessageType("success");
-        setMessage("Cidade cadastrada com sucesso!");
+        setMessage("Cidade atualizada com sucesso!");
         setTimeout(() => {
-          onSuccess();
+          onUpdate();
           onClose();
         }, 1500);
       } else {
         setMessageType("error");
-        setMessage(data.message || "Erro ao cadastrar cidade.");
+        setMessage(data.message || "Erro ao atualizar cidade.");
       }
     } catch (error) {
       setMessageType("error");
@@ -104,11 +120,13 @@ function CadastrarCidade({ onClose, onSuccess }) {
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
         <div className="modal-header">
-          <h1>Cadastrar Cidade</h1>
+          <h1>Alterar Cidade</h1>
           <button className="close-button" onClick={onClose}>
             ×
           </button>
@@ -160,7 +178,9 @@ function CadastrarCidade({ onClose, onSuccess }) {
             />
           </div>
 
-          {message && <div className={`message ${messageType}`}>{message}</div>}
+          {message && (
+            <div className={`message ${messageType}`}>{message}</div>
+          )}
 
           <div className="form-actions">
             <button
@@ -172,7 +192,7 @@ function CadastrarCidade({ onClose, onSuccess }) {
               Cancelar
             </button>
             <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? "Cadastrando..." : "Cadastrar"}
+              {loading ? "Atualizando..." : "Atualizar"}
             </button>
           </div>
         </form>
@@ -181,4 +201,4 @@ function CadastrarCidade({ onClose, onSuccess }) {
   );
 }
 
-export default CadastrarCidade;
+export default AlterarCidade;

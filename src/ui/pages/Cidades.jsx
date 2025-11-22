@@ -3,6 +3,7 @@ import "./Cidades.css";
 import Navbar from "../components/Navbar";
 import WindowControls from "../components/WindowControls";
 import CadastrarCidade from "../components/Cadastrar_cidade";
+import AlterarCidade from "../components/Alterar_cidade";
 
 function Cidades() {
   const [cidades, setCidades] = useState([]);
@@ -10,6 +11,8 @@ function Cidades() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedCidade, setSelectedCidade] = useState(null);
 
   useEffect(() => {
     fetchCidades();
@@ -58,8 +61,8 @@ function Cidades() {
   });
 
   const handleEdit = (cidade) => {
-    console.log("Editar cidade:", cidade);
-    // Implementar modal de edição
+    setSelectedCidade(cidade);
+    setShowEditModal(true);
   };
 
   const handleOpenModal = () => {
@@ -70,7 +73,16 @@ function Cidades() {
     setShowModal(false);
   };
 
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedCidade(null);
+  };
+
   const handleSuccess = () => {
+    fetchCidades();
+  };
+
+  const handleUpdate = () => {
     fetchCidades();
   };
 
@@ -85,7 +97,7 @@ function Cidades() {
     if (window.confirm("Deseja realmente deletar esta cidade?")) {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3000/cidades/deletar/${id}`,
+          `http://127.0.0.1:3000/cidades/cidades/${id}`,
           {
             method: "DELETE",
             headers: {
@@ -189,6 +201,15 @@ function Cidades() {
 
       {showModal && (
         <CadastrarCidade onClose={handleCloseModal} onSuccess={handleSuccess} />
+      )}
+
+      {showEditModal && selectedCidade && (
+        <AlterarCidade
+          isOpen={showEditModal}
+          onClose={handleCloseEditModal}
+          cidade={selectedCidade}
+          onUpdate={handleUpdate}
+        />
       )}
     </div>
   );
