@@ -204,6 +204,39 @@ class OrcamentoController {
       });
     }
   }
+
+  async faturarOrcamento(req, res) {
+    const id = req.params.id;
+
+    if (isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Id inválido",
+      });
+    }
+
+    try {
+      const result = await orcamento.faturarOrcamento(id);
+
+      if (result.validated) {
+        res.status(201).json({
+          success: true,
+          id_venda: result.id_venda,
+          message: result.message,
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: result.error,
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: `Internal server error: ${e.message}`,
+      });
+    }
+  }
 }
 
 module.exports = new OrcamentoController();
