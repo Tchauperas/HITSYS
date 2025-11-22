@@ -1,6 +1,6 @@
 import "./Navbar.css";
-import logo from "../assets/logo_mista.jpg";
 
+import logoHitsys from "../assets/logo_hitsys_sem_fundo.png";
 import homeIcon from "../assets/home_icon.png";
 import empresasIcon from "../assets/empresas_icon.png";
 import pessoasIcon from "../assets/pessoas_icon.png";
@@ -81,7 +81,10 @@ const Navbar = () => {
 
   return (
     <div className="sidebar">
-      <img className="logo" src={logo} alt="Logo Hitsys" />
+      <div className="logo-container">
+        <img src={logoHitsys} alt="Logo HITSYS" className="logo-image" />
+        <div className="logo-text">HITSYS</div>
+      </div>
       <div className="topButtons">
 
         {/* HOME */}

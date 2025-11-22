@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Modal.css";
+import "./Alterar_FormaPagamento.css";
 
 function AlterarFormaPagamento({ isOpen, onClose, forma, onSuccess }) {
   const [formData, setFormData] = useState({
