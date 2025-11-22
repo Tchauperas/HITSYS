@@ -394,7 +394,7 @@ function Pdv() {
         id_vendedor: vendedor,
         total_produtos: totalProdutos,
         total_orcamento: totalProdutos,
-        id_status_orcamento: 1,
+        id_status_orcamento: 2,
         margem_total_desconto: 0,
         total_desconto: 0,
         observacoes_orcamento: "Orçamento criado no PDV.",

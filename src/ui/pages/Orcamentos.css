@@ -98,7 +98,8 @@
 }
 
 .btn-visualizar,
-.btn-editar {
+.btn-editar,
+.btn-faturar {
     border: none;
     width: 42px;
     height: 42px;
@@ -121,8 +122,14 @@
     color: white;
 }
 
+.btn-faturar {
+    background: #10b981;
+    color: white;
+}
+
 .btn-visualizar:hover,
-.btn-editar:hover {
+.btn-editar:hover,
+.btn-faturar:hover {
     opacity: 0.8;
 }
 

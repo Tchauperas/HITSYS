@@ -60,6 +60,32 @@ function Orcamentos() {
     }
   };
 
+  const faturarOrcamento = async (id, numOrcamento) => {
+    if (!window.confirm(`Deseja realmente faturar o orçamento ${numOrcamento}? Esta ação irá converter o orçamento em uma venda.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/orcamentos/faturar/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert(`Orçamento faturado com sucesso! Venda #${data.id_venda} criada.`);
+        fetchOrcamentos(); // Recarrega a lista
+      } else {
+        alert(`Erro ao faturar orçamento: ${data.message}`);
+      }
+    } catch (err) {
+      alert("Erro ao conectar com o servidor");
+      console.error(err);
+    }
+  };
+
   const closeModal = () => {
     setShowModal(false);
     setSelectedOrcamento(null);
@@ -148,8 +174,12 @@ function Orcamentos() {
                       >
                         👁️
                       </button>
-                      <button className="btn-editar" title="Editar">
-                        ✏️
+                      <button 
+                        className="btn-faturar" 
+                        onClick={() => faturarOrcamento(orcamento.pedido.id_orcamento, orcamento.pedido.num_orcamento)}
+                        title="Faturar Orçamento"
+                      >
+                        💰
                       </button>
                     </td>
                   </tr>

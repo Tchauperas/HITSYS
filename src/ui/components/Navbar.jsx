@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import logo from "../assets/logo_mista.jpg";
 
-import logoHitsys from "../assets/logo_hitsys_sem_fundo.png"
+import logoHitsys from "../assets/logo_hitsys_sem_fundo.png";
 import homeIcon from "../assets/home_icon.png";
 import empresasIcon from "../assets/empresas_icon.png";
 import pessoasIcon from "../assets/pessoas_icon.png";
@@ -22,7 +22,7 @@ import gruposIcon from "../assets/grupos_icon.png";
 import cidadesIcon from "../assets/cidades_icon.png";
 import relatoriosIcon from "../assets/relatorios_icon.png";
 import marcasIcon from "../assets/marcas_icon.png";
-import secoesIcon from "../assets/secoes_icon.png"; 
+import secoesIcon from "../assets/secoes_icon.png";
 import contasIcon from "../assets/contas_icon.png";
 import auditoriaIcon from "../assets/auditoria_icon.png";
 import unidadeMedidaIcon from "../assets/unidades_medida_icon.png";
@@ -31,14 +31,8 @@ import receberIcon from "../assets/receber_icon.png";
 import vendasPeriodoIcon from "../assets/vendas_periodo_icon.png";
 import comissaoVendedores from "../assets/comissao_vendedores_icon.png";
 
-
-
-
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -67,7 +61,6 @@ const Navbar = () => {
         <div className="logo-text">HITSYS</div>
       </div>
       <div className="topButtons">
-
         {/* HOME */}
         <button onClick={() => navegar("/home")}>
           <img className="sideIcon" src={homeIcon} alt="home" />
@@ -105,7 +98,13 @@ const Navbar = () => {
         </button>
 
         {/* CONTAS */}
-        <button className="submenu-toggle" onClick={(e) => { e.stopPropagation(); toggleMenu("contas"); }}>
+        <button
+          className="submenu-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleMenu("contas");
+          }}
+        >
           <img className="sideIcon" src={contasIcon} alt="Contas" />
           Contas ▸
         </button>
@@ -113,7 +112,8 @@ const Navbar = () => {
         {openMenu === "contas" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => navegar("/contas-receber")}>
-              <img className="sideIcon" src={receberIcon} alt="Receber" /> Receber
+              <img className="sideIcon" src={receberIcon} alt="Receber" />{" "}
+              Receber
             </button>
             <button onClick={() => navegar("/contas-pagar")}>
               <img className="sideIcon" src={pagarIcon} alt="Pagar" /> Pagar
@@ -128,57 +128,68 @@ const Navbar = () => {
         </button>
 
         {/* CADASTROS */}
-        <button className="submenu-toggle" onClick={(e) => { e.stopPropagation(); toggleMenu("cadastros"); }}>
+        <button
+          className="submenu-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleMenu("cadastros");
+          }}
+        >
           <img className="sideIcon" src={cadastrosIcon} alt="Cadastros" />
           Cadastros ▸
         </button>
 
         {openMenu === "cadastros" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
-
             <button onClick={() => navegar("/empresas")}>
               <img className="sideIcon" src={empresasIcon} /> Empresas
             </button>
-            
+
             <button onClick={() => navegar("/usuarios")}>
               <img className="sideIcon" src={usuariosIcon} /> Usuários
             </button>
-            
+
             <button onClick={() => navegar("/perf_usuarios")}>
               <img className="sideIcon" src={perfisIcon} /> Perfis de Usuários
             </button>
-            
+
             <button onClick={() => navegar("/vendedores")}>
               <img className="sideIcon" src={vendedoresIcon} /> Vendedores
             </button>
-            
+
             <button onClick={() => navegar("/formas-pagamento")}>
-              <img className="sideIcon" src={formaPagamentoIcon} /> Formas de Pagamento
+              <img className="sideIcon" src={formaPagamentoIcon} /> Formas de
+              Pagamento
             </button>
-            
+
             <button onClick={() => navegar("/unidade-medida")}>
-              <img className="sideIcon" src={unidadeMedidaIcon} alt="Unidade de Medida" /> Unidades de Medida
+              <img
+                className="sideIcon"
+                src={unidadeMedidaIcon}
+                alt="Unidade de Medida"
+              />{" "}
+              Unidades de Medida
             </button>
-            
+
             <button onClick={() => navegar("/secoes")}>
               <img className="sideIcon" src={secoesIcon} /> Seções
             </button>
-            
+
             <button onClick={() => navegar("/grupos")}>
               <img className="sideIcon" src={gruposIcon} /> Grupos
             </button>
-            
+
             <button onClick={() => navegar("/marcas")}>
               <img className="sideIcon" src={marcasIcon} /> Marcas
             </button>
-            
+
             <button onClick={() => navegar("/cidades")}>
               <img className="sideIcon" src={cidadesIcon} /> Cidades
             </button>
           </div>
         )}
 
-         {/* RELATÓRIOS */}
+        {/* RELATÓRIOS */}
         <button
           className="submenu-toggle"
           onClick={(e) => {
@@ -186,32 +197,45 @@ const Navbar = () => {
             toggleMenu("relatorios");
           }}
         >
-          <img className="sideIcon" src={relatoriosIcon} alt="Relatórios"/>
+          <img className="sideIcon" src={relatoriosIcon} alt="Relatórios" />
           Relatórios ▸
         </button>
 
         {openMenu === "relatorios" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => navegar("/relatorios/vendasperiodo")}>
-              <img className="sideIcon" src={vendasPeriodoIcon} alt="Vendas por Período" />
-               Vendas por Período
-          </button>
+              <img
+                className="sideIcon"
+                src={vendasPeriodoIcon}
+                alt="Vendas por Período"
+              />
+              Vendas por Período
+            </button>
 
             <button onClick={() => navegar("/relatorios/comissaoVendedores")}>
-              <img className="sideIcon" src={comissaoVendedores} alt="Comissão de Vendedores" />
-               Comissão de Vendedores
-          </button>
-
+              <img
+                className="sideIcon"
+                src={comissaoVendedores}
+                alt="Comissão de Vendedores"
+              />
+              Comissão de Vendedores
+            </button>
           </div>
         )}
 
         {/* AUDITORIA */}
         <button onClick={() => navegar("/auditoria")}>
-          <img className="sideIcon" src={auditoriaIcon} alt="Auditoria" /> Auditoria
+          <img className="sideIcon" src={auditoriaIcon} alt="Auditoria" />{" "}
+          Auditoria
         </button>
 
         {/* SAIR */}
-        <button onClick={() => navegar("/")}>
+        <button
+          onClick={() => {
+            localStorage.clear();
+            navegar("/");
+          }}
+        >
           <img src={voltarIcon} className="sideIcon" /> Sair
         </button>
       </div>

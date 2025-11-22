@@ -7,5 +7,6 @@ router.get("/visualizar/:id", orcamento.visualizarOrcamento);
 router.get("/visualizar", orcamento.visualizarOrcamentos);
 router.put("/atualizar/:id", orcamento.atualizarOrcamento);
 router.delete("/deletar/:id", orcamento.deletarOrcamento);
+router.post("/faturar/:id", orcamento.faturarOrcamento);
 
 module.exports = router;
