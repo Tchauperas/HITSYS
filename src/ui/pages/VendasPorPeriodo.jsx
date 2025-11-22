@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./VendasPorPeriodo.css";
 import Navbar from "../components/Navbar";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/vendas_periodo_icon.png";
 
 const VendasPorPeriodo = () => {
   const [dataInicio, setDataInicio] = useState("");
@@ -111,8 +112,12 @@ const VendasPorPeriodo = () => {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>📊 RELATÓRIO DE VENDAS POR PERÍODO</h1>
-          </div>
+            <span className="icon-bg">
+              <img src={logo} alt="Ícone Relatório" className="title-icon" />
+        </span>
+        <h1>RELATÓRIO DE VENDAS POR PERÍODO</h1>
+      </div>
+
         </header>
 
         <div className="filtros-container">

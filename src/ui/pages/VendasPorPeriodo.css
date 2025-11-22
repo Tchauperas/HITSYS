@@ -409,3 +409,19 @@
         font-size: 13px;
     }
 }
+.icon-bg {
+    background-color: #007bff; 
+    padding: 10px;
+    border-radius: 8px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+}
+
+.title-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
