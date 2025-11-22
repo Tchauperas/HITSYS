@@ -1,0 +1,139 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.message.error {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.message.success {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-submit:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-submit:disabled,
+.btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

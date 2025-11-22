@@ -12,7 +12,10 @@ class Cidade {
 
   async visualizarCidades() {
     try {
-      let cidades = await db.select("*").table("cidades");
+      let cidades = await db
+        .select("cidades.*", "estados.uf")
+        .table("cidades")
+        .leftJoin("estados", "cidades.id_uf", "estados.id_estado");
       if (cidades.length > 0) {
         return { validated: true, values: cidades };
       } else {

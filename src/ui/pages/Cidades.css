@@ -1,0 +1,142 @@
+.cidades-container {
+    background: white;
+    height: 100vh;
+    width: 100vw;
+    padding: 10px;
+    padding-left: 210px;
+    box-sizing: border-box;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.content {
+    max-width: 100vw;
+    margin: 20px auto;
+}
+
+.top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: black;
+}
+
+.right-actions {
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.btn-cadastrar {
+    background: blue;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-cadastrar:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 20px;
+}
+
+.search-icon {
+    margin-right: 8px;
+    color: #6b7280;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+}
+
+.cidades-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cidades-table th,
+.cidades-table td {
+    padding: 12px;
+    text-align: left;
+}
+
+.cidades-table th {
+    background: #dfdfdf;
+    font-weight: bold;
+}
+
+.cidades-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.error-message {
+    color: #dc3545;
+    text-align: center;
+    padding: 20px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-editar {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-editar:hover {
+    opacity: 0.8;
+}
+
+.btn-excluir {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-excluir:hover {
+    opacity: 0.8;
+}
