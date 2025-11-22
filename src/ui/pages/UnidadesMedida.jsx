@@ -3,6 +3,7 @@ import "./UnidadesMedida.css";
 import Navbar from "../components/Navbar";
 import CadastrarUnidade from "../components/Cadastrar_unidade";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/unidades_medida_icon.png"
 
 function UnidadesMedida() {
   const [unidades, setUnidades] = useState([]);
@@ -117,7 +118,9 @@ function UnidadesMedida() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>LISTAGEM DE UNIDADES DE MEDIDA</h1>
+               <span className="box-icon"></span>
+               <img src={logo} alt="Logo" className="logo" />
+               <h1>LISTAGEM UNIDADES DE MEDIDA</h1>
           </div>
 
           <div className="right-actions">

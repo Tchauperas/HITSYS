@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import WindowControls from "../components/WindowControls";
 import CadastrarCidade from "../components/Cadastrar_cidade";
 import AlterarCidade from "../components/Alterar_cidade";
+import logo from "../assets/cidades_icon.png"
 
 function Cidades() {
   const [cidades, setCidades] = useState([]);
@@ -129,8 +130,11 @@ function Cidades() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>LISTAGEM DE CIDADES</h1>
+              <span className="box-icon"></span>
+              <img src={logo} alt="Logo" className="logo" />
+              <h1>LISTAGEM DE CIDADES</h1>
           </div>
+
 
           <div className="right-actions">
             <button className="btn-cadastrar" onClick={handleOpenModal}>

@@ -3,6 +3,7 @@ import "./Secao.css";
 import Navbar from "../components/Navbar";
 import CadastrarSecao from "../components/Cadastrar_secao";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/secoes_icon.png"; 
 
 function Secao() {
   const [secoes, setSecoes] = useState([]);
@@ -116,6 +117,8 @@ function Secao() {
       <div className="content">
         <header className="top-row">
           <div className="title">
+            <span className="box-icon"></span> 
+            <img src={logo} alt="Logo" className="logo" />
             <h1>LISTAGEM DE SEÇÕES</h1>
           </div>
 
