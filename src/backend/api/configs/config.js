@@ -19,7 +19,7 @@ const connDev = {
 
 const db = knex({
     client: "mysql2",
-    connection: conn
+    connection: connDev
 })
 
 module.exports = db
