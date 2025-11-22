@@ -501,91 +501,92 @@ function Pdv() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid container-my">
       <WindowControls />
-      <div className="text-center mb-4">
-        <img src={logo} alt="Logo" style={{ height: "50px" }} />
-        <h2>PDV</h2>
-      </div>
 
-      <div className="row mb-2">
-        <div className="col-12">
-          <div className="pdv-selectors d-flex align-items-center position-relative">
-            <div className="selector-item">
-              <button className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
-                {empresaNome ? `Empresa:${empresaNome}` : `Empresa${empresa}`}
-              </button>
-
-              {showEmpresaDropdown && (
-                <div className="pdv-dropdown-panel">
-                  <input 
-                    className="form-control mb-2" 
-                    placeholder="Buscar empresa..." 
-                    value={empresaSearch} 
-                    onChange={(e) => setEmpresaSearch(e.target.value)}
-                  />
-                  <div className="list-group">
-                    {empresasList.map((it) => (
-                      <button key={it.id_empresa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
-                        {it.id_empresa || it.id} - {it.nome_fantasia || it.razao_social || it.nome}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="selector-item ms-2 d-flex align-items-center">
-              <div style={{ position: 'relative' }}>
-                <button className="btn btn-outline-primary" onClick={openClienteDropdown}>
-                  {clienteNome ? `Cliente:${clienteNome}` : `Cliente${cliente}`}
+      <div>
+        <h2 className="titulo">PDV</h2>
+        <div>
+          <div className="top-row">
+            <div className="top-botoes">
+              <div className="selector-item botao_vendedor">
+                <button className="btn btn-outline-dark" onClick={openVendedorDropdown}>
+                  {vendedorNome ? `Vendedor:${vendedorNome}` : `Vendedor${vendedor}`}
                 </button>
-                {showClienteDropdown && (
+
+                {showVendedorDropdown && (
                   <div className="pdv-dropdown-panel">
                     <input 
                       className="form-control mb-2" 
-                      placeholder="Buscar cliente..." 
-                      value={clienteSearch} 
-                      onChange={(e) => setClienteSearch(e.target.value)}
+                      placeholder="Buscar vendedor..." 
+                      value={vendedorSearch} 
+                      onChange={(e) => setVendedorSearch(e.target.value)}
                     />
                     <div className="list-group">
-                      {clientesList.map((it) => (
-                        <button key={it.id_pessoa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectCliente(it)}>
-                          {it.id_pessoa || it.id} - {it.nome_razao_social || it.nome}
+                      {vendedoresList.map((it) => (
+                        <button key={it.id_vendedor || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
+                          {it.id_vendedor || it.id} - {it.nome_pessoa || it.nome}
                         </button>
                       ))}
                     </div>
                   </div>
                 )}
               </div>
+              <div className="selector-item">
+                <button className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
+                  {empresaNome ? `Empresa:${empresaNome}` : `Empresa${empresa}`}
+                </button>
 
-              <button className="btn btn-add-client  ms-2" onClick={adicionarCliente} title="Adicionar cliente">
-                +
-              </button>
-            </div>
-
-            <div className="selector-item ms-2">
-              <button className="btn btn-outline-dark" onClick={openVendedorDropdown}>
-                {vendedorNome ? `Vendedor:${vendedorNome}` : `Vendedor${vendedor}`}
-              </button>
-
-              {showVendedorDropdown && (
-                <div className="pdv-dropdown-panel">
-                  <input 
-                    className="form-control mb-2" 
-                    placeholder="Buscar vendedor..." 
-                    value={vendedorSearch} 
-                    onChange={(e) => setVendedorSearch(e.target.value)}
-                  />
-                  <div className="list-group">
-                    {vendedoresList.map((it) => (
-                      <button key={it.id_vendedor || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectVendedor(it)}>
-                        {it.id_vendedor || it.id} - {it.nome_pessoa || it.nome}
-                      </button>
-                    ))}
+                {showEmpresaDropdown && (
+                  <div className="pdv-dropdown-panel">
+                    <input 
+                      className="form-control mb-2" 
+                      placeholder="Buscar empresa..." 
+                      value={empresaSearch} 
+                      onChange={(e) => setEmpresaSearch(e.target.value)}
+                    />
+                    <div className="list-group">
+                      {empresasList.map((it) => (
+                        <button key={it.id_empresa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectEmpresa(it)}>
+                          {it.id_empresa || it.id} - {it.nome_fantasia || it.razao_social || it.nome}
+                        </button>
+                      ))}
+                    </div>
                   </div>
+                )}
+              </div>
+              
+              <div className="selector-item d-flex align-items-center">
+                <div style={{ position: 'relative' }}>
+                  <button className="btn btn-outline-primary" onClick={openClienteDropdown}>
+                    {clienteNome ? `Cliente:${clienteNome}` : `Cliente${cliente}`}
+                  </button>
+                  {showClienteDropdown && (
+                    <div className="pdv-dropdown-panel">
+                      <input 
+                        className="form-control mb-2" 
+                        placeholder="Buscar cliente..." 
+                        value={clienteSearch} 
+                        onChange={(e) => setClienteSearch(e.target.value)}
+                      />
+                      <div className="list-group">
+                        {clientesList.map((it) => (
+                          <button key={it.id_pessoa || it.id} type="button" className="list-group-item list-group-item-action" onClick={() => selectCliente(it)}>
+                            {it.id_pessoa || it.id} - {it.nome_razao_social || it.nome}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                <button className="btn btn-add-client adicionar_cliente" onClick={adicionarCliente} title="Adicionar cliente">
+                  +
+                </button>
+              </div>
+            </div>
+            <div className="logo_container">
+              <img src={logo} alt="Logo" style={{ height: "50px" }} />
             </div>
           </div>
         </div>
@@ -672,53 +673,52 @@ function Pdv() {
           </button>
         </div>
       </div>
-
-      <table className="table table-bordered">
-        <thead className="table-light">
-          <tr>
-            <th>#</th>
-            <th>Produto</th>
-            <th>Qtd.</th>
-            <th>Valor Unit.</th>
-            <th>Total</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itens.map((item, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{item.descricao}</td>
-              <td>{item.quantidade}</td>
-              <td>R$ {Number(item.preco_unitario || 0).toFixed(2)}</td>
-              <td>R$ {Number(item.preco_total || 0).toFixed(2)}</td>
-              <td>
-                <button 
-                  className="btn btn-sm btn-danger" 
-                  onClick={() => setItens(itens.filter((_, i) => i !== index))}
-                >
-                  Remover
-                </button>
-              </td>
+      <div className="table-space">
+        <table className="table-produtos">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Produto</th>
+              <th>Qtd.</th>
+              <th>Valor Unit.</th>
+              <th>Total</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="text-end mb-3">
+          </thead>
+          <tbody>
+            {itens.map((item, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{item.descricao}</td>
+                <td>{item.quantidade}</td>
+                <td>R$ {Number(item.preco_unitario || 0).toFixed(2)}</td>
+                <td>R$ {Number(item.preco_total || 0).toFixed(2)}</td>
+                <td>
+                  <button 
+                    className="btn btn-sm btn-danger" 
+                    onClick={() => setItens(itens.filter((_, i) => i !== index))}
+                  >
+                    Remover
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="text-end mb-3 texto-total">
         <h4>Total da Venda: R$ {calcularTotalVenda().toFixed(2)}</h4>
       </div>
 
-      <div className="d-flex justify-content-between">
-        <button className="btn btn-success" onClick={enviarVenda}>
+      <div className="d-flex justify-content-between botoes">
+        <button onClick={enviarVenda}>
           Fechar
         </button>
-        <button className="btn btn-secondary">Orçamento</button>
-        <button className="btn btn-info">Receber</button>
-        <button className="btn btn-warning">Consultar Vendas</button>
-        <button className="btn btn-dark">Alt. Vendedor</button>
-        <button className="btn btn-danger">Desistir</button>
-        <button className="btn btn-outline-dark" onClick={() => navigate("/home")}>
+        <button>Orçamento</button>
+        <button>Receber</button>
+        <button>Consultar Vendas</button>
+        <button>Desistir</button>
+        <button  onClick={() => navigate("/home")}>
           Sair
         </button>
       </div>

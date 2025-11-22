@@ -6,6 +6,36 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.container-my {
+  height: 90vh;
+  width: 95vw;
+  background-color: #f3f3f3;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 50px;
+}
+.titulo {
+  display: flex;
+  font-weight: bolder;
+  color: #007bff;
+  font-size: 50px;
+  justify-content: center;
+}
+.top-botoes {
+  display: flex;
+}
+
+
+.botoes button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 10px;
+  min-width: 165px;  
+}
+
 /* Logo e título */
 .text-center img {
   margin-bottom: 10px;
@@ -29,27 +59,38 @@
   border: none;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
 
 /* Tabela de itens */
 .table {
   background-color: #ffffff;
   border-radius: 6px;
   overflow: hidden;
+  width: 100%;
 }
-
-.table th {
+.table-space{
+  height: 40vh;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #adb5bd;
+  overflow-y: auto;
+}
+.table-produtos {
+  width: 100%;
+}
+.table-produtos th {
   background-color: #e9ecef;
   text-align: center;
+  height: 40px;
 }
-
-/* botões de seleção (empresa / cliente / vendedor) próximos à busca */
-.pdv-selectors {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.table-produtos td { 
+  text-align:center;
+  padding: 5px;
+}
+.table-produtos thead th{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #e9ecef;
 }
 
 .btn-add-client {
@@ -67,6 +108,13 @@
 .btn-add-client:hover {
   filter: brightness(0.95);
 }
+.top-botoes button {
+  margin-right: 10px;
+  height: 100%;
+  background-color: black;
+  color: white;
+  
+}
 
 /* dropdown panel used by selectors */
 .pdv-dropdown-panel {
@@ -83,8 +131,6 @@
   box-shadow: 0 6px 18px rgba(22,27,34,0.08);
   overflow: auto;
 }
-
-.pdv-selectors .selector-item { position: relative; }
 
 .pdv-dropdown-panel .list-group { max-height: 200px; overflow: auto; }
 
@@ -106,44 +152,12 @@
   font-weight: 500;
 }
 
-.btn-success {
-  background-color: #28a745;
-  border: none;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border: none;
-}
-
-.btn-info {
-  background-color: #17a2b8;
-  border: none;
-}
-
-.btn-warning {
-  background-color: #ffc107;
-  border: none;
-  color: #212529;
-}
-
-.btn-dark {
-  background-color: #343a40;
-  border: none;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-}
-
-.btn-outline-dark {
-  border: 1px solid #343a40;
-  color: #343a40;
-}
-
-.btn:hover {
+.botoes .btn:hover {
   opacity: 0.9;
+  color: #0056b3;
+}
+.adicionar_cliente {
+  border: #0056b3 solid 1px;
 }
 
 /* Responsividade */
