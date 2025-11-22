@@ -14,6 +14,8 @@ import comprasIcon from "../assets/compras_icon.png";
 import vendasIcon from "../assets/vendas_icon.png";
 import pdvIcon from "../assets/pdv_icon.png";
 
+import formaPagamentoIcon from "../assets/forma_pagamento_icon.png";  
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -300,9 +302,14 @@ const Navbar = () => {
               <img className="sideIcon" src={vendedoresIcon} /> Vendedores
             </button>
 
+            <button onClick={() => navegar("/formas-pagamento")}>
+              <img className="sideIcon" src={formaPagamentoIcon} /> Formas de Pagamento
+            </button>
+            
             <button onClick={() => navegar("/unidade-medida")}>
               <UnidadeIcon className="sideIcon" /> Unidade de Medida
             </button>
+
 
             <button onClick={() => navegar("/secoes")}>
               <SecoesIcon className="sideIcon" /> Seções
