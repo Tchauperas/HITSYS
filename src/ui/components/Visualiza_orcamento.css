@@ -1,5 +1,5 @@
 /* Modal Overlay */
-.modal-overlay-venda {
+.modal-overlay-orcamento {
   position: fixed;
   top: 0;
   left: 0;
@@ -23,7 +23,7 @@
 }
 
 /* Modal Content */
-.modal-content-venda {
+.modal-content-orcamento {
   background: #ffffff;
   border-radius: 12px;
   width: 95%;
@@ -48,7 +48,7 @@
 }
 
 /* Modal Header */
-.modal-header-venda {
+.modal-header-orcamento {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,13 +58,13 @@
   border-bottom: 2px solid #0056b3;
 }
 
-.modal-header-venda h2 {
+.modal-header-orcamento h2 {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
 }
 
-.modal-close-venda {
+.modal-close-orcamento {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   font-size: 28px;
@@ -79,30 +79,30 @@
   transition: all 0.3s ease;
 }
 
-.modal-close-venda:hover {
+.modal-close-orcamento:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: rotate(90deg);
 }
 
 /* Modal Body */
-.modal-body-venda {
+.modal-body-orcamento {
   padding: 30px;
   overflow-y: auto;
   flex: 1;
 }
 
 /* Sections */
-.venda-info-section,
-.venda-items-section,
-.venda-totals-section,
-.venda-observacoes-section {
+.orcamento-info-section,
+.orcamento-items-section,
+.orcamento-totals-section,
+.orcamento-observacoes-section {
   margin-bottom: 30px;
 }
 
-.venda-info-section h3,
-.venda-items-section h3,
-.venda-totals-section h3,
-.venda-observacoes-section h3 {
+.orcamento-info-section h3,
+.orcamento-items-section h3,
+.orcamento-totals-section h3,
+.orcamento-observacoes-section h3 {
   color: #2d3748;
   font-size: 18px;
   font-weight: 600;
@@ -154,12 +154,12 @@
   text-align: center;
 }
 
-.status-ativa {
+.status-ativo {
   background-color: #c6f6d5;
   color: #22543d;
 }
 
-.status-cancelada {
+.status-cancelado {
   background-color: #fed7d7;
   color: #742a2a;
 }
@@ -171,37 +171,37 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.items-table-venda {
+.items-table-orcamento {
   width: 100%;
   border-collapse: collapse;
   background: white;
 }
 
-.items-table-venda thead {
+.items-table-orcamento thead {
   background: #dfdfdf;
   color: #2d3748;
 }
 
-.items-table-venda th {
+.items-table-orcamento th {
   padding: 12px;
   text-align: left;
   font-weight: bold;
   font-size: 14px;
 }
 
-.items-table-venda td {
+.items-table-orcamento td {
   padding: 15px 12px;
   border-bottom: 1px solid #e2e8f0;
   color: #2d3748;
   font-size: 14px;
 }
 
-.items-table-venda tbody tr:hover {
+.items-table-orcamento tbody tr:hover {
   background-color: #f7fafc;
   transition: background-color 0.2s ease;
 }
 
-.items-table-venda tbody tr:last-child td {
+.items-table-orcamento tbody tr:last-child td {
   border-bottom: none;
 }
 
@@ -255,14 +255,6 @@
   color: #c53030;
 }
 
-.total-item.comissao {
-  border-left-color: #f6ad55;
-}
-
-.total-item.comissao span {
-  color: #c05621;
-}
-
 .total-item.highlight {
   background: #007bff;
   color: white;
@@ -280,7 +272,7 @@
 }
 
 /* Observações */
-.venda-observacoes-section {
+.orcamento-observacoes-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
@@ -314,7 +306,7 @@
 }
 
 /* Modal Footer */
-.modal-footer-venda {
+.modal-footer-orcamento {
   padding: 20px 30px;
   border-top: 2px solid #e2e8f0;
   display: flex;
@@ -345,13 +337,13 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .modal-content-venda {
+  .modal-content-orcamento {
     width: 100%;
     max-height: 100vh;
     border-radius: 0;
   }
 
-  .modal-body-venda {
+  .modal-body-orcamento {
     padding: 20px;
   }
 
@@ -360,12 +352,12 @@
     grid-template-columns: 1fr;
   }
 
-  .items-table-venda {
+  .items-table-orcamento {
     font-size: 12px;
   }
 
-  .items-table-venda th,
-  .items-table-venda td {
+  .items-table-orcamento th,
+  .items-table-orcamento td {
     padding: 10px 8px;
   }
 }

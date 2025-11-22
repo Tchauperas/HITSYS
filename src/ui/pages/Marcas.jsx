@@ -3,6 +3,7 @@ import "./Marcas.css";
 import Navbar from "../components/Navbar";
 import CadastrarMarca from "../components/Cadastrar_marca";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/marcas_icon.png"
 
 function Marcas() {
   const [marcas, setMarcas] = useState([]);
@@ -116,8 +117,11 @@ function Marcas() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>LISTAGEM DE MARCAS</h1>
+              <span className="box-icon"></span>
+              <img src={logo} alt="Logo" className="logo" />
+              <h1>LISTAGEM DE MARCAS</h1>
           </div>
+
 
           <div className="right-actions">
             <button

@@ -66,7 +66,6 @@ function Pdv() {
       valor_desconto: 0,
     };
     setItens([...itens, novoItem]);
-    // Limpar todos os campos para próxima inserção
     setCodigo("");
     setDescricao("");
     setQuantidade(1);
@@ -79,8 +78,8 @@ function Pdv() {
     return itens.reduce((acc, item) => acc + item.preco_total, 0);
   };
 
-  const handleAbrirPagamentoModal = () => {
-    // Validações básicas
+  const enviarVenda = async () => {
+    // Validações
     if (!empresa) {
       alert("Selecione uma empresa antes de fechar a venda.");
       return;
@@ -100,6 +99,8 @@ function Pdv() {
 
     // Preparar dados da venda (sem enviar ainda)
     const totalProdutos = calcularTotalVenda();
+    
+    // Calcular comissão
     const margemComissao = comissao || 0;
     const totalComissao = (totalProdutos * margemComissao) / 100;
     
@@ -293,10 +294,6 @@ function Pdv() {
       alert(`Erro ao conectar com o servidor: ${error.message}`);
       setShowPagamentoModal(false);
     }
-  };
-
-  const enviarVenda = async () => {
-    handleAbrirPagamentoModal();
   };
 
   const buscarProdutos = async (term = "") => {
@@ -806,7 +803,7 @@ function Pdv() {
         <button onClick={enviarVenda}>
           Fechar
         </button>
-        <button>Orçamento</button>
+        <button onClick={enviarOrcamento}>Orçamento</button>
         <button>Receber</button>
         <button>Consultar Vendas</button>
         <button>Desistir</button>

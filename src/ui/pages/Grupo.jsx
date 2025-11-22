@@ -3,6 +3,8 @@ import "./Grupo.css";
 import Navbar from "../components/Navbar";
 import CadastrarGrupo from "../components/Cadastrar_grupo";
 import WindowControls from "../components/WindowControls";
+import logo from "../assets/grupos_icon.png"; 
+
 
 function Grupo() {
   const [grupos, setGrupos] = useState([]);
@@ -116,7 +118,9 @@ function Grupo() {
       <div className="content">
         <header className="top-row">
           <div className="title">
-            <h1>LISTAGEM DE GRUPOS</h1>
+              <span className="box-icon"></span>
+              <img src={logo} alt="Logo" className="logo" />
+              <h1>LISTAGEM DE GRUPOS</h1>
           </div>
 
           <div className="right-actions">

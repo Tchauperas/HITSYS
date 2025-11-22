@@ -1,6 +1,7 @@
 import "./Navbar.css";
+import logo from "../assets/logo_mista.jpg";
 
-import logoHitsys from "../assets/logo_hitsys_sem_fundo.png";
+import logoHitsys from "../assets/logo_hitsys_sem_fundo.png"
 import homeIcon from "../assets/home_icon.png";
 import empresasIcon from "../assets/empresas_icon.png";
 import pessoasIcon from "../assets/pessoas_icon.png";
@@ -23,41 +24,21 @@ import relatoriosIcon from "../assets/relatorios_icon.png";
 import marcasIcon from "../assets/marcas_icon.png";
 import secoesIcon from "../assets/secoes_icon.png"; 
 import contasIcon from "../assets/contas_icon.png";
+import auditoriaIcon from "../assets/auditoria_icon.png";
+import unidadeMedidaIcon from "../assets/unidades_medida_icon.png";
+import pagarIcon from "../assets/pagar_icon.png";
+import receberIcon from "../assets/receber_icon.png";
+import vendasPeriodoIcon from "../assets/vendas_periodo_icon.png";
+import comissaoVendedores from "../assets/comissao_vendedores_icon.png";
+
+
+
+
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const ReceberIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24">
-    <line x1="12" y1="4" x2="12" y2="14" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
-    <polyline points="7 10 12 15 17 10" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-  </svg>
-);
 
-const PagarIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24">
-    <line x1="12" y1="20" x2="12" y2="10" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
-    <polyline points="7 14 12 9 17 14" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-  </svg>
-);
-
-const AuditoriaIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24">
-    <circle cx="11" cy="11" r="7" stroke="white" strokeWidth="2" fill="none" />
-    <line x1="16" y1="16" x2="21" y2="21" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    <line x1="11" y1="8" x2="11" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    <circle cx="11" cy="14.5" r="1" fill="white" />
-  </svg>
-);
-
-// Unidade de Medida icon
-const UnidadeIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24">
-    <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="white" strokeWidth="1.6" />
-    <circle cx="8.5" cy="12" r="1.2" fill="white" />
-    <path d="M11 9h6" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-  </svg>
-);
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -132,10 +113,10 @@ const Navbar = () => {
         {openMenu === "contas" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => navegar("/contas-receber")}>
-              <ReceberIcon className="sideIcon" /> Receber
+              <img className="sideIcon" src={receberIcon} alt="Receber" /> Receber
             </button>
             <button onClick={() => navegar("/contas-pagar")}>
-              <PagarIcon className="sideIcon" /> Pagar
+              <img className="sideIcon" src={pagarIcon} alt="Pagar" /> Pagar
             </button>
           </div>
         )}
@@ -176,7 +157,7 @@ const Navbar = () => {
             </button>
             
             <button onClick={() => navegar("/unidade-medida")}>
-              <UnidadeIcon className="sideIcon" /> Unidade de Medida
+              <img className="sideIcon" src={unidadeMedidaIcon} alt="Unidade de Medida" /> Unidades de Medida
             </button>
             
             <button onClick={() => navegar("/secoes")}>
@@ -212,17 +193,21 @@ const Navbar = () => {
         {openMenu === "relatorios" && (
           <div className="submenu" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => navegar("/relatorios/vendasperiodo")}>
-              ▸ Vendas por Período
-            </button>
-            <button onClick={() => navegar("/relatorios/comissaovendedores")}>
-              ▸ Comissão de vendedores
-            </button>
+              <img className="sideIcon" src={vendasPeriodoIcon} alt="Vendas por Período" />
+               Vendas por Período
+          </button>
+
+            <button onClick={() => navegar("/relatorios/comissaoVendedores")}>
+              <img className="sideIcon" src={comissaoVendedores} alt="Comissão de Vendedores" />
+               Comissão de Vendedores
+          </button>
+
           </div>
         )}
 
         {/* AUDITORIA */}
         <button onClick={() => navegar("/auditoria")}>
-          <AuditoriaIcon className="sideIcon" /> Auditoria
+          <img className="sideIcon" src={auditoriaIcon} alt="Auditoria" /> Auditoria
         </button>
 
         {/* SAIR */}
