@@ -82,6 +82,18 @@ class Produto {
       return {validated: false, error: e}
     }
   }
+
+  async creditarEstoque(id, credit) {
+    try {
+      const quant = await db.select("saldo_estoque").table("produtos").where({id_produto: id})
+      let saldo =  quant[0].saldo_estoque + credit 
+      console.log(saldo, quant, credit)
+      await db.update({saldo_estoque: saldo}).table("produtos").where({id_produto: id})
+      return {validated: true}
+    } catch (e) {
+      return {validated: false, error: e}
+    }
+  }
 }
 
 module.exports = new Produto();
