@@ -171,7 +171,7 @@
 }
 .top-botoes button {
   margin-right: 10px;
-  height: 100%;
+  min-height: 100%;
   background-color: #404951;
   color: white;
   border: none;

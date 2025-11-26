@@ -840,7 +840,7 @@ function Pdv() {
               <div className="selector-item container_botao_cliente">
                 <div style={{ position: 'relative' }} className="div_botao_cliente">
                   <button ref={clienteBtnRef} className="botao_cliente" onClick={openClienteDropdown}>
-                    {clienteNome ? `Cliente:${clienteNome}` : `Cliente${cliente}`}
+                    {clienteNome ? `Cliente: ${clienteNome}` : `Cliente${cliente}`}
                   </button>
                   {showClienteDropdown && (
                     <div ref={clienteRef} className="pdv-dropdown-panel show">
