@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Pdv.css";
 import logo from "../assets/logo_mista.jpg";
+import voltarIcon from "../assets/voltar_icon.png";
+import lixoIcon from "../assets/trash_icon.png";
+import vendasIcon from "../assets/vendas_icon.png";
+import fecharIcon from "../assets/fechar_icon.png";
+import receberIcon from "../assets/receber_icon.png";
+import orcamentoIcon from "../assets/orcamentos_icon.png";
 import CadastroPessoa from "../components/Cadastro_pessoa"; // Adicione esta importação
 import WindowControls from "../components/WindowControls";
 import PagamentoVendaModal from "../components/PagamentoVendaModal";
@@ -47,6 +53,50 @@ function Pdv() {
 
   // Adicione este estado para controlar o modal
   const [showCadastroClienteModal, setShowCadastroClienteModal] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Fecha dropdown da empresa
+      if (
+        showEmpresaDropdown &&
+        !event.target.closest(".div_botao_empresa")
+      ) {
+        setShowEmpresaDropdown(false);
+      }
+
+      // Fecha dropdown do vendedor
+      if (
+        showVendedorDropdown &&
+        !event.target.closest(".div_botao_vendedor")
+      ) {
+        setShowVendedorDropdown(false);
+      }
+
+      // Fecha dropdown do cliente
+      if (
+        showClienteDropdown &&
+        !event.target.closest(".div_botao_cliente")
+      ) {
+        setShowClienteDropdown(false);
+      }
+
+      // Fecha dropdown do produto
+      if (
+        showProdutoDropdown &&
+        !event.target.closest(".btn-selecao-produto")
+      ) {
+        setShowProdutoDropdown(false);
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [
+        showEmpresaDropdown,
+        showVendedorDropdown,
+        showClienteDropdown,
+        showProdutoDropdown,
+      ]);
+
 
   const adicionarItem = () => {
     if (!codigo || !descricao || quantidade <= 0 || valorUnitario <= 0) {
@@ -716,6 +766,19 @@ function Pdv() {
     }
   };
 
+
+  const empresaRef = useRef(null);
+  const empresaBtnRef = useRef(null);
+
+  const vendedorRef = useRef(null);
+  const vendedorBtnRef = useRef(null);
+
+  const clienteRef = useRef(null);
+  const clienteBtnRef = useRef(null);
+
+  const produtoRef = useRef(null);
+  const produtoBtnRef = useRef(null);
+
   return (
     <div className="container-fluid container-my">
       <WindowControls />
@@ -727,12 +790,12 @@ function Pdv() {
             <div className="top-botoes">
               <div className="selector-item botao_empresa">
                 <div style={{ position: 'relative' }} className="div_botao_empresa">
-                  <button className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
+                  <button ref={empresaBtnRef} className="btn btn-outline-dark" onClick={openEmpresaDropdown}>
                     {empresaNome ? `Empresa:${empresaNome}` : `Empresa${empresa}`}
                   </button>
 
                   {showEmpresaDropdown && (
-                    <div className="pdv-dropdown-panel">
+                    <div ref={empresaRef} className="pdv-dropdown-panel show">
                       <input 
                         className="form-control mb-2" 
                         placeholder="Buscar empresa..." 
@@ -752,11 +815,11 @@ function Pdv() {
               </div>
               <div className="selector-item botao_vendedor">
                 <div style={{ position: 'relative' }} className="div_botao_vendedor">
-                  <button className="btn btn-outline-dark" onClick={openVendedorDropdown}>
+                  <button ref={vendedorBtnRef} className="btn btn-outline-dark" onClick={openVendedorDropdown}>
                     {vendedorNome ? `Vendedor:${vendedorNome}` : `Vendedor${vendedor}`}
                   </button>
                   {showVendedorDropdown && (
-                    <div className="pdv-dropdown-panel">
+                    <div ref={vendedorRef} className="pdv-dropdown-panel show">
                       <input 
                         className="form-control mb-2" 
                         placeholder="Buscar vendedor..." 
@@ -776,11 +839,11 @@ function Pdv() {
               </div>
               <div className="selector-item container_botao_cliente">
                 <div style={{ position: 'relative' }} className="div_botao_cliente">
-                  <button className="botao_cliente" onClick={openClienteDropdown}>
+                  <button ref={clienteBtnRef} className="botao_cliente" onClick={openClienteDropdown}>
                     {clienteNome ? `Cliente:${clienteNome}` : `Cliente${cliente}`}
                   </button>
                   {showClienteDropdown && (
-                    <div className="pdv-dropdown-panel">
+                    <div ref={clienteRef} className="pdv-dropdown-panel show">
                       <input 
                         className="form-control mb-2" 
                         placeholder="Buscar cliente..." 
@@ -813,12 +876,12 @@ function Pdv() {
       <div className="row mb-3">
         <div className="col-12">
           <div style={{ position: 'relative' }}>
-            <button className="btn-selecao-produto" onClick={openProdutoDropdown}>
+            <button ref={produtoBtnRef} className="btn-selecao-produto" onClick={openProdutoDropdown}>
               {produtoNome ? `Produto: ${produtoNome}` : "SELECIONE UM PRODUTO"}
             </button>
 
             {showProdutoDropdown && (
-              <div className="pdv-dropdown-panel" style={{ width: '100%' }}>
+              <div ef={produtoRef} className="pdv-dropdown-panel show" style={{ width: '100%' }}>
                 <input 
                   className="form-control mb-2" 
                   placeholder="Buscar produto..." 
@@ -930,13 +993,27 @@ function Pdv() {
 
       <div className="botoes">
         <button onClick={enviarVenda}>
+          <img src={fecharIcon} />
           Fechar
         </button>
-        <button onClick={enviarOrcamento}>Orçamento</button>
-        <button>Receber</button>
-        <button>Consultar Vendas</button>
-        <button>Desistir</button>
+        <button onClick={enviarOrcamento}>
+          <img src={orcamentoIcon} />
+          Orçamento
+        </button>
+        <button>
+          <img src={receberIcon} />
+          Receber
+        </button>
+        <button>
+          <img src={vendasIcon} />
+          Consultar Vendas
+        </button>
+        <button>
+          <img src={lixoIcon} />
+          Desistir
+        </button>
         <button  onClick={() => navigate("/home")}>
+          <img src={voltarIcon}/>
           Sair
         </button>
       </div>
@@ -959,7 +1036,7 @@ function Pdv() {
       {showCadastroClienteModal && (
         <CadastroPessoa
           show={showCadastroClienteModal}
-          onHide={() => setShowCadastroClienteModal(false)}
+          onClose={() => setShowCadastroClienteModal(false)}
           onSuccess={handleClienteCadastrado}
         />
       )}

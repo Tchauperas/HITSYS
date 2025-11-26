@@ -60,6 +60,12 @@
   padding: 8px;
   border-radius: 10px;
   min-width: 165px;  
+  font-size: 20px;
+}
+.botoes img {
+  width: 25px;
+  margin-right:5px;
+  padding-bottom: 5px;
 }
 .botoes {
   display: flex;
@@ -179,6 +185,20 @@
 }
 
 /* dropdown panel used by selectors */
+/* Estado inicial (antes de aparecer) */
+/* keyframes de entrada */
+@keyframes pdvDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* estado base — lembrando que isso roda ANTES de show ser aplicado */
 .pdv-dropdown-panel {
   position: absolute;
   z-index: 30;
@@ -192,14 +212,29 @@
   padding: 8px;
   box-shadow: 0 6px 18px rgba(22,27,34,0.08);
   overflow: auto;
+
+  /* para entrada automática */
+  animation: pdvDropdownIn 180ms cubic-bezier(.22,1,.36,1) both;
+  will-change: opacity, transform;
+}
+
+/* se quiser, estilize a classe show para garantir comportamento posterior */
+.pdv-dropdown-panel.show {
+  pointer-events: auto;      /* permite clicar nos itens */
+  opacity: 1;                /* garante o estado final */
+  transform: translateY(0) scale(1);
+  transition: none; /* evita transições extras */
+  pointer-events: auto;
 }
 
 .pdv-dropdown-panel .list-group { max-height: 200px; overflow: auto; }
+
 
 .table td {
   text-align: center;
   vertical-align: middle;
 }
+
 
 /* Total da venda */
 .texto-total h4 {

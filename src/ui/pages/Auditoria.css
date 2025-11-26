@@ -106,7 +106,7 @@
 }
 
 .auditoria-table-container {
-    max-height: 65vh; /* limite de altura */
+    max-height: 70vh; /* limite de altura */
     overflow-y: auto; /* scroll vertical */
 }
 .auditoria-table thead th{
